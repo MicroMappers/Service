@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2e622bb9-7d3d-40f4-85c0-fd817a8482d0" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/img/25.GIF" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/AbstractDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/AbstractDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/impl/AbstractDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/impl/AbstractDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/CoverageTilerExtended$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/tool/CoverageTilerExtended$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/CoverageTilerExtended$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/tool/CoverageTilerExtended$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/CoverageTilerExtended.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/tool/CoverageTilerExtended.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/Damage Zone Map UTM59.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/Damage Zone Map UTM59.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/util/GeoTifFileCoverageReader.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/util/GeoTifFileCoverageReader.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/GeoTifSlicer.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/tool/GeoTifSlicer.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/service/ImagePublishingService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/service/ImagePublishingService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/service/impl/ImagePublishingServiceImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/service/impl/ImagePublishingServiceImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/test-classes/qa/qcri/mm/media/service/ImagePublishingServiceTest.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/store/LookUp.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/store/LookUp.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/entity/MediaExport.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/entity/MediaExport.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/MediaExportDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/MediaExportDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/entity/MediaPool.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/entity/MediaPool.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/MediaPoolDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/MediaPoolDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/impl/MediaPoolDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/impl/MediaPoolDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/entity/MediaSource.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/entity/MediaSource.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/MediaSourceDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/MediaSourceDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/impl/MediaSourceDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/impl/MediaSourceDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/entity/Partner.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/entity/Partner.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/PartnerDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/PartnerDao.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/dao/impl/PartnerDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/dao/impl/PartnerDaoImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/PicasaInterfaceClient.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/PicasawebClient.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/tool/PicasawebClient.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/service/PoolService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/service/PoolService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/service/impl/PoolServiceImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/service/impl/PoolServiceImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/test-classes/qa/qcri/mm/media/service/PoolServiceTest.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/qa/qcri/mm/media/tool/SmallTileGenerator.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/qa/qcri/mm/media/tool/SmallTileGenerator.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/Untitled-1.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/Untitled-1.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/activation-1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/img/ajax-loader.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/antlr-2.7.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/aopalliance-1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/asm-3.3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-beanutils-1.9.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-cli-2.0-gt2-pre1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-codec-1.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-collections-3.2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-httpclient-3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-io-2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-lang-2.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-logging-1.0.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/commons-pool-1.6.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/core-1.47.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/cyclone.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/cyclone.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/cyclone_2x.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/cyclone_2x.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/dom4j-1.6.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/ehcache-1.6.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/img/flashImg.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/img/flashImg2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/img/flashImg3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/fullscreen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/fullscreen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/fullscreen@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/fullscreen@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/glyphicons-halflings-white.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/glyphicons-halflings-white.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/glyphicons-halflings.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/glyphicons-halflings.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/google-http-client-1.11.0-beta.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/google-oauth-client-1.11.0-beta.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/google-oauth-client-java6-1.11.0-beta.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/google-oauth-client-jetty-1.11.0-beta.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-api-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-coverage-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-coveragetools-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-cql-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-data-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-epsg-hsql-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-geotiff-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-image-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-imagemosaic-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-main-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-metadata-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-opengis-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-referencing-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-render-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-shapefile-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-swing-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-transform-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-wms-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/gt-xml-13-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/guava-13.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/hibernate-commons-annotations-4.0.1.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/hibernate-core-4.1.5.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/holding-ipad.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/holding-ipad.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/hsqldb-2.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/httpclient-4.2.5.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/httpcore-4.2.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/imageio-ext-geocore-1.1.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/imageio-ext-streams-1.1.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/imageio-ext-tiff-1.1.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/imageio-ext-utilities-1.1.10.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jai_codec-1.1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jai_core-1.1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jai_imageio-1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/javassist-3.18.1-GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/javax.servlet-api-3.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jboss-logging-3.1.0.GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jcl-over-slf4j-1.7.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jdom-1.1.3.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jersey-bundle-1.18.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jersey-core-1.18.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jersey-server-1.18.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jersey-servlet-1.18.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jersey-spring-1.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jetty-6.1.26.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jetty-util-6.1.26.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jgridshift-1.0.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/json-simple-1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jsr-275-1.0-beta-2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jsr305-1.3.7.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jsr311-api-1.1.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jstl-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jt-utils-1.3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jt-vectorbinarize-1.3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jt-zonalstats-1.3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jts-1.13.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/jul-to-slf4j-1.7.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/loading.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/loading.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/log4j-1.2.14.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/log4j-over-slf4j-1.7.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/logback-classic-1.1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/logback-core-1.1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/geoclickerMap/textgeo/images/logo.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/media/images/logo_qcri.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/media/images/logo_sbtf.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/mail-1.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/marker-icon-2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/marker-icon-2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/images/marker-icon-2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/marker-icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/marker-icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/images/marker-icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/marker-shadow.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/marker-shadow.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/images/marker-shadow.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/miglayout-3.7-swing.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api.war.original" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api.war" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/mysql-connector-java-5.1.25.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/servlet-api-2.5-20081211.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/slf4j-api-1.7.8.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/snakeyaml-1.14.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-aop-4.1.4.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-beans-4.1.4.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-boot-1.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-boot-autoconfigure-1.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-boot-starter-1.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-boot-starter-logging-1.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-context-3.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-core-4.1.4.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-expression-4.1.4.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-jdbc-3.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-orm-3.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-test-3.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-tx-4.1.4.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-web-3.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/spring-webmvc-3.2.1.RELEASE.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/spritesheet-2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/spritesheet-2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/spritesheet-2x.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/spritesheet-2x.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/spritesheet.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/spritesheet.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/img/skyeye/spritesheet.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/img/nepal/spritesheet.psd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/udg.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/udg.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/validation-api-1.0.0.GA.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/vecmath-1.3.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/xml-commons-resolver-1.2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/lib/xpp3-1.1.4c.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/AUTHOR" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/AUTHOR" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/src/test/qa/qcri/mm/api/service/ClientAppSourceServiceTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/src/test/qa/qcri/mm/api/service/GeoServiceTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/L.RotatedMarker.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/L.RotatedMarker.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/L.Symbol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/L.Symbol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/LICENSE.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/LICENSE.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/Leaflet.fullscreen.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/Leaflet.fullscreen.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/Leaflet.fullscreen.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/Leaflet.fullscreen.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__com_drewnoakes_metadata_extractor_2_7_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_geotools_gt_jdbc_13_SNAPSHOT.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_geotools_gt_jdbc_tests_13_SNAPSHOT.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/src/test/qa/qcri/mm/api/service/SkyeyeReportServiceTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/surefire-reports/TEST-qa.qcri.mm.media.service.ImagePublishingServiceTest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/surefire-reports/TEST-qa.qcri.mm.media.service.PoolServiceTest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/Test.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/Test.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/geoclickerMap/imageClicker/TileTest.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/aerialClicker.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/aerialClicker.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagremoteSenseclicker/aerialClicker.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/app.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/app.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/target/classes/spring/applicationContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/spring/applicationContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/spring/applicationContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/chatRoom.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-gis-util/clickers-gis.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/artifacts/clickers_gis_war.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/artifacts/clickers_gis_war_exploded.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/createTasks.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/createTasks.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagremoteSenseclicker/createTasks.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/resources/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/src/main/resources/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/target/classes/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/src/main/resources/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/database.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/target/classes/databaseTemp.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/databaseTemp.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/databaseTemp.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/displayOutput.htm" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/document.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/geoclickerMap/imageClicker/globalmaptiles.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/geoclickerMap/imageClicker/googleTileTest.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/target/classes/spring/hibernateContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/spring/hibernateContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/spring/hibernateContext.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/imageMap.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/indexLeaflet.htm" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/indexOriginal.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/indexTest.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-topictagAerialClickerDemo/vendor/jquery.dialogextend.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/leaflet.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/leaflet.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/leaflet.draw.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/leaflet.draw.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/dist/leaflet.draw.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/leaflet.draw.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/leaflet.draw.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/dist/leaflet.draw.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/leaflet.fullscreen.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/leaflet.fullscreen.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/vendor/leaflet.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/vendor/leaflet.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/data/lenakel-vanuatu-damage.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/target/classes/log4j.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/classes/log4j.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/mm-media-api/WEB-INF/classes/log4j.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/long_description.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/long_description.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/src/main/java/qa/qcri/mm/media/entity/partner.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-api/target/maven-archiver/pom.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/maven-archiver/pom.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/surefire-reports/qa.qcri.mm.media.service.ImagePublishingServiceTest.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../mm-media-api/target/surefire-reports/qa.qcri.mm.media.service.PoolServiceTest.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/requirements.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/requirements.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/template.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/template.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagaerialclicker/templateGoogle.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagremoteSenseclicker/templateGoogle.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagaerialclicker/template_org.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagremoteSenseclicker/template_org.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/tutorial.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/tutorial.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialClicker/tutorialTemplate.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../clickers/app-geotagNepalAerialPeopleClicker/tutorialTemplate.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../map/pamMap/data/vanuatu-uav-mapping-dmg-tagged-all.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/dao/LookupDao.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/dao/impl/LookupDaoImpl.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/entity/Lookup.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/format/impl/PybossaFormatter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/service/LookupService.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/service/impl/LookupServiceImpl.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/java/qa/qcri/mm/trainer/pybossa/util/FusionTablesOps.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/controller/ServiceController.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/controller/TemplateController.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/template/CrisisLandingHtmlModel.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/template/CrisisLandingStatusModel.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/template/CrisisNominalAttributeModel.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/template/PybossaTemplate.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/util/TaskManagerEntityMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/test/java/qa/qcri/mm/api/AllTestSuite.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-api/src/test/java/qa/qcri/mm/api/service/ClientAppSourceServiceTest.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/image/PicasawebClient.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/image/PicasawebCommandLine2.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../mm-api/src/test/java/qa/qcri/mm/api/service/PartnerAppSourceServiceTest.java" afterPath="$PROJECT_DIR$/../mm-api/src/test/qa/qcri/mm/api/service/PartnerAppSourceServiceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/test/java/qa/qcri/mm/trainer/pybossa/service/ClientAppServiceTest.java" afterPath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/test/java/qa/qcri/mm/trainer/pybossa/service/ClientAppServiceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/test/java/qa/qcri/mm/trainer/pybossa/service/ClientServiceTest.java" afterPath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/test/java/qa/qcri/mm/trainer/pybossa/service/ClientServiceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-media-api/src/main/java/qa/qcri/mm/media/tool/CoverageTilerExtended.java" afterPath="$PROJECT_DIR$/../mm-media-api/src/main/java/qa/qcri/mm/media/tool/CoverageTilerExtended.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/dao/CrisisDao.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/dao/CrisisDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/dao/impl/CrisisDaoImpl.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/dao/impl/CrisisDaoImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/gdelt/DataPull.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/gdelt/DataPull.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/qa/qcri/mm/drone/api/entity/DroneReport.java" afterPath="$PROJECT_DIR$/src/main/java/qa/qcri/mm/drone/api/entity/DroneReport.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/qa/qcri/mm/drone/api/entity/DroneTracker.java" afterPath="$PROJECT_DIR$/src/main/java/qa/qcri/mm/drone/api/entity/DroneTracker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/tile/GeoTIFFReaderTest.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/tile/GeoTIFFReaderTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/image/GridImage.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/image/GridImage.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/tile/ImageMosaicTester.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/tile/ImageMosaicTester.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../License.txt" afterPath="$PROJECT_DIR$/../../License.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../License.txt" afterPath="$PROJECT_DIR$/../License.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-media-api/src/main/java/qa/qcri/mm/media/store/LookUp.java" afterPath="$PROJECT_DIR$/../mm-media-api/src/main/java/qa/qcri/mm/media/store/LookUp.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/aerial/MBTilesExtractor.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/aerial/MBTilesExtractor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/controller/MicroMapsController.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/controller/MicroMapsController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/service/MicroMapsService.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/service/MicroMapsService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/service/impl/MicroMapsServiceImpl.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/service/impl/MicroMapsServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/test/java/qa/qcri/mm/trainer/pybossa/service/ReportProductServiceTest.java" afterPath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/test/java/qa/qcri/mm/trainer/pybossa/service/ReportProductServiceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/service/impl/SkyeyeReportServiceImpl.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/service/impl/SkyeyeReportServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/tile/SmallTileGenerator.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/tile/SmallTileGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/store/URLReference.java" afterPath="$PROJECT_DIR$/../mm-api/src/main/java/qa/qcri/mm/api/store/URLReference.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/resources/spring/applicationContext.xml" afterPath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/resources/spring/applicationContext.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../AIME/assets/css/bootstrap-theme.css" afterPath="$PROJECT_DIR$/../../AIME/assets/css/bootstrap-theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/image/geoJsonGenerator.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/image/geoJsonGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/spring/hibernateContext.xml" afterPath="$PROJECT_DIR$/src/main/resources/spring/hibernateContext.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/resources/log4j.properties" afterPath="$PROJECT_DIR$/../clicker-trainer-pybossa/src/main/resources/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/src/main/resources/log4j.properties" afterPath="$PROJECT_DIR$/../mm-api/src/main/resources/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-gis-util/src/main/java/aerial/pamReport.java" afterPath="$PROJECT_DIR$/../mm-gis-util/src/main/java/aerial/pamReport.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mm-api/pom.xml" afterPath="$PROJECT_DIR$/../mm-api/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../map/skyeyeMap/js/skyeyeApp.js" afterPath="$PROJECT_DIR$/../../map/skyeyeMap/js/skyeyeApp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../clickers/app-topictagtweetclicker/template.html" afterPath="$PROJECT_DIR$/../../clickers/app-topictagtweetclicker/template.html" />
+    </list>
+    <ignored path="mm-drone-api.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="mm-drone-api" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="22" />
+    <option name="width" value="2560" />
+    <option name="height" value="1330" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mm-drone-api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="options.lastSelected" value="preferences.pathVariables" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="false" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="osgi.bnd.run" factoryName="Run Launcher">
+      <method />
+    </configuration>
+    <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" myUseAcceleration="nothing">
+    <configuration>$USER_HOME$/.subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2e622bb9-7d3d-40f4-85c0-fd817a8482d0" name="Default" comment="" />
+      <created>1440591854915</created>
+      <option name="number" value="Default" />
+      <updated>1440591854915</updated>
+      <workItem from="1440591859114" duration="131000" />
+      <workItem from="1440592107092" duration="90000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="221000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="22" width="2560" height="1330" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24980143" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="JProfiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+</project>
