@@ -1,10 +1,15 @@
 package qa.qcri.mm.drone.api.entity;
 
-import qa.qcri.mm.drone.api.store.LookUp;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import qa.qcri.mm.drone.api.store.LookUp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +19,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(catalog = "mm_uaviators",name = "droneTracker")
+@Table(catalog = "mm_uaviators",name = "dronetracker")
 public class DroneTracker  implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
