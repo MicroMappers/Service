@@ -1,18 +1,25 @@
 package qa.qcri.mm.drone.api.controller;
 
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import qa.qcri.mm.drone.api.entity.DroneTracker;
 import qa.qcri.mm.drone.api.service.DroneTrackerService;
+import qa.qcri.mm.drone.api.service.SubscribeUserService;
 import qa.qcri.mm.drone.api.store.LookUp;
 import qa.qcri.mm.drone.api.util.HTTPResultTemplate;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +35,9 @@ public class DroneTrackerController {
 
     @Autowired
     private DroneTrackerService droneTrackerService;
+    
+    @Autowired
+    private SubscribeUserService subscribeUserService;
 
     @GET
     @Produces( MediaType.APPLICATION_JSON )

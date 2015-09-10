@@ -19,7 +19,6 @@
         <property name="url" value="${jdbc.url}" />
         <property name="username" value="${jdbc.user}" />
         <property name="password" value="${jdbc.password}" />
-
     </bean>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -29,9 +28,9 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>
-
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

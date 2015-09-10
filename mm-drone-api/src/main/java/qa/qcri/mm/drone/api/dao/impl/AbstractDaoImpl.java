@@ -1,12 +1,19 @@
 package qa.qcri.mm.drone.api.dao.impl;
 
-import org.hibernate.*;
-import org.hibernate.criterion.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.drone.api.dao.AbstractDao;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.LockOptions;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import qa.qcri.mm.drone.api.dao.AbstractDao;
 
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDao<E,I> {
 
@@ -23,7 +30,8 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
         return sessionFactory.getCurrentSession();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public E findById(I id) {
         return (E) getCurrentSession().get(entityClass, id);
     }

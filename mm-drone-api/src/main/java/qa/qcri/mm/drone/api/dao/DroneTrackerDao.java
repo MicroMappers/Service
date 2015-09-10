@@ -1,8 +1,8 @@
 package qa.qcri.mm.drone.api.dao;
 
-import qa.qcri.mm.drone.api.entity.DroneTracker;
-
 import java.util.List;
+
+import qa.qcri.mm.drone.api.entity.DroneTracker;
 
 /**
  * Created with IntelliJ IDEA.

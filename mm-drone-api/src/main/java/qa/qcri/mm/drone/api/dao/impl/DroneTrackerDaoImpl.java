@@ -1,13 +1,14 @@
 package qa.qcri.mm.drone.api.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.drone.api.dao.DroneTrackerDao;
 import qa.qcri.mm.drone.api.entity.DroneTracker;
 import qa.qcri.mm.drone.api.store.LookUp;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
