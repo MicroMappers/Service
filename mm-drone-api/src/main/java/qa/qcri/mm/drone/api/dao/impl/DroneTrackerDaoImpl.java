@@ -32,7 +32,7 @@ public class DroneTrackerDaoImpl extends AbstractDaoImpl<DroneTracker, String> i
         Criterion criterion = Restrictions.eq("status", LookUp.DRONE_VIDEO_APPROVED);
         return findByCriteriaByOrder(criterion, orderby, null) ;
 
-    }
+    }   
 
     @Override
     public List<DroneTracker> getallApprovedDataAfterID(Long id) {

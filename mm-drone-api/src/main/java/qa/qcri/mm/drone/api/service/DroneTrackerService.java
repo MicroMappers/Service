@@ -1,9 +1,10 @@
 package qa.qcri.mm.drone.api.service;
 
-import org.json.simple.JSONArray;
-import qa.qcri.mm.drone.api.entity.DroneTracker;
-
 import java.util.List;
+
+import org.json.simple.JSONArray;
+
+import qa.qcri.mm.drone.api.entity.DroneTracker;
 
 /**
  * Created with IntelliJ IDEA.

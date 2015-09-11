@@ -1,21 +1,26 @@
 package qa.qcri.mm.drone.api.service.impl;
 
+import java.text.DateFormat;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.drone.api.dao.DroneReportDao;
 import qa.qcri.mm.drone.api.dao.DroneTrackerDao;
 import qa.qcri.mm.drone.api.entity.DroneTracker;
+import qa.qcri.mm.drone.api.entity.SubscribeUser;
 import qa.qcri.mm.drone.api.service.DroneTrackerService;
+import qa.qcri.mm.drone.api.service.SubscribeUserService;
 import qa.qcri.mm.drone.api.service.UserTokenService;
 import qa.qcri.mm.drone.api.store.LookUp;
+import qa.qcri.mm.drone.api.store.SubscribeFrequency;
 import qa.qcri.mm.drone.api.util.GISUtil;
-
-import java.text.DateFormat;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +40,9 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
 
     @Autowired
     UserTokenService userTokenService;
+    
+    @Autowired
+    private SubscribeUserService subscribeUserService;
 
     @Override
     public JSONArray getAllApprovedDroneGeoData() {
@@ -42,6 +50,7 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
         return reformatDroneJson(drones);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    
     @Override
     public JSONArray getAllApprovedDroneGeoDataAfterID(Long id) {
         //System.out.println("id : " + id);
@@ -69,6 +78,7 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
             String displayName = gisUtil.getDisplayNameWithReverseLookUp(key) ;
             DroneTracker droneTracker =    new DroneTracker(geoJson,url, displayName );
             droneTrackerDao.save(droneTracker);
+            notifySubscribeUsers(droneTracker);
         }
     }
 
@@ -213,6 +223,18 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
        // obj.put("title", jsonObject.get("title"));
 
         return obj;
-
     }
+    
+
+	@Async
+    public void notifySubscribeUsers(DroneTracker droneTracker){
+    	List<SubscribeUser> subscribedUsers = subscribeUserService.getSubscribedUsers(SubscribeFrequency.IMAGERY_ADDED);
+    	if(subscribedUsers != null && !subscribedUsers.isEmpty()){
+    		for(SubscribeUser subscribeUser : subscribedUsers){
+    			//Mime
+    		}
+    	}
+    }
+	
+	
 }

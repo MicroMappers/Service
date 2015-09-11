@@ -1,5 +1,7 @@
 package qa.qcri.mm.drone.api.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,5 +23,10 @@ public class SubscribeUserServiceImpl implements SubscribeUserService {
 		SubscribeUser subscribeUser = new SubscribeUser(name, email, SubscribeFrequency.valueOf(preference));
 		subscribeUserDao.save(subscribeUser);
 	}
+	
+	@Override
+	public List<SubscribeUser> getSubscribedUsers(SubscribeFrequency subscribeFrequency){
+		return subscribeUserDao.getSubscribedUsers(subscribeFrequency);
+    }
 	
 }
