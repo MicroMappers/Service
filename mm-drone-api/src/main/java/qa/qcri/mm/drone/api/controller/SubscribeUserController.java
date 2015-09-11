@@ -28,4 +28,5 @@ public class SubscribeUserController {
 		subscribeUserService.subscribeUser(name, email, preference);
 		return "{\"status\": \"sucess\"}";
 	}    
+	
 }

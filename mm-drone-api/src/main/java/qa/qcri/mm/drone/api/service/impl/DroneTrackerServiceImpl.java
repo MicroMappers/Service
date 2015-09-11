@@ -1,15 +1,25 @@
 package qa.qcri.mm.drone.api.service.impl;
 
 import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import qa.qcri.mm.drone.api.dao.DroneReportDao;
 import qa.qcri.mm.drone.api.dao.DroneTrackerDao;
@@ -236,5 +246,40 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
     	}
     }
 	
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@Autowired
+	private SpringTemplateEngine templateEngine;
+
+	public void sendMailWithInline(
+	  final String recipientName, final String recipientEmail, final String imageResourceName,
+	  final byte[] imageBytes, final String imageContentType, final Locale locale) throws MessagingException
+	 {
+		
+	  // Prepare the evaluation context
+	  final Context ctx = new Context(locale);	  
+	  ctx.setVariable("name", recipientName);
+	  ctx.setVariable("subscriptionDate", new Date());
+	  ctx.setVariable("hobbies", Arrays.asList("Cinema", "Sports", "Music"));
+	  ctx.setVariable("imageResourceName", imageResourceName); // so that we can reference it from HTML
+	  
+	 	 
+	  // Prepare message using a Spring helper
+	  final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+	  final MimeMessageHelper message =
+	      new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
+	  message.setSubject("Example HTML email with inline image");
+	  message.setFrom("thymeleaf@example.com");
+	  message.setTo(recipientEmail);
+	 
+	  // Create the HTML body using Thymeleaf
+	  final String htmlContent = this.templateEngine.process("email-inlineimage.html", ctx);
+	  message.setText(htmlContent, true); // true = isHtml
+	 
+	  // Send mail
+	  this.mailSender.send(mimeMessage);
+	 
+	}
 	
 }

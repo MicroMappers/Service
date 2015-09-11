@@ -22,5 +22,29 @@
     
     <task:annotation-driven />   
     
+    <!-- THYMELEAF: Template Resolver for email templates -->
+	<bean id="emailTemplateResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver">
+	  <property name="prefix" value="mail/" />
+	  <property name="templateMode" value="HTML5" />
+	  <property name="characterEncoding" value="UTF-8" />
+	  <property name="order" value="1" />
+	</bean>
+	
+	<!-- THYMELEAF: Template Engine (Spring3-specific version) -->
+	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+	  <property name="templateResolvers">
+	    <set>
+	      <ref bean="emailTemplateResolver" />	      
+	    </set>
+	  </property>
+	</bean>
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	  <property name="host" value="${mail.server.host}" />
+	  <property name="port" value="${mail.server.port}" />
+	  <property name="protocol" value="${mail.server.protocol}" />
+	  <property name="username" value="${mail.server.username}" />
+	  <property name="password" value="${mail.server.password}" />	  
+	</bean>
 
 </beans>
