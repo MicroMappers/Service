@@ -1,10 +1,11 @@
 package qa.qcri.mm.drone.api.service.impl;
 
 import java.text.DateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -13,6 +14,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -236,14 +238,23 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
     }
     
 
+	@Override
 	@Async
     public void notifySubscribeUsers(DroneTracker droneTracker){
+		
+		List<String> emails = new ArrayList<String>();
     	List<SubscribeUser> subscribedUsers = subscribeUserService.getSubscribedUsers(SubscribeFrequency.IMAGERY_ADDED);
     	if(subscribedUsers != null && !subscribedUsers.isEmpty()){
     		for(SubscribeUser subscribeUser : subscribedUsers){
-    			//Mime
+    			emails.add(subscribeUser.getEmail());
     		}
     	}
+    	if(!emails.isEmpty()){
+    		Map<String, Object> variables = new HashMap<>();
+    		variables.put("location", droneTracker.getDisplayName());
+    		variables.put("created_at", new Date());
+    		sendMail(emails, variables);
+    	}    	
     }
 	
 	@Autowired
@@ -251,34 +262,36 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
 	
 	@Autowired
 	private SpringTemplateEngine templateEngine;
-
-	public void sendMailWithInline(
-	  final String recipientName, final String recipientEmail, final String imageResourceName,
-	  final byte[] imageBytes, final String imageContentType, final Locale locale) throws MessagingException
+	
+	@Async
+	public void sendMail( List<String> recipientEmails, Map<String, Object> variables)
 	 {
 		
-	  // Prepare the evaluation context
-	  final Context ctx = new Context(locale);	  
-	  ctx.setVariable("name", recipientName);
-	  ctx.setVariable("subscriptionDate", new Date());
-	  ctx.setVariable("hobbies", Arrays.asList("Cinema", "Sports", "Music"));
-	  ctx.setVariable("imageResourceName", imageResourceName); // so that we can reference it from HTML
-	  
-	 	 
-	  // Prepare message using a Spring helper
-	  final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-	  final MimeMessageHelper message =
-	      new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
-	  message.setSubject("Example HTML email with inline image");
-	  message.setFrom("thymeleaf@example.com");
-	  message.setTo(recipientEmail);
-	 
-	  // Create the HTML body using Thymeleaf
-	  final String htmlContent = this.templateEngine.process("email-inlineimage.html", ctx);
-	  message.setText(htmlContent, true); // true = isHtml
-	 
-	  // Send mail
-	  this.mailSender.send(mimeMessage);
+	  try {
+		// Prepare the evaluation context
+		  final Context ctx = new Context();	  
+		  ctx.setVariables(variables);
+		  
+		  final MimeMessage mimeMessage = mailSender.createMimeMessage();
+		  final MimeMessageHelper message =
+		      new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
+		  message.setSubject("UAViators Map Updated");
+		  message.setFrom("info.uaviators@gmail.com");		 
+		  message.setTo(recipientEmails.toArray(new String[0]));
+		 
+		  
+		  final String htmlContent = this.templateEngine.process("imagery_added.html", ctx);
+		  message.setText(htmlContent, true); 
+		  System.out.println(htmlContent);
+		 
+		  // Send mail
+		  this.mailSender.send(mimeMessage);
+		  
+		} catch (MailException e) {		
+			e.printStackTrace();
+		} catch (MessagingException e) {		
+			e.printStackTrace();
+		}
 	 
 	}
 	

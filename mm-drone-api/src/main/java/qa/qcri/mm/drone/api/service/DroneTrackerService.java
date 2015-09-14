@@ -20,4 +20,5 @@ public interface DroneTrackerService {
     List<DroneTracker> getAllPendingDroneGeoData(String token);
     int updateUserMappingRequest(String geoJson);
     int deleteUserMappingRequest(String email, Long id);
+	void notifySubscribeUsers(DroneTracker droneTracker);
 }
