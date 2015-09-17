@@ -19,7 +19,7 @@ import qa.qcri.mm.drone.api.store.LookUp;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(catalog = "mm_uaviators",name = "dronetracker")
+@Table(catalog = "mm_uaviators",name = "droneTracker")
 public class DroneTracker  implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 

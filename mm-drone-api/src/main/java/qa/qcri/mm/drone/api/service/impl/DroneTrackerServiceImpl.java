@@ -2,6 +2,7 @@ package qa.qcri.mm.drone.api.service.impl;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,6 +21,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
@@ -58,7 +62,7 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
 
     @Override
     public JSONArray getAllApprovedDroneGeoData() {
-        List<DroneTracker> drones =  droneTrackerDao.getallApprovedData();
+        List<DroneTracker> drones =  droneTrackerDao.getallApprovedData();     
         return reformatDroneJson(drones);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -90,7 +94,7 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
             String displayName = gisUtil.getDisplayNameWithReverseLookUp(key) ;
             DroneTracker droneTracker =    new DroneTracker(geoJson,url, displayName );
             droneTrackerDao.save(droneTracker);
-            notifySubscribeUsers(droneTracker);
+            notifySubscribeUsers(droneTracker);            
         }
     }
 
@@ -253,7 +257,7 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
     		Map<String, Object> variables = new HashMap<>();
     		variables.put("location", droneTracker.getDisplayName());
     		variables.put("created_at", new Date());
-    		sendMail(emails, variables);
+    		sendMail(emails, variables, "imagery_added.html");
     	}    	
     }
 	
@@ -264,7 +268,7 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
 	private SpringTemplateEngine templateEngine;
 	
 	@Async
-	public void sendMail( List<String> recipientEmails, Map<String, Object> variables)
+	public void sendMail( List<String> recipientEmails, Map<String, Object> variables, String templateName)
 	 {
 		
 	  try {
@@ -276,11 +280,11 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
 		  final MimeMessageHelper message =
 		      new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
 		  message.setSubject("UAViators Map Updated");
-		  message.setFrom("info.uaviators@gmail.com");		 
-		  message.setTo(recipientEmails.toArray(new String[0]));
+		  message.setFrom("info.uaviators@gmail.com");	  
+		  message.setBcc(recipientEmails.toArray(new String[0]));
 		 
 		  
-		  final String htmlContent = this.templateEngine.process("imagery_added.html", ctx);
+		  final String htmlContent = this.templateEngine.process(templateName, ctx);
 		  message.setText(htmlContent, true); 
 		  System.out.println(htmlContent);
 		 
@@ -294,5 +298,87 @@ public class DroneTrackerServiceImpl implements DroneTrackerService {
 		}
 	 
 	}
+	
+	@Override
+	@Scheduled(cron="0 0 0 1/1 * ?")
+    public void dailySuscribedMail()
+    {
+		List<String> emails = new ArrayList<String>();
+    	List<SubscribeUser> subscribedUsers = subscribeUserService.getSubscribedUsers(SubscribeFrequency.DAILY);
+    	if(subscribedUsers != null && !subscribedUsers.isEmpty()){
+    		for(SubscribeUser subscribeUser : subscribedUsers){
+    			emails.add(subscribeUser.getEmail());
+    		}
+    		
+    		Calendar calendar = Calendar.getInstance();
+        	calendar.add(Calendar.DATE, -1);
+        	calendar.set(Calendar.HOUR_OF_DAY, 0);
+        	calendar.set(Calendar.MINUTE, 0);
+        	calendar.set(Calendar.SECOND, 0);
+        	calendar.set(Calendar.MILLISECOND, 0);
+        	Date fromDate = calendar.getTime();
+
+        	calendar.add(Calendar.DATE, 1);
+        	Date toDate = calendar.getTime();
+
+        	Criterion criterion = Restrictions.between("created", fromDate, toDate);
+        	List<DroneTracker> droneTrackers = droneTrackerDao.findByCriteriaByOrder(criterion, new String[]{"created"}, null);
+        	if(!emails.isEmpty() && !droneTrackers.isEmpty()){
+        		Map<String, Object> variables = new HashMap<>();
+        		List<Map<String, Object>> droneData = new ArrayList<>();
+        		for(DroneTracker droneTracker : droneTrackers){
+        			Map<String, Object> tempMap = new HashMap<>();
+        			tempMap.put("location", droneTracker.getDisplayName());
+        			tempMap.put("created_at", droneTracker.getCreated());
+        			droneData.add(tempMap);
+        		}
+        		variables.put("drones", droneData);
+        		sendMail(emails, variables, "daily.html");
+        	}
+    	}   	
+    	
+    }
+	
+	@Override
+	@Scheduled(cron="0 1 0 ? * SUN")
+    public void weeklySuscribedMail()
+    {
+		List<String> emails = new ArrayList<String>();
+    	List<SubscribeUser> subscribedUsers = subscribeUserService.getSubscribedUsers(SubscribeFrequency.WEEKLY);
+    	if(subscribedUsers != null && !subscribedUsers.isEmpty()){
+    		for(SubscribeUser subscribeUser : subscribedUsers){
+    			emails.add(subscribeUser.getEmail());
+    		}
+    		
+    		// get last week range
+    		Calendar c = Calendar.getInstance();
+            c.set(Calendar.HOUR_OF_DAY, 0);
+        	c.set(Calendar.MINUTE, 0);
+        	c.set(Calendar.SECOND, 0);
+        	c.set(Calendar.MILLISECOND, 0);
+            
+            int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
+            c.add(Calendar.DATE, -i - 7);
+            Date fromDate = c.getTime();
+            c.add(Calendar.DATE, 7);
+            Date toDate = c.getTime();
+
+        	Criterion criterion = Restrictions.between("created", fromDate, toDate);
+        	List<DroneTracker> droneTrackers = droneTrackerDao.findByCriteriaByOrder(criterion, new String[]{"created"}, null);
+        	if(!emails.isEmpty() && !droneTrackers.isEmpty()){
+        		Map<String, Object> variables = new HashMap<>();
+        		List<Map<String, Object>> droneData = new ArrayList<>();
+        		for(DroneTracker droneTracker : droneTrackers){
+        			Map<String, Object> tempMap = new HashMap<>();
+        			tempMap.put("location", droneTracker.getDisplayName());
+        			tempMap.put("created_at", droneTracker.getCreated());
+        			droneData.add(tempMap);
+        		}
+        		variables.put("drones", droneData);
+        		sendMail(emails, variables, "weekly.html");
+        	}
+    	}   	
+    	
+    }
 	
 }

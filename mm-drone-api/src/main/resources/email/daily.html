@@ -77,15 +77,12 @@
                   <tr style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                     <td class="content-block" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                       <div style="color: grey">
-                          New imagery added to the uaviators Map Today
+                          New imagery added to the UAViators Map Yesterday
 
                           <ul>
-                            <li>Tiajin, China at May 13, 2015 1:13 PM</li>
-                            <li>Central Region, Nepal at May 13, 2015 3:13 PM</li>
-                            <li>Tiajin, China at May 13, 2015 1:13 PM</li>
-                            <li>Central Region, Nepal at May 13, 2015 3:13 PM</li>
-                            <li>Tiajin, China at May 13, 2015 1:13 PM</li>
-                            <li>Central Region, Nepal at May 13, 2015 3:13 PM</li>
+                            <li th:each="drone : ${drones}">
+                            	<span th:text="${drone.location}"></span> on <span th:text="${drone.created_at}"></span>
+                            </li>                            
                           </ul>
 
                           <div style="text-align: center;">

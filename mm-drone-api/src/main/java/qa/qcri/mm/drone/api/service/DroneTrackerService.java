@@ -21,4 +21,6 @@ public interface DroneTrackerService {
     int updateUserMappingRequest(String geoJson);
     int deleteUserMappingRequest(String email, Long id);
 	void notifySubscribeUsers(DroneTracker droneTracker);
+	void dailySuscribedMail();
+	void weeklySuscribedMail();
 }
