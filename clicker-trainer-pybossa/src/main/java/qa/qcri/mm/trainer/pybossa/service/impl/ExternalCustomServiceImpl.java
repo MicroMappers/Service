@@ -1,14 +1,25 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.trainer.pybossa.custom.NamibiaAerialClickerFileFormat;
-import qa.qcri.mm.trainer.pybossa.dao.*;
-import qa.qcri.mm.trainer.pybossa.entity.*;
+import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
+import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
+import qa.qcri.mm.trainer.pybossa.dao.NamibiaImageDao;
+import qa.qcri.mm.trainer.pybossa.dao.TaskRunDao;
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.NamibiaImage;
+import qa.qcri.mm.trainer.pybossa.entity.NamibiaReport;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.format.impl.SkyEyeDataOutputProcessor;
 import qa.qcri.mm.trainer.pybossa.format.impl.VanuatuDataOutputProcessor;
 import qa.qcri.mm.trainer.pybossa.service.ClientAppService;
@@ -16,9 +27,6 @@ import qa.qcri.mm.trainer.pybossa.service.ExternalCustomService;
 import qa.qcri.mm.trainer.pybossa.service.NamibiaReportService;
 import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
 import qa.qcri.mm.trainer.pybossa.store.UserAccount;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -189,7 +197,7 @@ public class ExternalCustomServiceImpl  implements ExternalCustomService {
 
         if(clientApp.getShortName().equalsIgnoreCase(UserAccount.SKY_EYES_COCONUT_APP) || clientApp.getShortName().equalsIgnoreCase(UserAccount.SKY_EYES_RUBY_APP)) {
             //
-            System.out.println("skyeyes");
+            //System.out.println("skyeyes");
             return getAnswerResponseForSkyEyes(clientApp,  datasource,  taskQueue);
         }
 

@@ -1,24 +1,32 @@
 package qa.qcri.mm.trainer.pybossa.format.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import qa.qcri.mm.trainer.pybossa.dao.CrisisDao;
-import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
+
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppSource;
+import qa.qcri.mm.trainer.pybossa.entity.Crisis;
+import qa.qcri.mm.trainer.pybossa.entity.MarkerStyle;
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
+import qa.qcri.mm.trainer.pybossa.service.impl.PybossaCommunicator;
 import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
 import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
-import qa.qcri.mm.trainer.pybossa.util.*;
-
-import java.io.InputStream;
-import java.util.*;
+import qa.qcri.mm.trainer.pybossa.util.CVSFileDataSourceSearch;
+import qa.qcri.mm.trainer.pybossa.util.DataFormatValidator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,6 +37,8 @@ import java.util.*;
  */
 public class MicroMapperPybossaFormatter {
     protected static Logger logger = Logger.getLogger(MicroMapperPybossaFormatter.class);
+    
+    private PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
 
 
     public MicroMapperPybossaFormatter(){}
@@ -300,6 +310,32 @@ public class MicroMapperPybossaFormatter {
         TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJsonString, taskInfo);
         return  taskQueueResponse;
     }
+    
+    Map<Long, JSONObject> responseArrayMap = new HashMap<>();
+    
+    public String getCategoryFromJson(Long taskid) throws ParseException{
+    	if (responseArrayMap.isEmpty()) {
+			JSONParser parser = new JSONParser();
+			String jsonData = pybossaCommunicator
+					.sendGet("http://maps.micromappers.org/data/esri/nepal/nepalText1.json");
+			jsonData = jsonData.substring(6, jsonData.length() - 2);
+			JSONArray responseArray = (JSONArray) parser.parse(jsonData);
+			for (int j = 0; j < responseArray.size(); j++) {
+				try {
+					JSONObject object = (JSONObject) responseArray.get(j);
+					String infoStringObject = (String) object.get("info");
+					JSONObject infoObject = (JSONObject) parser.parse(infoStringObject);
+					Long taskId = (Long) infoObject.get("taskid");
+					responseArrayMap.put(taskId, object);
+					System.out.println(j);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}   	
+    	JSONObject jsonObject = responseArrayMap.get(taskid);
+    	return (String) jsonObject.get("answer");
+    }
 
     public TaskQueueResponse getAnswerResponseForGeo(String pybossaResult, JSONParser parser, Long taskQueueID, ClientApp clientApp, Crisis c, MarkerStyle markerStyle, ClientAppSource appSource) throws Exception{
         boolean noLocationFound  = isContainNoLocationInfo( pybossaResult,  parser);
@@ -318,11 +354,19 @@ public class MicroMapperPybossaFormatter {
 
             JSONObject info = (JSONObject)featureJsonObj.get("info");
 
-            String locValue = info.get("loc").toString();
-            if(!locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND)){
+            String locValue = info.get("loc") == null? null : info.get("loc").toString();
+            if(locValue != null && !locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND) && c != null){
                 if(DataFormatValidator.isValidateJson(locValue)) {
                     JSONObject loc = (JSONObject)info.get("loc");
                     String locType = (String)loc.get("type");
+                    
+                    if(info.get("category") == null || info.get("category").equals("")) {
+                    	if(info.get("taskid") != null){
+                    		String category = getCategoryFromJson((Long)info.get("taskid"));
+                        	info.put("category", category );
+                    	}
+                    }
+                    
                     if(locType.equalsIgnoreCase(PybossaConf.GEOJSON_TYPE_FEATURE_COLLECTION)){
                         JSONArray features = (JSONArray)loc.get("features");
 
@@ -336,9 +380,10 @@ public class MicroMapperPybossaFormatter {
 
                                 String[] row =   CVSFileDataSourceSearch.search((String)info.get("tweetid"),appSource.getSourceURL() );
 
-                                System.out.println("row :" + row.length);
+                                
 
                                 if(row != null){
+                                	System.out.println("row :" + row.length);
                                     //tweetID,tweet,author,lat,lng,url,created,answer
                                     info.put("author", row[2] );
                                     info.put("timestamp", row[6] );
@@ -360,11 +405,9 @@ public class MicroMapperPybossaFormatter {
 
                             JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser,info.get("category")!=null?info.get("category"):"");
                             if(mStyle != null){
-                                properties.put("style", mStyle )   ;
-                                locations.add(aFeature) ;
+                                properties.put("style", mStyle );                                
                             }
-
-
+                            locations.add(aFeature) ;
                             uniqueIDString  = String.valueOf(info.get("tweetid"));
                         }
 
@@ -387,19 +430,23 @@ public class MicroMapperPybossaFormatter {
                        // JSONObject geometry = (JSONObject)geoLoc.get("geometry");
 
                         JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser,info.get("category")!=null?info.get("category"):"mild");
-                        properties.put("style", mStyle )   ;
-
                         uniqueIDString = String.valueOf(info.get("url") );
-
-                        locations.add(geoLoc)   ;
+                        
+                        if(mStyle != null){
+                        	properties.put("style", mStyle );
+                        }
+                        locations.add(geoLoc);
+                        
                     }
                 }
             }
 
         }
         System.out.println("locations : " + locations.toJSONString()) ;
-        TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), uniqueIDString);
-
+        TaskQueueResponse taskQueueResponse = null;
+        if(!locations.isEmpty()){
+        	taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), uniqueIDString);
+        }
         return  taskQueueResponse;
     }
 
@@ -591,11 +638,12 @@ public class MicroMapperPybossaFormatter {
             JSONObject featureJsonObj = (JSONObject)itr.next();
 
             JSONObject info = (JSONObject)featureJsonObj.get("info");
-            String locValue = info.get("loc").toString();
-            if(locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND)){
-                found = true;
+            if(info.get("loc") != null){
+	            String locValue = info.get("loc").toString();
+	            if(locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND)){
+	                found = true;
+	            }
             }
-
         }
         return  found;
     }
@@ -615,18 +663,20 @@ public class MicroMapperPybossaFormatter {
 
         JSONObject selectedStyle = null;
         try {
-            JSONObject mJson = (JSONObject)parser.parse(markerStyle.getStyle());
-            JSONArray mStyles = (JSONArray)mJson.get("style");
-            for(Object a : mStyles) {
-                JSONObject aStyle = (JSONObject)a;
+        	if(markerStyle != null){
+                JSONObject mJson = (JSONObject)parser.parse(markerStyle.getStyle());
+                JSONArray mStyles = (JSONArray)mJson.get("style");
+                for(Object a : mStyles) {
+                    JSONObject aStyle = (JSONObject)a;
 
-                System.out.println("aStyle.get(\"label_code\") : " + aStyle.get("label_code"));
-                System.out.println("answer : " + answer);
+                    System.out.println("aStyle.get(\"label_code\") : " + aStyle.get("label_code"));
+                    System.out.println("answer : " + answer);
 
-                if(aStyle.get("label_code").equals(answer)){
-                    selectedStyle = aStyle;
+                    if(aStyle.get("label_code").equals(answer)){
+                        selectedStyle = aStyle;
+                    }
                 }
-            }
+        	}
         } catch (ParseException e) {
             e.printStackTrace();
         }

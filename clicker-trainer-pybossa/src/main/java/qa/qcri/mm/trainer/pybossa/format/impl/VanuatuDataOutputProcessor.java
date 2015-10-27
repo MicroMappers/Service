@@ -1,17 +1,19 @@
 package qa.qcri.mm.trainer.pybossa.format.impl;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.trainer.pybossa.dao.CrisisDao;
-import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
-import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
-import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ImageMetaData;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -138,9 +140,10 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
             JSONArray latlng = new JSONArray();
 
             ImageMetaData aData = imageMetaDataList.get(0);
-
+            
+            latlng.add(Double.valueOf(aData.getLng())) ;            
             latlng.add(Double.valueOf(aData.getLat())) ;
-            latlng.add(Double.valueOf(aData.getLng())) ;
+            
 
             geometry.put("coordinates", latlng) ;
 

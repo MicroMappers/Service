@@ -1,11 +1,12 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.trainer.pybossa.dao.TaskQueueResponseDao;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +25,9 @@ public class TaskQueueResponseDaoImpl extends AbstractDaoImpl<TaskQueueResponse,
     @Override
     public void addTaskQueueResponse(TaskQueueResponse taskQueueResponse) {
         //To change body of implemented methods use File | Settings | File Templates.
-        saveOrUpdate(taskQueueResponse);
+    	if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("[]")){
+    	  saveOrUpdate(taskQueueResponse);
+    	}        
     }
 
     @Override

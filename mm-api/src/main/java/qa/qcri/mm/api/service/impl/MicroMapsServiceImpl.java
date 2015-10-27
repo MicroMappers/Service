@@ -1,5 +1,9 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,22 +11,28 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import qa.qcri.mm.api.dao.CrisisDao;
+import qa.qcri.mm.api.dao.MarkerStyleDao;
 import qa.qcri.mm.api.dao.TaskQueueResponseDao;
-import qa.qcri.mm.api.entity.*;
+import qa.qcri.mm.api.entity.ClientApp;
+import qa.qcri.mm.api.entity.ClientAppAnswer;
+import qa.qcri.mm.api.entity.Crisis;
+import qa.qcri.mm.api.entity.MarkerStyle;
+import qa.qcri.mm.api.entity.TaskQueue;
+import qa.qcri.mm.api.entity.TaskQueueResponse;
 import qa.qcri.mm.api.service.ClientAppAnswerService;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.MicroMapsService;
 import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.store.URLReference;
-import qa.qcri.mm.api.template.*;
-import qa.qcri.mm.api.dao.CrisisDao;
-import qa.qcri.mm.api.dao.MarkerStyleDao;
+import qa.qcri.mm.api.template.AerialClickerKMLModel;
+import qa.qcri.mm.api.template.CrisisGISModel;
+import qa.qcri.mm.api.template.ImageClickerKMLModel;
+import qa.qcri.mm.api.template.MicroMapsCrisisModel;
+import qa.qcri.mm.api.template.TextClickerKMLModel;
 import qa.qcri.mm.api.util.DataFileUtil;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -114,7 +124,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             JSONObject aObject = new JSONObject();
             aObject.put("clientAppID",c.getClientAppID()) ;
             aObject.put("crisisID",c.getCrisisID()) ;
-            aObject.put("crisis",c.getCrisisName()) ;
+            //aObject.put("crisis",c.getCrisisName()) ;
             aObject.put("name",c.getDisplayName()) ;
             aObject.put("type",c.getClickerType()) ;
             aObject.put("activationStart",c.getActivationStart().toString()) ;
@@ -171,7 +181,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                     if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
                         JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
                         for(Object a : eachFeatureArrary){
-                            features.add((JSONObject) a);
+                            features.add(a);
                         }
 
                     }
@@ -187,7 +197,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
         String content = DataFileUtil.getDataFileContent(fileName);
 
-        return content;
+        return geoClickerOutput.toJSONString();
     }
 
     @Override
@@ -215,7 +225,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                         if (!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")) {
                             JSONArray eachFeatureArrary = (JSONArray) parser.parse(responses.get(0).getResponse());
                             for (Object a : eachFeatureArrary) {
-                                features.add((JSONObject) a);
+                                features.add(a);
                             }
 
                         }

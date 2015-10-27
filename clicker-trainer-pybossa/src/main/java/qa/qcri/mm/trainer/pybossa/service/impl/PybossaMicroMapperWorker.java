@@ -1,28 +1,43 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.trainer.pybossa.dao.CrisisDao;
 import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
+import qa.qcri.mm.trainer.pybossa.entity.Client;
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppSource;
+import qa.qcri.mm.trainer.pybossa.entity.Crisis;
+import qa.qcri.mm.trainer.pybossa.entity.MarkerStyle;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.format.impl.CVSRemoteFileFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicroMapperPybossaFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicromapperInput;
-import qa.qcri.mm.trainer.pybossa.service.*;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppService;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppSourceService;
+import qa.qcri.mm.trainer.pybossa.service.ClientService;
+import qa.qcri.mm.trainer.pybossa.service.ExternalCustomService;
+import qa.qcri.mm.trainer.pybossa.service.MicroMapperWorker;
+import qa.qcri.mm.trainer.pybossa.service.ReportProductService;
+import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
+import qa.qcri.mm.trainer.pybossa.service.TaskQueueService;
 import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
 import qa.qcri.mm.trainer.pybossa.store.URLPrefixCode;
 import qa.qcri.mm.trainer.pybossa.store.UserAccount;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -181,6 +196,14 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         Iterator itr= appList.iterator();
         while(itr.hasNext()){
             ClientApp clientApp = (ClientApp)itr.next();
+            
+            if(clientApp.getAppType() != 4 && clientApp.getAppType() != 5){
+            	continue;
+            }
+            
+            /*if(clientApp.getClientAppID() != 254){
+            	continue;
+            }*/
 
             if(clientApp.getStatus().equals(StatusCodeType.MICROMAPPER_ONLY)){
                 List<TaskQueue> taskQueues =  taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(),StatusCodeType.TASK_PUBLISHED);
@@ -191,26 +214,35 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                     {
                         queueSize =  taskQueues.size();
                     }
-
+                    
+                    
                     for(int i=0; i < queueSize; i++){
                         TaskQueue taskQueue = taskQueues.get(i);
+                        //Long taskID =  108062l;
                         Long taskID =  taskQueue.getTaskID();
+                        /*if(taskID != 536913){
+                        	continue;
+                        }*/
                         String taskQueryURL = PYBOSSA_API_TASK_BASE_URL + clientApp.getPlatformAppID() + "&id=" + taskID;
+                        System.out.print("Calling Task API: "+ taskQueryURL);                        
                         String inputData = pybossaCommunicator.sendGet(taskQueryURL);
+                        System.out.println("  ..  Completed");
+                        //String inputData = tasksInputData.get(taskID) == null? null : tasksInputData.get(taskID).toString();
                         try {
 
-                            boolean isFound = pybossaFormatter.isTaskStatusCompleted(inputData);
-
-                            if(isFound){
-                                this.processTaskQueueImport(clientApp,taskQueue,taskID, geoJsonOutputModels) ;
-                            }
+                            if (inputData != null) {
+								boolean isFound = pybossaFormatter.isTaskStatusCompleted(inputData);
+								if (isFound) {
+									this.processTaskQueueImport(clientApp, taskQueue, taskID, geoJsonOutputModels);
+								}
+							}
 
                         } catch (Exception e) {
                             e.printStackTrace();
                             logger.error("processTaskImport: " + e);
                             System.out.println("getTaskQueueID*******************" + taskQueue.getTaskQueueID());
                             //To change body of catch statement use File | Settings | File Templates.
-                        }
+                        }    
                     }
                     // Map data export
                     reportProductService.generateGeoJsonForClientApp(clientApp.getClientAppID());
@@ -276,9 +308,11 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
     private void processTaskQueueImport(ClientApp clientApp,TaskQueue taskQueue, Long taskID, List<GeoJsonOutputModel> geoJsonOutputModels) throws Exception {
         String PYBOSSA_API_TASK_RUN = PYBOSSA_API_TASK_RUN_BASE_URL + clientApp.getPlatformAppID() + "&task_id=" + taskID;
-
+        
+        System.out.print("Calling Task Run API: "+ PYBOSSA_API_TASK_RUN);                  
         String importResult = pybossaCommunicator.sendGet(PYBOSSA_API_TASK_RUN) ;
-
+        System.out.println("  ..  Completed");
+        
         if(!importResult.isEmpty() && importResult.length() > StatusCodeType.RESPONSE_MIN_LENGTH  ){
 
             TaskQueueResponse taskQueueResponse = null;
@@ -307,17 +341,12 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                     taskQueueResponse = pybossaFormatter.getAnswerResponseForAerial(importResult, parser, taskQueue.getTaskQueueID(), clientApp);
                 }
 
-                if(taskQueueResponse != null){
-                    clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
-                }
-
             }
             else{
                 taskQueueResponse = pybossaFormatter.getAnswerResponse(clientApp, importResult, parser, taskQueue.getTaskQueueID(), clientAppAnswer, reportTemplateService);
             }
 
-            if(taskQueueResponse != null){
-
+            if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("[]")){            	
                 clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
                 taskQueue.setStatus(StatusCodeType.TASK_LIFECYCLE_COMPLETED);
                 updateTaskQueue(taskQueue);
@@ -395,7 +424,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         MarkerStyle selectedStyle = null;
         try {
             List<MarkerStyle> styleTemplate = markerStyleDao.findByClientAppID(clientApp.getClientAppID().longValue()) ;
-            if(styleTemplate.isEmpty()){
+            if(styleTemplate.isEmpty() && c != null){
                 styleTemplate = markerStyleDao.findByAppType(c.getClickerType());
             }
 

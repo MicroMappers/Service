@@ -3,6 +3,7 @@ package qa.qcri.mm.trainer.pybossa.controller;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import qa.qcri.mm.trainer.pybossa.service.MicroMapperWorker;
 import qa.qcri.mm.trainer.pybossa.service.Worker;
 
@@ -18,14 +19,15 @@ public class SyncWorker implements Worker {
     @Autowired
     private MicroMapperWorker microMapperWorker;
 
+	@Override
 	public void work() {
 		String threadName = Thread.currentThread().getName();
 		logger.info("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
 
         try {
-            microMapperWorker.processTaskPublish();
-            microMapperWorker.processTaskImport();
-            microMapperWorker.processTaskExport();
+           // microMapperWorker.processTaskPublish();
+            //microMapperWorker.processTaskImport();
+            //microMapperWorker.processTaskExport();
 
             Thread.sleep(180000);
         }

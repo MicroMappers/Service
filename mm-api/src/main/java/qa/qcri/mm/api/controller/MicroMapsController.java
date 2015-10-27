@@ -1,25 +1,22 @@
 package qa.qcri.mm.api.controller;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import qa.qcri.mm.api.service.GeoService;
-import qa.qcri.mm.api.service.MicroMapsService;
-import qa.qcri.mm.api.template.CrisisGISModel;
-import qa.qcri.mm.api.template.MicroMapsCrisisModel;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.List;
-import java.util.Scanner;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import qa.qcri.mm.api.service.GeoService;
+import qa.qcri.mm.api.service.MicroMapsService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,7 +41,6 @@ public class MicroMapsController {
     @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Path("/JSON/crisis")
     public String getAllCrisis() throws Exception {
-
         return microMapsService.getAllCrisisJSONP().toJSONString();
     }
 
@@ -52,7 +48,6 @@ public class MicroMapsController {
     @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Path("/JSONP/crisis")
     public String getAllCrisisJSONP() throws Exception {
-
         return "jsonp(" + microMapsService.getAllCrisisJSONP().toJSONString() + ");";
     }
 
@@ -173,11 +168,12 @@ public class MicroMapsController {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Path("/kml/text/id/{id}")
     public String getTextClickerKML(@PathParam("id") long id) throws Exception {
 
-        return microMapsService.generateTextClickerKML(id);
+        String output = microMapsService.generateTextClickerKML(id);
+        return output;
     }
 
     @GET

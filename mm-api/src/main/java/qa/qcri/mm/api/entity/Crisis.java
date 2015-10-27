@@ -1,8 +1,15 @@
 package qa.qcri.mm.api.entity;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,8 +32,8 @@ public class Crisis implements Serializable {
     @Column (name = "crisisID", nullable = true)
     private Long crisisID;
 
-    @Column (name = "crisisName", nullable = true)
-    private String crisisName;
+//    @Column (name = "crisisName", nullable = true)
+//    private String crisisName;
 
     @Column (name = "clientAppID", nullable = true)
     private Long clientAppID;
@@ -46,8 +53,8 @@ public class Crisis implements Serializable {
     @Column (name = "clickerType", nullable = true)
     private String clickerType;
 
-    @Column (name = "refreshInMinute", nullable = true)
-    private Integer refreshInMinute;
+//    @Column (name = "refreshInMinute", nullable = true)
+//    private Integer refreshInMinute;
 
     @OneToOne
     @JoinColumn(name="clientAppID" ,nullable = false, insertable = false, updatable = false)
@@ -73,13 +80,13 @@ public class Crisis implements Serializable {
         this.crisisID = crisisID;
     }
 
-    public String getCrisisName() {
-        return crisisName;
-    }
+//    public String getCrisisName() {
+//        return crisisName;
+//    }
 
-    public void setCrisisName(String crisisName) {
-        this.crisisName = crisisName;
-    }
+//    public void setCrisisName(String crisisName) {
+//        this.crisisName = crisisName;
+//    }
 
     public Long getClientAppID() {
         return clientAppID;
@@ -137,11 +144,11 @@ public class Crisis implements Serializable {
         this.clientApp = clientApp;
     }
 
-    public Integer getRefreshInMinute() {
+/*    public Integer getRefreshInMinute() {
         return refreshInMinute;
     }
 
     public void setRefreshInMinute(Integer refreshInMinute) {
         this.refreshInMinute = refreshInMinute;
-    }
+    }*/
 }
