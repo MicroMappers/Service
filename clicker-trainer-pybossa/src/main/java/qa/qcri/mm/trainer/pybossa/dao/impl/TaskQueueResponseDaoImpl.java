@@ -39,5 +39,4 @@ public class TaskQueueResponseDaoImpl extends AbstractDaoImpl<TaskQueueResponse,
     public List<TaskQueueResponse> getTaskQueueResponseByContent() {
         return  findByCriteria(Restrictions.eq("response", "geo"));
     }
-
 }

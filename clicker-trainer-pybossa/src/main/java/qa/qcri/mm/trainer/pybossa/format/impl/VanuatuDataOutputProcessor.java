@@ -57,11 +57,13 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
 
                 String tweetID = null;
                 String imgURL = (String)this.getStringValueFromInfoJson(array, "imgurl");
-
+                                
+                //String bounds = this.getStringValueFromInfoJson(array, "geo");
+                String bounds = "[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]";
 
                 JSONObject finalProperties = new JSONObject();
                 finalProperties.put("imgURL", imgURL);
-                finalProperties.put("bounds", this.getStringValueFromInfoJson(array, "geo"));
+                finalProperties.put("bounds", bounds);
                 finalProperties.put("taskid", this.taskQueue.getTaskID());
 
                 JSONObject features = this.getFeature(imgURL);

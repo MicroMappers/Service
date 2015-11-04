@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
     </properties>
-
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -165,8 +165,21 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-
-
+		<dependency>
+		  <groupId>com.pusher</groupId>
+		  <artifactId>pusher-http-java</artifactId>
+		  <version>0.9.3</version>
+		</dependency>
+		<dependency>
+	       <groupId>org.apache.httpcomponents</groupId>
+	       <artifactId>httpclient</artifactId>
+	       <version>4.3.5</version>
+	   </dependency>
+	   <dependency>
+		   <groupId>cglib</groupId>
+		   <artifactId>cglib-nodep</artifactId>
+		   <version>2.1_3</version>
+	   </dependency>
 
     </dependencies>
 

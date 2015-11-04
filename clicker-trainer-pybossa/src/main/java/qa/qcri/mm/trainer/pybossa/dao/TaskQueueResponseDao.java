@@ -1,8 +1,8 @@
 package qa.qcri.mm.trainer.pybossa.dao;
 
-import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
-
 import java.util.List;
+
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,5 +16,4 @@ public interface TaskQueueResponseDao extends AbstractDao<TaskQueueResponse, Str
     void addTaskQueueResponse(TaskQueueResponse taskQueueResponse);
     List<TaskQueueResponse> getTaskQueueResponse(Long taskQueueID);
     List<TaskQueueResponse> getTaskQueueResponseByContent();
-
 }

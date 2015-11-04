@@ -52,6 +52,9 @@ public class Crisis implements Serializable {
 
     @Column (name = "clickerType", nullable = true)
     private String clickerType;
+    
+    @Column (name = "bounds")
+    private String bounds;
 
 //    @Column (name = "refreshInMinute", nullable = true)
 //    private Integer refreshInMinute;
@@ -143,6 +146,15 @@ public class Crisis implements Serializable {
     public void setClientApp(ClientApp clientApp) {
         this.clientApp = clientApp;
     }
+
+	public String getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(String bounds) {
+		this.bounds = bounds;
+	}
+    
 
 /*    public Integer getRefreshInMinute() {
         return refreshInMinute;

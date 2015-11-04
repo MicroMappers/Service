@@ -334,6 +334,9 @@ public class MicroMapperPybossaFormatter {
 			}
 		}   	
     	JSONObject jsonObject = responseArrayMap.get(taskid);
+    	if(jsonObject == null){
+    		return null;
+    	}
     	return (String) jsonObject.get("answer");
     }
 
@@ -363,6 +366,16 @@ public class MicroMapperPybossaFormatter {
                     if(info.get("category") == null || info.get("category").equals("")) {
                     	if(info.get("taskid") != null){
                     		String category = getCategoryFromJson((Long)info.get("taskid"));
+                    		if(category != null){
+                        		switch(category){
+                        			case "infrastructure":
+                        				category = "infrastructure_damage";
+                        				break;
+                        			case "urgent_needs":
+                        				category = "urgent_need";
+                        				break;	
+                        		}
+                        	}
                         	info.put("category", category );
                     	}
                     }
@@ -405,9 +418,9 @@ public class MicroMapperPybossaFormatter {
 
                             JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser,info.get("category")!=null?info.get("category"):"");
                             if(mStyle != null){
-                                properties.put("style", mStyle );                                
-                            }
-                            locations.add(aFeature) ;
+                                properties.put("style", mStyle );
+                                locations.add(aFeature) ;
+                            }                            
                             uniqueIDString  = String.valueOf(info.get("tweetid"));
                         }
 
@@ -434,8 +447,9 @@ public class MicroMapperPybossaFormatter {
                         
                         if(mStyle != null){
                         	properties.put("style", mStyle );
+                        	locations.add(geoLoc);
                         }
-                        locations.add(geoLoc);
+                        
                         
                     }
                 }
@@ -660,7 +674,7 @@ public class MicroMapperPybossaFormatter {
     }
 
     private JSONObject getMarkerStyleForClientApp(MarkerStyle markerStyle, JSONParser parser, Object answer){
-
+    	  	
         JSONObject selectedStyle = null;
         try {
         	if(markerStyle != null){

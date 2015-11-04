@@ -127,6 +127,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             //aObject.put("crisis",c.getCrisisName()) ;
             aObject.put("name",c.getDisplayName()) ;
             aObject.put("type",c.getClickerType()) ;
+            aObject.put("bounds", c.getBounds());
             aObject.put("activationStart",c.getActivationStart().toString()) ;
             if(c.getActivationEnd() == null){
                 aObject.put("activationEnd","") ;

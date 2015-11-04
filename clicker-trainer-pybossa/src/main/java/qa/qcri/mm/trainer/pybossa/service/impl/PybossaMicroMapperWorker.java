@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,14 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import qa.qcri.mm.trainer.pybossa.dao.CrisisDao;
 import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
+import qa.qcri.mm.trainer.pybossa.dao.ReportTemplateTyphoonRubyDao;
+import qa.qcri.mm.trainer.pybossa.dao.TaskQueueResponseDao;
+import qa.qcri.mm.trainer.pybossa.dao.TyphoonRubyTextGeoClickerDao;
 import qa.qcri.mm.trainer.pybossa.entity.Client;
 import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
 import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
 import qa.qcri.mm.trainer.pybossa.entity.ClientAppSource;
 import qa.qcri.mm.trainer.pybossa.entity.Crisis;
 import qa.qcri.mm.trainer.pybossa.entity.MarkerStyle;
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplateTyphoonRuby;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entity.TyphoonRubyTextGeoClicker;
 import qa.qcri.mm.trainer.pybossa.format.impl.CVSRemoteFileFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicroMapperPybossaFormatter;
@@ -90,9 +97,17 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
     @Autowired
     private ExternalCustomService externalCustomService;
 
-
     @Autowired
     private MarkerStyleDao markerStyleDao;
+    
+    @Autowired
+    private TaskQueueResponseDao taskQueueResponseDao;
+    
+    @Autowired
+    private TyphoonRubyTextGeoClickerDao typhoonRubyTextGeoClickerDao;
+    
+    @Autowired
+    private ReportTemplateTyphoonRubyDao reportTemplateTyphoonRubyDao;
 
     @Autowired
     private CrisisDao crisisDao;
@@ -120,6 +135,175 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             MAX_PENDING_QUEUE_SIZE = client.getQueueSize();
         }
 
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+   	@Override
+   	public void processTyphoonRubyTextClikcer() throws ParseException{
+    	List<MarkerStyle> markerStyles = markerStyleDao.findByClientAppID(79);
+    	MarkerStyle markerStyle = markerStyles.get(0);
+    	
+    	List<TaskQueue> taskQueses = taskQueueService.getTaskQueueByClientAppId(79L);
+    	
+    	for(TaskQueue taskQueue : taskQueses){
+    		
+    		boolean isProcessed = false;
+    		List<TaskQueueResponse> taskQueueResponses = taskQueueResponseDao.getTaskQueueResponse(taskQueue.getTaskQueueID());
+    		for(TaskQueueResponse taskQueueResponse : taskQueueResponses){
+    			if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("") && !taskQueueResponse.getResponse().equals("{}")){
+    				List<TyphoonRubyTextGeoClicker> typhoonRubyTextGeoClickers = typhoonRubyTextGeoClickerDao.getTyphoonRubyTextGeoClickerByTaskId(taskQueue.getTaskID());
+    				if(typhoonRubyTextGeoClickers != null && !typhoonRubyTextGeoClickers.isEmpty()){
+    					TyphoonRubyTextGeoClicker typhoonRubyTextGeoClicker = typhoonRubyTextGeoClickers.get(0);
+    					
+    					String answer = null;
+    					
+    					String data = taskQueueResponse.getTaskInfo();
+    					
+    					if(data != null && !data.isEmpty() && !data.equalsIgnoreCase("null")){
+    						try {
+								long tweetId = Long.parseLong(data);
+								List<ReportTemplateTyphoonRuby> reportTemplateTyphoonRubys = reportTemplateTyphoonRubyDao.getReportTemplateTyphoonRubyByTweetId(tweetId);
+								if(reportTemplateTyphoonRubys != null && !reportTemplateTyphoonRubys.isEmpty()){
+									ReportTemplateTyphoonRuby reportTemplateTyphoonRuby = reportTemplateTyphoonRubys.get(0);
+									answer = reportTemplateTyphoonRuby.getAnswer();
+								}
+    						} catch (NumberFormatException e) {
+								answer = data;
+							}    						
+    					}
+    					
+    					if(answer != null && !answer.isEmpty()){    						
+    						JSONArray responseArray = new JSONArray();
+    						
+    						JSONObject responseObject = (JSONObject)parser.parse(taskQueueResponse.getResponse());
+    						
+    						JSONObject propertyObject = new JSONObject();
+    						
+    						JSONObject markerStyleForResponse = getMarkerStyleForRubyClicker(markerStyle, answer);
+    						if(markerStyleForResponse == null){
+    							continue;
+    						}
+    						
+    						/*JSONArray responseArray = (JSONArray)parser.parse(taskQueueResponse.getResponse());
+    						
+    						JSONObject responseObject = (JSONObject) responseArray.get(0);
+    						
+    						JSONObject propertyObject = (JSONObject) responseObject.get("properties");
+    						if(propertyObject == null){
+    							continue;
+    						}*/
+    						
+           					propertyObject.put("category", answer);
+           					propertyObject.put("crisis_type", "Text");
+           					propertyObject.put("crisis_name", "Typhoon Ruby");
+           					propertyObject.put("tweetid", typhoonRubyTextGeoClicker.getFinalTweetID());
+           					propertyObject.put("tweet", typhoonRubyTextGeoClicker.getTweet());
+           					propertyObject.put("taskid", typhoonRubyTextGeoClicker.getTaskId());
+           					
+           					
+           					propertyObject.put("style", markerStyleForResponse );
+           					
+           					if (markerStyleForResponse != null) {
+   								responseObject.put("properties", propertyObject);
+   								responseArray.remove(0);
+   								responseArray.add(responseObject);
+   								System.out.println("------------------------------------------------------");
+   								System.out.println("TaskQueueId: " + taskQueueResponse.getTaskQueueID()
+   										+ " Processed.....");
+   								System.out.println(responseArray);
+   								taskQueueResponse.setResponse(responseArray.toJSONString());
+   								clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
+   								isProcessed = true;
+   							}
+    					}
+    					
+    				}
+        		} 
+    			
+    			if(!isProcessed && taskQueueResponse != null && !taskQueueResponse.getResponse().equals("")){    				
+        			JSONArray responseArray = new JSONArray();
+        			JSONObject responseObject = (JSONObject)parser.parse(taskQueueResponse.getResponse());
+        			responseArray.add(responseObject);
+					System.out.println("------------------------------------------------------");
+					System.out.println("TaskQueueId: " + taskQueueResponse.getTaskQueueID() + "Not Processed.....");
+					System.out.println(responseArray);
+					taskQueueResponse.setResponse(responseArray.toJSONString());
+					//clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
+        		}
+    		}    		
+    	}
+   }
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public void processTyphoonRubyImageClikcer() throws ParseException{
+    	//List<TaskQueueResponse> taskQueueResponses = clientAppResponseService.getTaskQueueResponseByClientApp("mm_rubyimagegeoclicker");
+    	List<TaskQueueResponse> taskQueueResponses = taskQueueResponseDao.getAll();
+    	
+    	List<MarkerStyle> findByAppType = markerStyleDao.findByAppType("Image");
+    	MarkerStyle markerStyle = findByAppType.get(0);
+    	
+    	for(TaskQueueResponse taskQueueResponse : taskQueueResponses){
+    		if(taskQueueResponse.getTaskQueueID() > 130604){
+    			continue;
+    		}    		
+    		String response = taskQueueResponse.getResponse();
+    		if(response != null && !response.equals("") && !response.equals("{}")){
+    			JSONObject responseObject = (JSONObject)parser.parse(response);
+    			if(responseObject.get("properties") == null){
+    				List<ReportTemplate> reportTemplates = reportTemplateService.getReportTemplateSearchByTwittID("tweetID", taskQueueResponse.getTaskInfo());
+    				if(reportTemplates != null && !reportTemplates.isEmpty()){
+    					for(ReportTemplate reportTemplate : reportTemplates){
+    						if(reportTemplate.getAnswer() == null || reportTemplate.getAnswer().isEmpty() || reportTemplate.getAnswer().equalsIgnoreCase("none")){
+    							continue;
+    						}
+        					JSONObject propertyObject = new JSONObject();
+        					propertyObject.put("category", reportTemplate.getAnswer());
+        					propertyObject.put("crisis_type", "Image");
+        					propertyObject.put("crisis_name", "Typhoon Ruby");
+        					propertyObject.put("tweetid", reportTemplate.getTweetID());
+        					propertyObject.put("url", reportTemplate.getUrl());
+        					
+        					JSONObject markerStyleForResponse = getMarkerStyleForRubyClicker(markerStyle, reportTemplate.getAnswer());
+        					propertyObject.put("style", markerStyleForResponse );
+        					
+        					if (markerStyleForResponse != null) {
+								responseObject.put("properties", propertyObject);
+								System.out.println("------------------------------------------------------");
+								System.out.println("TaskQueueId: " + taskQueueResponse.getTaskQueueID()
+										+ " Processed.....");
+								System.out.println(responseObject);
+								taskQueueResponse.setResponse(responseObject.toJSONString());
+								clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
+								break;
+							}
+    					}
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    public JSONObject getMarkerStyleForRubyClicker(MarkerStyle markerStyle, String answer){
+    	 JSONObject selectedStyle = null;
+         try {
+         	if(markerStyle != null){
+                 JSONObject mJson = (JSONObject)parser.parse(markerStyle.getStyle());
+                 JSONArray mStyles = (JSONArray)mJson.get("style");
+                 for(Object a : mStyles) {
+                     JSONObject aStyle = (JSONObject)a;
+                     String label_code = (String)aStyle.get("label_code");
+                     if(label_code.equals(answer.trim())){
+                         selectedStyle = aStyle;
+                     }
+                 }
+         	}
+         } catch (ParseException e) {
+             e.printStackTrace();
+         }
+
+         return selectedStyle;
     }
 
     @Override
@@ -201,16 +385,16 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             	continue;
             }
             
-            /*if(clientApp.getClientAppID() != 254){
+            if(clientApp.getClientAppID() != 255){
             	continue;
-            }*/
+            }
 
             if(clientApp.getStatus().equals(StatusCodeType.MICROMAPPER_ONLY)){
                 List<TaskQueue> taskQueues =  taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(),StatusCodeType.TASK_PUBLISHED);
                 if(taskQueues != null ){
 
                     int queueSize =   MAX_IMPORT_PROCESS_QUEUE_SIZE;
-                    if(taskQueues.size() < MAX_IMPORT_PROCESS_QUEUE_SIZE)
+                    //if(taskQueues.size() < MAX_IMPORT_PROCESS_QUEUE_SIZE)
                     {
                         queueSize =  taskQueues.size();
                     }
@@ -220,7 +404,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                         TaskQueue taskQueue = taskQueues.get(i);
                         //Long taskID =  108062l;
                         Long taskID =  taskQueue.getTaskID();
-                        /*if(taskID != 536913){
+                        /*if(taskID < 626570 || taskID > 626591){
                         	continue;
                         }*/
                         String taskQueryURL = PYBOSSA_API_TASK_BASE_URL + clientApp.getPlatformAppID() + "&id=" + taskID;

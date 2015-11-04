@@ -1,5 +1,8 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,10 +11,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import qa.qcri.mm.trainer.pybossa.dao.AbstractDao;
 
-import java.io.Serializable;
-import java.util.List;
+import qa.qcri.mm.trainer.pybossa.dao.AbstractDao;
 
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDao<E,I> {
 
@@ -40,11 +41,13 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @Override
     public void saveOrUpdate(E e) {
         getCurrentSession().saveOrUpdate(e);
+        //getCurrentSession().close();
     }
 
     @Override
     public void save(E e) {
         getCurrentSession().save(e);
+        //getCurrentSession().close();
     }
 
 

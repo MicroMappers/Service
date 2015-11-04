@@ -1,9 +1,9 @@
 package qa.qcri.mm.trainer.pybossa.dao;
 
 
-import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
-
 import java.util.List;
+
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,4 +22,5 @@ public interface TaskQueueDao extends AbstractDao<TaskQueue, String>  {
     List<TaskQueue> findTaskQueueByTaskID(Long clientAppID, Long taskID);
     void deleteTaskQueue(Long taskQueueID);
     List<TaskQueue> findLatestTaskQueue(Long clientAppID)  ;
+	List<TaskQueue> findTaskQueueByClientAppId(Long clientAppID);
 }

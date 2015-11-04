@@ -50,7 +50,9 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
                 String imgURL = this.getStringValueFromInfoJson(array, "imgurl");
                 finalProperties.put("imgURL", imgURL);
 
-                JSONArray bounds = (JSONArray)parser.parse(this.getStringValueFromInfoJson(array, "geo"));
+                //JSONArray bounds = (JSONArray)parser.parse(this.getStringValueFromInfoJson(array, "geo"));
+                JSONArray bounds = (JSONArray)parser.parse("[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]");
+                		
                 finalProperties.put("bounds", bounds);
                 finalProperties.put("taskid", this.taskQueue.getTaskID());
 

@@ -1,12 +1,13 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.trainer.pybossa.dao.TaskQueueDao;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,6 +48,11 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
     @Override
     public List<TaskQueue> findTaskQueueByStatus(String column, Integer status) {
         return findByCriteria(Restrictions.eq(column, status));  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    
+    @Override
+    public List<TaskQueue> findTaskQueueByClientAppId(Long clientAppID) {
+        return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
     }
 
     @Override

@@ -17,6 +17,9 @@ import org.springframework.stereotype.Component;
 
 import qa.qcri.mm.api.service.GeoService;
 import qa.qcri.mm.api.service.MicroMapsService;
+import qa.qcri.mm.api.service.PusherService;
+
+import com.pusher.rest.data.Result;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +38,17 @@ public class MicroMapsController {
 
     @Autowired
     GeoService geoService;
+    
+    @Autowired
+    PusherService pusherService;
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
+    @Path("/pusher")
+    public String getAllTextJSON() throws Exception {
+    	Result triggerNotification = pusherService.triggerNotification();
+    	return triggerNotification.toString();        
+    }
 
 
     @GET
