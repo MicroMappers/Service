@@ -27,7 +27,7 @@ public class MicroMapperWorkerTest {
       //  List<TaskQueueResponse> responseList =  clientAppResponseService.getTaskQueueResponseByContent();
      // microMapperWorker.processTaskPublish();
      //
-      //microMapperWorker.processTaskImport();
+      microMapperWorker.processTaskImport();
      // microMapperWorker.processTaskExport();
       // microMapperWorker.processTaskImportOnDemand();
       long endTime = System.nanoTime();
@@ -42,7 +42,7 @@ public class MicroMapperWorkerTest {
     
     @Test
     public void processTyphoonRubyTextClikcer() throws Exception{
-    	microMapperWorker.processTyphoonRubyTextClikcer();
+    	//microMapperWorker.processTyphoonRubyTextClikcer();
     }
 
 }

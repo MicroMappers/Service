@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import qa.qcri.mm.trainer.pybossa.service.MicroMapperWorker;
+import qa.qcri.mm.trainer.pybossa.service.PusherService;
 import qa.qcri.mm.trainer.pybossa.service.Worker;
 
 
@@ -18,6 +19,11 @@ public class SyncWorker implements Worker {
 
     @Autowired
     private MicroMapperWorker microMapperWorker;
+    
+    @Autowired
+    PusherService pusherService;
+    
+    
 
 	@Override
 	public void work() {

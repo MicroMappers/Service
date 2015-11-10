@@ -33,7 +33,6 @@ public class PybossaConf {
 
     public static int DEFAULT_GEO_N_ANSWERS = 1;
 
-    //public static String GEOJSON_HOME = "/mnt/data/micromaps/";
-    public static String GEOJSON_HOME = "D:\\data";
-
+    public static String GEOJSON_HOME = "/mnt/data/micromaps/";
+    //public static String GEOJSON_HOME = "D:\\data";
 }

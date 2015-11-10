@@ -17,9 +17,6 @@ import org.springframework.stereotype.Component;
 
 import qa.qcri.mm.api.service.GeoService;
 import qa.qcri.mm.api.service.MicroMapsService;
-import qa.qcri.mm.api.service.PusherService;
-
-import com.pusher.rest.data.Result;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,18 +36,6 @@ public class MicroMapsController {
     @Autowired
     GeoService geoService;
     
-    @Autowired
-    PusherService pusherService;
-    
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
-    @Path("/pusher")
-    public String getAllTextJSON() throws Exception {
-    	Result triggerNotification = pusherService.triggerNotification();
-    	return triggerNotification.toString();        
-    }
-
-
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
     @Path("/JSON/crisis")
@@ -122,6 +107,13 @@ public class MicroMapsController {
     public String getAllAerialJSONP(@PathParam("id") long id) throws Exception {
 
         return "jsonp(" +microMapsService.getGeoClickerByClientApp(id) + ");";
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
+    @Path("/JSONP/geojson/id/{id}/createdDate/{createdDate}")
+    public String getGeojsonAfterTaskQueue(@PathParam("id") long id, @PathParam("createdDate") long createdDate) throws Exception {
+        return "jsonp(" + microMapsService.getGeoClickerByClientAppAndAfterCreatedDate(id, createdDate) + ");";
     }
 
 

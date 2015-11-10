@@ -2,6 +2,7 @@ package qa.qcri.mm.api.service.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -147,6 +148,41 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         }
         return models;
     }
+    
+    @Override
+    public String getGeoClickerByClientAppAndAfterCreatedDate(Long clientAppID,Long createdDate) throws Exception{
+
+        List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
+        ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
+
+        JSONObject geoClickerOutput = new JSONObject();
+        JSONArray features = new JSONArray();
+
+        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+
+        for(TaskQueue t: taskQueueList){
+
+            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
+
+            if(responses.size() > 0 ){
+                if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
+                	TaskQueueResponse taskQueueResponse = responses.get(0);                	
+                	if(taskQueueResponse.getCreated().compareTo(new Date(createdDate)) >= 0){
+                		JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponse.getResponse());
+                        for(Object a : eachFeatureArrary){
+                            features.add(a);
+                        }
+                	}               
+                }
+            }
+
+        }
+
+        geoClickerOutput.put("type", "FeatureCollection");
+        geoClickerOutput.put("features", features);
+        
+        return geoClickerOutput.toJSONString();     
+    }
 
     @Override
     public String getGeoClickerByClientApp(Long clientAppID) throws Exception{
@@ -162,11 +198,6 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
         if(!DataFileUtil.doesFileExist(fileName)) {
             JSONArray features = new JSONArray();
-
-            if(crisises.size() > 0)
-            {
-                Crisis c =  crisises.get(0);
-            }
 
             System.out.println("crisis :" + clientApp.getName());
 
@@ -192,13 +223,19 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
             geoClickerOutput.put("type", "FeatureCollection");
             geoClickerOutput.put("features", features);
-            System.out.println(geoClickerOutput.toJSONString());
-            DataFileUtil.createAfile(geoClickerOutput.toJSONString(), fileName);
+            //System.out.println(geoClickerOutput.toJSONString());
+            
+            // if crisis is archived
+            if(crisises != null && !crisises.isEmpty()){
+            	Crisis crisis = crisises.get(0);
+            	if(crisis.getActivationEnd() != null){
+            		DataFileUtil.createAfile(geoClickerOutput.toJSONString(), fileName);
+            	}
+            }
+            
+            return geoClickerOutput.toJSONString();
         }
-
-        String content = DataFileUtil.getDataFileContent(fileName);
-
-        return geoClickerOutput.toJSONString();
+        return DataFileUtil.getDataFileContent(fileName);        
     }
 
     @Override
