@@ -1,7 +1,6 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     @Override
     @Transactional(readOnly = false)
     public void updateTaskQueue(TaskQueue taskQueue) {
-        TaskQueue queue;
+        /*TaskQueue queue;
         if(taskQueue.getDocumentID()!=null){
             queue = taskQueueDao.findTaskQueue(taskQueue.getTaskID(),taskQueue.getClientAppID(), taskQueue.getDocumentID()).get(0);
         }
@@ -43,10 +42,10 @@ public class TaskQueueServiceImpl implements TaskQueueService {
             queue = taskQueueDao.findTaskQueueByTaskID(taskQueue.getClientAppID(), taskQueue.getTaskID()).get(0);
         }
         queue.setStatus(taskQueue.getStatus());
-        queue.setUpdated(new Date());
+        queue.setUpdated(new Date());*/
 
         try{
-            taskQueueDao.createTaskQueue(queue);
+            taskQueueDao.createTaskQueue(taskQueue);
         }
         catch (Exception ex){
             System.out.println("updateTaskQueue Exception : " + ex.getMessage());

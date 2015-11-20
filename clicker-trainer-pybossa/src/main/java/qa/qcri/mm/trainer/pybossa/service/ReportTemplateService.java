@@ -1,8 +1,8 @@
 package qa.qcri.mm.trainer.pybossa.service;
 
-import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
-
 import java.util.List;
+
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,4 +16,5 @@ public interface ReportTemplateService {
     List<ReportTemplate> getReportTemplateByClientApp(Long clientAppID, Integer status);
     void updateReportItem(ReportTemplate reportTemplate);
     List<ReportTemplate> getReportTemplateSearchByTwittID(String field, String value);
+	List<ReportTemplate> getReportTemplatesByUrl(String url);
 }
