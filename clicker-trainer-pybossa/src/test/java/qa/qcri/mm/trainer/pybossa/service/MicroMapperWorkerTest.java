@@ -24,12 +24,11 @@ public class MicroMapperWorkerTest {
     @Test
     public void testProcessTaskPublish() throws Exception {
     	long startTime = System.nanoTime();
-      //  List<TaskQueueResponse> responseList =  clientAppResponseService.getTaskQueueResponseByContent();
-     // microMapperWorker.processTaskPublish();
-     //
+     // List<TaskQueueResponse> responseList =  clientAppResponseService.getTaskQueueResponseByContent();
+      //microMapperWorker.processTaskPublish();
       microMapperWorker.processTaskImport();
      // microMapperWorker.processTaskExport();
-      // microMapperWorker.processTaskImportOnDemand();
+     // microMapperWorker.processTaskImportOnDemand();
       long endTime = System.nanoTime();
       double duration = (endTime - startTime) / 1000000000.0;
       System.out.println("\n\n\nTotal time elapsed: "+ duration + " seconds\n\n\n");

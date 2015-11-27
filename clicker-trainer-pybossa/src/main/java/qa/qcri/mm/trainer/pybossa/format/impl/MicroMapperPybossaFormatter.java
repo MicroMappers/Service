@@ -391,7 +391,22 @@ public class MicroMapperPybossaFormatter {
             				}
                     		
                     	}
-                    }
+                    } else if(c.getClickerType().trim().equalsIgnoreCase("text")){
+                    	if(info.get("taskid") != null){
+                    		String category = (String) info.get("category");
+                    		if(category != null){
+                        		switch(category){
+                        			case "infrastructure":
+                        				category = "infrastructure_damage";
+                        				break;
+                        			case "urgent_needs":
+                        				category = "urgent_need";
+                        				break;	
+                        		}
+                        	}
+                        	info.put("category", category );
+                    	}
+                	}
                     
                     if(locType.equalsIgnoreCase(PybossaConf.GEOJSON_TYPE_FEATURE_COLLECTION)){
                         JSONArray features = (JSONArray)loc.get("features");

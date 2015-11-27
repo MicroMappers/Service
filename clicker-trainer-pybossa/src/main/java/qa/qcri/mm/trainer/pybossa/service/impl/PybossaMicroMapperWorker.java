@@ -313,9 +313,10 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
     @Override
     public void processTaskPublish() throws Exception{
-        System.out.println("processTaskImport is starting");
+        System.out.println("processTaskPublish is starting");
         setClassVariable();
 
+        
         if(client == null){
             return;
         }
@@ -324,6 +325,9 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
         if(appList.size() > 0){
             for(int i=0; i < appList.size(); i++){
+            	if(i< 14){
+            		continue;
+            	}
                 ClientApp currentClientApp =  appList.get(i);
 
                 List<ClientAppSource> datasources = clientAppSourceService.getClientAppSourceByStatus(currentClientApp.getClientAppID(),StatusCodeType.EXTERNAL_DATA_SOURCE_ACTIVE);
@@ -334,7 +338,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                     String url = datasources.get(j).getSourceURL();
 
                     if(!cvsRemoteFileFormatter.doesSourcerExist(url)){
-                        return;
+                        continue;
                     }
 
                     if(currentClientApp.getAppType() == StatusCodeType.APP_MAP){
@@ -390,14 +394,11 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         while(itr.hasNext()){
             ClientApp clientApp = (ClientApp)itr.next();
             
-            boolean isProcessed = false;
-            /*if(clientApp.getAppType() != 4 && clientApp.getAppType() != 5){
+            List<Crisis> crises = crisisDao.getClientAppCrisisDetail(clientApp.getClientAppID());
+            if(clientApp.getAppType() != 4 && clientApp.getAppType() != 5){
             	continue;
             }
-            
-            if(clientApp.getClientAppID() != 260){
-            	continue;
-            }*/
+           
 
             if(clientApp.getStatus().equals(StatusCodeType.MICROMAPPER_ONLY)){
                 List<TaskQueue> taskQueues =  taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(),StatusCodeType.TASK_PUBLISHED);
@@ -409,26 +410,38 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                         queueSize =  taskQueues.size();
                     }
                     
+                    System.out.println("TaskQueueSize: "+ queueSize);
+                    
                     Date processStartTime = new Date();
                     
                     for(int i=0; i < queueSize; i++){
                         TaskQueue taskQueue = taskQueues.get(i);
                         //Long taskID =  108062l;
                         Long taskID =  taskQueue.getTaskID();
-                        /*if(taskID < 622128 || taskID > 622128){
+                        if(taskID >= 739637){
                         	continue;
-                        }*/
+                        }
                         String taskQueryURL = PYBOSSA_API_TASK_BASE_URL + clientApp.getPlatformAppID() + "&id=" + taskID;
-                        //System.out.print("Calling Task API: "+ taskQueryURL);                        
+                        System.out.print("Calling Task API: "+ taskQueryURL);                        
                         String inputData = pybossaCommunicator.sendGet(taskQueryURL);
-                        //System.out.println("  ..  Completed");
+                        //System.out.println("inputData: "+ inputData);
+                        System.out.println("  ..  Completed");
                         //String inputData = tasksInputData.get(taskID) == null? null : tasksInputData.get(taskID).toString();
                         try {
 
                             if (inputData != null) {
 								boolean isFound = pybossaFormatter.isTaskStatusCompleted(inputData);
+								System.out.println("isFound: "+isFound);
 								if (isFound) {
-									isProcessed = isProcessed | this.processTaskQueueImport(clientApp, taskQueue, taskID, geoJsonOutputModels);
+									System.out.println("isFound: "+isFound);
+									boolean isProcessed = this.processTaskQueueImport(clientApp, taskQueue, taskID, geoJsonOutputModels);
+									if(isProcessed){
+				                    	// Some new data has been processed
+				                    	if(crises != null && !crises.isEmpty()){
+				                    		Crisis crisis = crises.get(0);
+				                    		//pusherService.triggerNotification(crisis.getCrisisID(), clientApp.getClientAppID(), crisis.getClickerType(), crisis.getDisplayName(), processStartTime.getTime());                    		
+				                    	}
+				                    }
 								}
 							}
 
@@ -441,19 +454,13 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                     }
                     // Map data export
                     try {
-						reportProductService.generateGeoJsonForClientApp(clientApp.getClientAppID());
-					} catch (Exception e) {						 
-						e.printStackTrace();
+						//reportProductService.generateGeoJsonForClientApp(clientApp.getClientAppID());
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+						//e.printStackTrace();
 					}
                     
-                    if(isProcessed){
-                    	// Some new data has been processed
-                    	List<Crisis> crises = crisisDao.getClientAppCrisisDetail(clientApp.getClientAppID());
-                    	if(crises != null && !crises.isEmpty()){
-                    		Crisis crisis = crises.get(0);
-                    		pusherService.triggerNotification(crisis.getCrisisID(), clientApp.getClientAppID(), crisis.getClickerType(), crisis.getDisplayName(), processStartTime.getTime());                    		
-                    	}
-                    }
+                    
 
                 }
             }
@@ -555,7 +562,8 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                 taskQueueResponse = pybossaFormatter.getAnswerResponse(clientApp, importResult, parser, taskQueue.getTaskQueueID(), clientAppAnswer, reportTemplateService);
             }
 
-            if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("[]")){            	
+            if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("[]")){
+            	System.out.println("Response: "+ taskQueueResponse.getResponse());
                 clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
                 taskQueue.setStatus(StatusCodeType.TASK_LIFECYCLE_COMPLETED);
                 updateTaskQueue(taskQueue);

@@ -13,7 +13,7 @@ public class URLReference {
     public static String PYBOSAA_APP = "/project/";
     public static String PYBOSSA_APP_KEY ="/project?api_key=";
     public static String PYBOSSA_APP_UPDATE_KEY = "?api_key=";
-    public static String GEOJSON_HOME = "/var/www/html/micromaps/";
-    //public static String GEOJSON_HOME = "D:\\data";
+    public static String GEOJSON_HOME = "/var/www/micromaps/";
+    //public static String GEOJSON_HOME = "D:/data";
 
 }

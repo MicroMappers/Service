@@ -29,13 +29,13 @@ public class SyncWorker implements Worker {
 	public void work() {
 		String threadName = Thread.currentThread().getName();
 		logger.info("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
-
+		System.out.println("cron Start");
         try {
-           // microMapperWorker.processTaskPublish();
-            //microMapperWorker.processTaskImport();
-            //microMapperWorker.processTaskExport();
-
-            Thread.sleep(180000);
+            //microMapperWorker.processTaskPublish();
+            microMapperWorker.processTaskImport();
+            //microMapperWorker.processTaskExport();            
+            	
+            //Thread.sleep(180000);
         }
         catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -43,6 +43,7 @@ public class SyncWorker implements Worker {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             logger.info(e.getMessage());
         }
+        System.out.println("cron End");
 
     }
 	

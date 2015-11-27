@@ -28,7 +28,8 @@ public class SchedulerService {
     //set 5 sec. for testing. update to 5min later
     //"0 0/5 * * * ?"
 	//@Scheduled(cron="0/3 * * * * ?")
-	@Scheduled(cron="0 0/5 * * * ?")
+	//@Scheduled(cron="0 0/3 * * * ?")
+	@Scheduled(fixedDelay = 10000)
 	public void doSchedule() {
 	//	logger.debug("Start schedule");
 

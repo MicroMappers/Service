@@ -1,9 +1,15 @@
 package qa.qcri.mm.api.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -183,6 +189,59 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         
         return geoClickerOutput.toJSONString();     
     }
+    
+    @Override
+    public List<Crisis> findCrisisByClientAppID(Long clientAppID){
+    	return crisisDao.findCrisisByClientAppID(clientAppID);
+    }
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public String getGeoClickerDataForDownload(Long clientAppID) throws Exception{
+
+        JSONObject geoClickerOutput = new JSONObject();
+        JSONArray features = new JSONArray();
+        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        
+        List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
+        JSONArray bounds = null;
+        if(crisises != null && !crisises.isEmpty()){
+        	Crisis crisis = crisises.get(0);
+        	bounds = (JSONArray)parser.parse(crisis.getBounds());
+        }
+        
+        for(TaskQueue t: taskQueueList){
+            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
+            if(responses.size() > 0 ){
+                if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
+                    JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
+                    for(Object a : eachFeatureArrary){
+                    	JSONObject jsonObject = (JSONObject) a;
+                    	
+                    	if(jsonObject != null && jsonObject.get("properties") != null 
+                    			&& jsonObject.get("geometry") != null && bounds != null){
+                    		
+                    		JSONObject geometryObject = (JSONObject) jsonObject.get("geometry");
+                        	JSONArray coordinates = (JSONArray) geometryObject.get("coordinates");                        	
+                        	
+                    		if( ((Number)coordinates.get(0)).doubleValue() >= ((Number)bounds.get(0)).doubleValue() 
+                    				&& ((Number)coordinates.get(0)).doubleValue() <= ((Number)bounds.get(2)).doubleValue()
+                    				&& ((Number)coordinates.get(1)).doubleValue() >= ((Number)bounds.get(1)).doubleValue() 
+                    				&& ((Number)coordinates.get(1)).doubleValue() <= ((Number)bounds.get(3)).doubleValue()){
+                    			
+                    			features.add(a);
+                    		
+                    		}
+                    	}
+                    }
+                }
+            }
+        }
+        geoClickerOutput.put("developedBy", "Qatar Computing Research Institute");
+        geoClickerOutput.put("type", "FeatureCollection");
+        geoClickerOutput.put("features", features);
+        return geoClickerOutput.toJSONString();     
+    }
 
     @Override
     public String getGeoClickerByClientApp(Long clientAppID) throws Exception{
@@ -220,9 +279,10 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                 }
 
             }
-
+            
+            geoClickerOutput.put("developedBy", "Qatar Computing Research Institute");
             geoClickerOutput.put("type", "FeatureCollection");
-            geoClickerOutput.put("features", features);
+            geoClickerOutput.put("features", features);            
             //System.out.println(geoClickerOutput.toJSONString());
             
             // if crisis is archived
@@ -236,6 +296,34 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             return geoClickerOutput.toJSONString();
         }
         return DataFileUtil.getDataFileContent(fileName);        
+    }
+    
+    @Override
+    public boolean createZip(String zipFileName, String filePath, String fileName){
+    	byte[] buffer = new byte[1024];
+    	try {
+			FileOutputStream fos = new FileOutputStream(zipFileName);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+			
+			ZipEntry ze= new ZipEntry(fileName);
+			zos.putNextEntry(ze);
+			FileInputStream in = new FileInputStream(filePath);
+   
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				zos.write(buffer, 0, len);
+			}
+
+			in.close();
+			zos.closeEntry();
+			zos.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return false;
     }
 
     @Override

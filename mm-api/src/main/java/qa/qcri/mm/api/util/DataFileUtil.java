@@ -46,6 +46,7 @@ public class DataFileUtil {
 
         try {
             File f = new File(geoFileName);
+            //f.mkdirs();
             PrintWriter writer = new PrintWriter(f, "UTF-8");
             writer.println(fileContent);
             writer.close();
