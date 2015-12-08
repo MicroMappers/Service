@@ -376,11 +376,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
     }
 
     @Override
-    public void processTaskImport() throws Exception{
-    	/*pusherService.triggerNotification(316L, 260L, "Text", "Nepal Earthquake", new Date().getTime());
-    	if(true){
-    		return;
-    	}*/    	
+    public void processTaskImport() throws Exception{    	   	
         System.out.println("Data import is starting");
         setClassVariable();
 
@@ -418,9 +414,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                         TaskQueue taskQueue = taskQueues.get(i);
                         //Long taskID =  108062l;
                         Long taskID =  taskQueue.getTaskID();
-                        if(taskID >= 739637){
-                        	continue;
-                        }
+                      
                         String taskQueryURL = PYBOSSA_API_TASK_BASE_URL + clientApp.getPlatformAppID() + "&id=" + taskID;
                         System.out.print("Calling Task API: "+ taskQueryURL);                        
                         String inputData = pybossaCommunicator.sendGet(taskQueryURL);
@@ -439,7 +433,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 				                    	// Some new data has been processed
 				                    	if(crises != null && !crises.isEmpty()){
 				                    		Crisis crisis = crises.get(0);
-				                    		//pusherService.triggerNotification(crisis.getCrisisID(), clientApp.getClientAppID(), crisis.getClickerType(), crisis.getDisplayName(), processStartTime.getTime());                    		
+				                    		pusherService.triggerNotification(crisis.getCrisisID(), clientApp.getClientAppID(), crisis.getClickerType(), crisis.getDisplayName(), processStartTime.getTime());                    		
 				                    	}
 				                    }
 								}

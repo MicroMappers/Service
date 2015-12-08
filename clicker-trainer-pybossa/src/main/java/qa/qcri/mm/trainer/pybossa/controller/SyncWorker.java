@@ -31,10 +31,9 @@ public class SyncWorker implements Worker {
 		logger.info("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
 		System.out.println("cron Start");
         try {
-            //microMapperWorker.processTaskPublish();
+            microMapperWorker.processTaskPublish();
             microMapperWorker.processTaskImport();
-            //microMapperWorker.processTaskExport();            
-            	
+            microMapperWorker.processTaskExport();       
             //Thread.sleep(180000);
         }
         catch (InterruptedException e) {
