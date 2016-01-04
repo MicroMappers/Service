@@ -11,7 +11,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "pamReport")
+@Table(name = "pam_report")
 public class PamReport implements Serializable {
 
     private static final long serialVersionUID = -5527566248002296042L;
@@ -23,7 +23,7 @@ public class PamReport implements Serializable {
 
     //taskID,lng,lat,imgurl, userID,damageType,geo
 
-    @Column(name = "taskID", nullable = false)
+    @Column(name = "task_id", nullable = false)
     private String taskID;
 
     @Column(name = "lng", nullable = false)
@@ -32,13 +32,13 @@ public class PamReport implements Serializable {
     @Column(name = "lat", nullable = false)
     private String lat;
 
-    @Column(name = "imgurl", nullable = false)
+    @Column(name = "img_url", nullable = false)
     private String imgurl;
 
-    @Column(name = "userID", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private String userID;
 
-    @Column(name = "damageType", nullable = false)
+    @Column(name = "damage_type", nullable = false)
     private String damageType;
 
     @Column(name = "geo", nullable = false)

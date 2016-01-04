@@ -11,7 +11,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "namibiaReportReprocess")
+@Table(name = "namibia_report_reprocess")
 public class NamibiaReport  implements Serializable {
 
     private static final long serialVersionUID = -5527566248002296042L;
@@ -28,16 +28,16 @@ public class NamibiaReport  implements Serializable {
     @Column(name = "geo", length = 100000 )
     private String geo;
 
-    @Column(name = "sourceImage", nullable = false)
+    @Column(name = "source_image", nullable = false)
     private String sourceImage;
 
-    @Column(name = "slicedImage", nullable = false)
+    @Column(name = "sliced_image", nullable = false)
     private String slicedImage;
 
-    @Column(name = "foundCount", nullable = false)
+    @Column(name = "found_count", nullable = false)
     private Integer foundCount;
 
-    @Column(name = "noFoundCount", nullable = false)
+    @Column(name = "no_found_count", nullable = false)
     private Integer noFoundCount;
 
     public NamibiaReport(Long task_id, String geo, String sourceImage, String slicedImage, Integer foundCount, Integer noFoundCount) {

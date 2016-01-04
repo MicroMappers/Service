@@ -11,7 +11,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "namibiaImage")
+@Table(name = "namibia_image")
 public class NamibiaImage implements Serializable {
 
     private static final long serialVersionUID = -5527566248002296042L;
@@ -28,10 +28,10 @@ public class NamibiaImage implements Serializable {
     @Column(name = "source", nullable = false)
     private String source;
 
-    @Column(name = "gridImage", nullable = false)
+    @Column(name = "grid_image", nullable = false)
     private String gridImage;
 
-    @Column(name = "animalFound", nullable = false)
+    @Column(name = "animal_found", nullable = false)
     private Integer animalFound;
 
 

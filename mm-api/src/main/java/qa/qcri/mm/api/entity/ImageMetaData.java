@@ -11,7 +11,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "imageMetaData")
+@Table(name = "image_meta_data")
 public class ImageMetaData implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
@@ -23,7 +23,7 @@ public class ImageMetaData implements Serializable {
     @Column (name = "path", nullable = true)
     private String path;
 
-    @Column (name = "fileName", nullable = true)
+    @Column (name = "file_name", nullable = true)
     private String fileName;
 
     @Column (name = "thumbnail", nullable = true)

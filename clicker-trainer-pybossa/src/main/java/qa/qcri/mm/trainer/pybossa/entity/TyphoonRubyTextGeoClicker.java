@@ -13,7 +13,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "typhoonrubytextgeoclicker")
+@Table(name = "typhoon_ruby_text_geo_clicker")
 public class TyphoonRubyTextGeoClicker implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
@@ -24,13 +24,13 @@ public class TyphoonRubyTextGeoClicker implements Serializable {
     @Column (name = "tweet")
     private String tweet;
 
-    @Column (name = "tweetID")
+    @Column (name = "tweet_id")
     private String tweetID;
     
     @Column (name = "author")
     private String author;
     
-    @Column (name = "finalTweetID")
+    @Column (name = "final_tweet_id")
     private String finalTweetID;
 
     public TyphoonRubyTextGeoClicker(){}

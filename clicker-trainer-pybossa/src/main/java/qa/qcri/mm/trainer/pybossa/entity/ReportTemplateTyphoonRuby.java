@@ -14,27 +14,27 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "reporttemplatetyphoonruby")
+@Table(name = "report_template_typhoon_ruby")
 public class ReportTemplateTyphoonRuby implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
     @Id
-    @Column(name = "reportTemplateID")
+    @Column(name = "id")
     private Long reportTemplateID;
     
-    @Column(name = "clientAppID")
+    @Column(name = "client_app_id")
     private Long clientAppID;
     
-    @Column(name = "taskQueueID")
+    @Column(name = "task_queue_id")
     private Long taskQueueID;
     
-    @Column(name = "taskID")
+    @Column(name = "task_id")
     private Long taskID;
 
     @Column (name = "tweet")
     private String tweet;
 
-    @Column (name = "tweetID")
+    @Column (name = "tweet_id")
     private String tweetID;
     
     @Column (name = "author")
