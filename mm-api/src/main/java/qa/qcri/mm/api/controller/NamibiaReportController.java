@@ -1,18 +1,17 @@
 package qa.qcri.mm.api.controller;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import qa.qcri.mm.api.entity.FilteredTaskRun;
 import qa.qcri.mm.api.entity.NamibiaReport;
 import qa.qcri.mm.api.service.NamibiaReportService;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,8 +20,8 @@ import java.util.List;
  * Time: 10:13 AM
  * To change this template use File | Settings | File Templates.
  */
-@Path("/namibia")
-@Component
+@RestController
+@RequestMapping("/namibia")
 public class NamibiaReportController {
 
     protected static Logger logger = Logger.getLogger("NamibiaReportController");
@@ -30,41 +29,29 @@ public class NamibiaReportController {
     @Autowired
     NamibiaReportService namibiaReportService;
 
-    @GET
-    @Produces( MediaType.APPLICATION_JSON )
-    @Path("/reports")
+    @RequestMapping(value = "/reports", method = RequestMethod.GET)
     public List<NamibiaReport> getSummeryReport(){
         return namibiaReportService.getSummerydDataSetForReport();
 
     }
 
-    @GET
-    @Produces( MediaType.APPLICATION_JSON )
-    @Path("/jsonp/reports")
+    @RequestMapping(value = "/jsonp/reports", method = RequestMethod.GET)
     public String getJSONPSummeryReport(){
         return "jsonp(" + namibiaReportService.getJSONSummerydDataSetForReport().toJSONString() + ");";
     }
-
-    @GET
-    @Produces( MediaType.APPLICATION_JSON )
-    @Path("/jsonp/image/source/{source}")
-    public String getJSONPSourceImageReport(@PathParam("source") String source){
+    
+    @RequestMapping(value = "/jsonp/image/source/{source}", method = RequestMethod.GET)
+    public String getJSONPSourceImageReport(@PathVariable("source") String source){
         return "jsonp(" + namibiaReportService.getJSONDataSetBySource(source).toJSONString() + ");";
     }
 
-
-    @GET
-    @Produces( MediaType.APPLICATION_JSON )
-    @Path("/taskrun/{taskID}")
-    public List<FilteredTaskRun> getTaskRunResult(@PathParam("taskID") Long taskID){
+    @RequestMapping(value = "/taskrun/{taskID}", method = RequestMethod.GET)
+    public List<FilteredTaskRun> getTaskRunResult(@PathVariable("taskID") Long taskID){
         return namibiaReportService.getFilteredTaskRunByTask(taskID);
 
     }
 
-
-    @GET
-    @Produces( MediaType.APPLICATION_JSON )
-    @Path("/test")
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String getTester(){
         return "{\"status\":\"working\"}";
 
