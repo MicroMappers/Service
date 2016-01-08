@@ -199,7 +199,13 @@
                         });
 
                         $('#loading-widget').hide();
+                    },
+                    error: function(jq,status,message) {
+                    	$('#loading-widget').hide();
+                    	$("#login-modal").show();
+                    	//alert("login");
                     }
+                    
                 });
             };
 
@@ -247,6 +253,7 @@
                     },
                     error: function(response){
                       $('#loading-widget').hide();
+                      toastr.error("Only admin can able to download.");
                     }
                 });
             }
@@ -270,6 +277,8 @@
                          $('#downloadBtn').attr("href", dataStr);
                          $('#downloadBtn').attr("download", "clicker.kml");
                          $("#downloadBtn")[0].click();
+                      } else {
+                    	  toastr.error("Only admin can able to download.");
                       }
                       $('#loading-widget').hide();
                     }

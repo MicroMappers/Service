@@ -1,4 +1,4 @@
-package qa.qcri.mm.api.entity.aidr_predict;
+package qa.qcri.mm.api.aidr_predict_entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

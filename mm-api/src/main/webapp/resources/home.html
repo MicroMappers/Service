@@ -10,18 +10,18 @@
     <meta property="og:image" content="http://199.223.234.225/images/MicroMappers-Logo.png">
     <meta property="og:description" content="Digital disaster response with a single click.">
 
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/jquery-ui.min.css" rel="stylesheet">
-    <link href="css/toastr.min.css" rel="stylesheet">
-    <link href="css/leaflet.css" rel="stylesheet">
-    <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.ie.css" /><![endif]-->
-
-    <link rel="stylesheet" href="css/sidebar.css" />
-    <link rel="stylesheet" href="css/jstree.min.css" />
-    <link rel="stylesheet" href="css/leaflet.awesome-markers.css" />
-    <link rel="stylesheet" href="css/leaflet.label.css" />
-    <link rel="stylesheet" href="css/MarkerCluster.css" />
-    <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+    <link href="resources/css/font-awesome.min.css" rel="stylesheet">
+    <link href="resources/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="resources/css/toastr.min.css" rel="stylesheet">
+    <link href="resources/css/leaflet.css" rel="stylesheet">
+    <link rel="stylesheet" href="resources/css/sidebar.css" />
+    <link rel="stylesheet" href="resources/css/jstree.min.css" />
+    <link rel="stylesheet" href="resources/css/leaflet.awesome-markers.css" />
+    <link rel="stylesheet" href="resources/css/leaflet.label.css" />
+    <link rel="stylesheet" href="resources/css/MarkerCluster.css" />
+    <link rel="stylesheet" href="resources/css/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="resources/css/bootstrap-social.css" />
 
     <style media="screen">
       .jstree li a ins { display:none !important; }
@@ -36,10 +36,10 @@
 </div>
 <header>
 <a id="downloadBtn" href="" style="display: none"> Download </a>
-<div id="logo"><a href="/"> <img src="images/MicroMappers-Logo.png"> </a> </div>
+<div id="logo"><a href="/"> <img src="resources/images/MicroMappers-Logo.png"> </a> </div>
 
 <div class="info pull-right">
-    <img src="images/qcri_logo.png" >
+    <img src="resources/images/qcri_logo.png" >
 </div>
 
 <div class="search-bar pull-right">
@@ -49,7 +49,7 @@
 
 </header>
 
-<div class="container">
+<div class="mainContainer">
 
     <div id="sidebar" class="sidebar">
         <!-- Nav tabs -->
@@ -76,8 +76,7 @@
 
     <div id="image-modal" class="modal-dialog" >
         <a href="#close" title="close" class="close">X</a>
-        <img id="zoom_image" class="image-clicker" data-zoom-image="" src="" />
-        <!-- <iframe class="image-clicker" frameborder="0" style="display: none"></iframe> -->
+        <img id="zoom_image" class="image-clicker" data-zoom-image="" src="" />        
     </div>
 
     <div id="video-modal" class="modalDialog">
@@ -93,31 +92,73 @@
         <div id="aerialMapContainer"></div>
       </div>
     </div>
+    
+    <div id="login-modal" class="login-dialog" >        
+        <div class="login-block text-center">
+        	<div class="row">			
+				<div class="col-md-3">
+				</div>
+				 <div class="col-md-6">
+					<img src="resources/images/micromaps_logo.jpg" height="75">
+				</div>				 
+			</div><br/>
+        	By logging in, you are agreeing to the <a href="resources/aidr_user_agreement.docx">terms of use, privacy</a> and <a href="resources/aidr_data_policy.docx">data policy.</a>
+        	<div class="row" style="padding-top: 25px">				
+				<div class="col-md-6">
+					<form action="signin/twitter" method="POST">
+						<button type="submit" class="btn btn-social btn-twitter" style="width: 100%">
+							<span class="fa fa-twitter"></span> Sign in with Twitter
+						</button>
+					</form>
+				</div>
+				<div class="col-md-6">
+					<form action="signin/facebook" method="POST">
+						<button type="submit" class="btn btn-social btn-facebook" style="width: 100%">
+							<span class="fa fa-facebook"></span> Sign in with Facebook
+						</button>
+					</form>
+				</div>
+				<!-- <div class="col-md-3">
+					<form action="signin/google" method="POST">
+						<button type="submit" class="btn btn-social btn-google">
+							<span class="fa fa-google"></span> Sign in with Google
+						</button>
+					</form>
+				</div> -->
+			</div>
+			<div class="row" style="padding-top: 20px">			
+				<div class="col-md-3">
+				</div>
+				 <div class="col-md-6">
+					<form action="signin/google" method="POST">
+						<button type="submit" class="btn btn-social btn-google" style="width: 100%">
+							<span class="fa fa-google"></span> Sign in with Google
+						</button>
+					</form>
+				</div>
+				 
+			</div>
+        </div>                
+    </div>
+    
 </div>
 
-<script src="lib/jquery-1.11.2.min.js"></script>
-<script src="lib/jquery-ui.min.js"></script>
-<script src="lib/toastr.min.js"></script>
-<script src="lib/leaflet.js"></script>
+<script src="resources/lib/jquery-1.11.2.min.js"></script>
+<script src="resources/lib/jquery-ui.min.js"></script>
+<script src="resources/lib/toastr.min.js"></script>
+<script src="resources/lib/leaflet.js"></script>
 <!-- <script src="lib/jstree.min.js"></script> -->
-<script src="lib/jstree.js"></script>
-<script src="lib/leaflet.awesome-markers.min.js"></script>
-<script src="lib/leaflet.label.js"></script>
-<script src="lib/jquery.elevatezoom.js"></script>
-<script src="lib/leaflet.markercluster.js"></script>
-<script src="lib/pusher.js"></script>
-<!-- <script src="lib/leaflet.smoothmarkerbouncing.js"></script> -->
-<script src="lib/bouncemarker.js"></script>
+<script src="resources/lib/jstree.js"></script>
+<script src="resources/lib/leaflet.awesome-markers.min.js"></script>
+<script src="resources/lib/leaflet.label.js"></script>
+<script src="resources/lib/jquery.elevatezoom.js"></script>
+<script src="resources/lib/leaflet.markercluster.js"></script>
+<script src="resources/lib/pusher.js"></script>
+<script src="resources/lib/bouncemarker.js"></script>
 
-<!-- <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
-<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' /> -->
-
-<script src="js/sidebar.js"></script>
-<script src="js/config.js"></script>
-<script src="js/micromaps.js"></script>
+<script src="resources/js/sidebar.js"></script>
+<script src="resources/js/config.js"></script>
+<script src="resources/js/micromaps.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".share-div a").click(function(){

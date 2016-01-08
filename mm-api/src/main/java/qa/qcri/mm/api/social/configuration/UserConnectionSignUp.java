@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
@@ -16,13 +13,23 @@ import org.springframework.social.connect.support.OAuth1Connection;
 import org.springframework.social.connect.support.OAuth2Connection;
 import org.springframework.stereotype.Component;
 
+import qa.qcri.mm.api.RoleType;
+import qa.qcri.mm.api.aidr_predict_entity.Role;
+import qa.qcri.mm.api.aidr_predict_entity.UserAccount;
+import qa.qcri.mm.api.aidr_predict_entity.UserAccountRole;
+import qa.qcri.mm.api.aidr_predict_entity.UserConnection;
+import qa.qcri.mm.api.repository.RoleRepository;
+import qa.qcri.mm.api.repository.UserAccountRoleRepository;
+import qa.qcri.mm.api.service.UserConnectionService;
+import qa.qcri.mm.api.service.UserService;
+
 @Component("userConnectionSignUp")
 public class UserConnectionSignUp implements ConnectionSignUp {
 
-	@Inject
+	@Autowired
 	private UserConnectionService userConnectionService;
 	
-	@Resource(name="userService")
+	@Autowired
 	private UserService userService;
 	
 	@Autowired

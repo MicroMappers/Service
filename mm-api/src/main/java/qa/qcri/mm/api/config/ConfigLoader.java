@@ -61,14 +61,16 @@ public class ConfigLoader extends WebMvcConfigurerAdapter {
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/views/");
+        viewResolver.setPrefix("/resources/");
         viewResolver.setSuffix(".html"); 
+        
+        
         return viewResolver;
     }
 	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-	    registry.addViewController("/").setViewName("/login");
+	    registry.addViewController("/").setViewName("/home");
 	}
 	
 }

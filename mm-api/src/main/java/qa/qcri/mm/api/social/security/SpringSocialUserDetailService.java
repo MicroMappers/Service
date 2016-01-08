@@ -3,8 +3,6 @@ package qa.qcri.mm.api.social.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.socialsignin.springsocial.security.api.SpringSocialProfile;
 import org.socialsignin.springsocial.security.signin.SpringSocialSecurityAuthenticationFactory;
@@ -24,11 +22,10 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
-import qa.qcri.aidr.data.RoleType;
-import qa.qcri.aidr.data.persistence.entity.UserAccount;
-import qa.qcri.aidr.data.service.UserService;
+import qa.qcri.mm.api.RoleType;
+import qa.qcri.mm.api.aidr_predict_entity.UserAccount;
+import qa.qcri.mm.api.service.UserService;
 
-//@Repository
 @Service
 @Qualifier("springSocialUserDetailsService")
 public class SpringSocialUserDetailService implements UserDetailsService {
@@ -43,7 +40,7 @@ public class SpringSocialUserDetailService implements UserDetailsService {
 	@Autowired
 	private SignUpService<?> signUpService;
 	
-	@Resource(name="userService")
+	@Autowired
 	private UserService userService;
 	
 	@Override

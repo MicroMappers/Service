@@ -45,6 +45,6 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 		/* Configuring dispatcher servlet for spring mvc */		
 		ServletRegistration.Dynamic appServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(context));
 		appServlet.setLoadOnStartup(1);
-		appServlet.addMapping("/rest/*");
+		appServlet.addMapping("/*");
 	}
 }

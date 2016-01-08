@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,7 @@ import qa.qcri.mm.api.util.DataFileUtil;
  * change this template use File | Settings | File Templates.
  */
 @RestController
+@PreAuthorize("hasRole('ROLE_USER_SPRINGSOCIALSECURITY')")
 @RequestMapping("/micromaps")
 public class MicroMapsController {
 	protected static Logger logger = Logger.getLogger("MicroMapsController");
@@ -59,6 +61,7 @@ public class MicroMapsController {
 		return "Success";
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")	
 	@RequestMapping(value = "/JSONP/download/geojson/id/{id}", method = RequestMethod.GET)
 	public String downloadGeojson(@PathVariable("id") long id) throws Exception {
 		String path = URLReference.GEOJSON_HOME + "app/download/";
@@ -91,7 +94,7 @@ public class MicroMapsController {
 	public String getAllCrisis() throws Exception {
 		return microMapsService.getAllCrisisJSONP().toJSONString();
 	}
-
+	
 	@RequestMapping(value = "/JSONP/crisis", method = RequestMethod.GET)
 	public String getAllCrisisJSONP() throws Exception {
 		return "jsonp(" + microMapsService.getAllCrisisJSONP().toJSONString() + ");";
@@ -188,17 +191,20 @@ public class MicroMapsController {
 		return output;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "/kml/text/id/{id}", method = RequestMethod.GET, produces = { "application/xml" })
 	public String getTextClickerKML(@PathVariable("id") long id) throws Exception {
 		String output = microMapsService.generateTextClickerKML(id);
 		return output;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "/kml/image/id/{id}", method = RequestMethod.GET, produces = { "application/xml" })
 	public String getImageClickerKML(@PathVariable("id") long id) throws Exception {
 		return microMapsService.generateImageClickerKML(id);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "/kml/aerial/id/{id}", method = RequestMethod.GET, produces = { "application/xml" })
 	public String getAerialClickerKML(@PathVariable("id") long id) throws Exception {
 		return microMapsService.generateAericalClickerKML(id);

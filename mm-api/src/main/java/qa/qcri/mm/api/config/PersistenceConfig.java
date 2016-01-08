@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -27,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Profile("default")
 @Configuration
 @EnableTransactionManagement
-//@EnableJpaRepositories(basePackages = "qa.qcri.aidr.data.repository")
+@EnableJpaRepositories(basePackages = "qa.qcri.mm.api.repository")
 public class PersistenceConfig {
 
 	@Value("${jdbc.driver}")
@@ -93,7 +94,7 @@ public class PersistenceConfig {
 	public LocalSessionFactoryBean aidrPredictSessionFactory() {
       LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
       sessionFactory.setDataSource(aidrPredictDataSource());
-      sessionFactory.setPackagesToScan(new String[] { "qa.qcri.mm.api.entity.aidr_predict" });
+      sessionFactory.setPackagesToScan(new String[] { "qa.qcri.mm.api.aidr_predict_entity" });
       sessionFactory.setHibernateProperties(hibernateProperties());
  
       return sessionFactory;
@@ -130,8 +131,8 @@ public class PersistenceConfig {
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-		entityManagerFactory.setDataSource(dataSource());
-		entityManagerFactory.setPackagesToScan("qa.qcri.mm.api.entity");
+		entityManagerFactory.setDataSource(aidrPredictDataSource());
+		entityManagerFactory.setPackagesToScan("qa.qcri.mm.api.aidr_predict_entity");
 		entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());
 		//entityManagerFactory.setJpaProperties(getJpaProperties());
 		entityManagerFactory.setPersistenceUnitName(persistentUnitName);

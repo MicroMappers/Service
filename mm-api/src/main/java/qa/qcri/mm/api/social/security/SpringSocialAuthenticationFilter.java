@@ -29,8 +29,8 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.stereotype.Component;
 
-import qa.qcri.aidr.data.persistence.entity.UserConnection;
-import qa.qcri.aidr.data.service.UserConnectionService;
+import qa.qcri.mm.api.aidr_predict_entity.UserConnection;
+import qa.qcri.mm.api.service.UserConnectionService;
 
 @Component
 @Qualifier("springSocialAuthenticationFilter")

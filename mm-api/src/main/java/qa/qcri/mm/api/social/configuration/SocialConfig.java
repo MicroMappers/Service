@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.socialsignin.springsocial.security.signin.SpringSocialSecuritySignInService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
@@ -28,7 +30,8 @@ public class SocialConfig {
 	private String callbackURL;
 	
 	@Autowired
-	private DataSource dataSource;
+	@Qualifier("aidrPredictDataSource")
+	private DataSource aidrPredictDataSource;
 	
 	@Autowired 
 	private Environment env;
@@ -36,8 +39,18 @@ public class SocialConfig {
 	@Autowired
 	UserConnectionSignUp userConnectionSignUp;        
 
-    @Autowired
-	private ConnectionFactoryRegistry connectionFactoryLocator;
+    //@Autowired
+    //@Resource(name = "connectionFactoryRegistry")
+	//private ConnectionFactoryRegistry connectionFactoryLocator;
+    
+    
+    @Bean
+    public ConnectionFactoryLocator connectionFactoryLocator() {
+        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+        //registry.addConnectionFactory(new FacebookConnectionFactory("706678372802150", "0a968b6f7a9f46505616dde09703fc84"));
+
+        return registry;
+    }
     
     @Bean
     public TextEncryptor textEncryptor() {
@@ -46,8 +59,8 @@ public class SocialConfig {
     
     @Bean
     public UsersConnectionRepository usersConnectionRepository() {    	
-    	JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, 
-        		connectionFactoryLocator, 
+    	JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(aidrPredictDataSource, 
+        		connectionFactoryLocator(), 
         		textEncryptor());
     	jdbcUsersConnectionRepository.setConnectionSignUp(userConnectionSignUp);
     	return jdbcUsersConnectionRepository;
@@ -65,7 +78,7 @@ public class SocialConfig {
     	
     @Bean
     public ConnectController connectController() {
-    	ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository());
+    	ConnectController connectController = new ConnectController(connectionFactoryLocator(), connectionRepository());
         connectController.setApplicationUrl(callbackURL);
         return connectController;
     }
@@ -73,7 +86,7 @@ public class SocialConfig {
     @Bean
     public ProviderSignInController providerSignInController() {
     	
-    	ProviderSignInController providerSignInController = new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository(), 
+    	ProviderSignInController providerSignInController = new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), 
     			new SpringSocialSecuritySignInService());
     	providerSignInController.setSignInUrl("/login");
     	providerSignInController.setSignUpUrl("/signup");
