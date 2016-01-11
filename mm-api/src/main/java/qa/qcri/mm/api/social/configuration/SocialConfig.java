@@ -88,7 +88,7 @@ public class SocialConfig {
     	
     	ProviderSignInController providerSignInController = new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), 
     			new SpringSocialSecuritySignInService());
-    	providerSignInController.setSignInUrl("/login");
+    	providerSignInController.setSignInUrl("/home");
     	providerSignInController.setSignUpUrl("/signup");
     	providerSignInController.setPostSignInUrl("/authenticate");
     	providerSignInController.setApplicationUrl(callbackURL);
