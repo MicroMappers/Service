@@ -49,4 +49,9 @@ public class UserAccountRole extends BaseEntity {
 		this.role = role;
 	}
 
+	@Override
+	public String toString() {
+		return "UserAccountRole [account=" + account + ", role=" + role + "]";
+	}
+
 }

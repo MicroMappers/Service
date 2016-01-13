@@ -316,7 +316,6 @@
                               }
                             }
                           });
-                          //console.log("pusher: "+cnt);
 
                           $.each(geoJsonMap, function(category, features){
                             var geoJson = { "type" : "FeatureCollection", "features" : features};
@@ -380,7 +379,6 @@
                                         cc++;
                                         layer.options.bounceOnAdd = false;
                                       });
-                                      console.log(cc);
                                     }
                                     markerClusterGroup.addLayer(layer);
                                 }
@@ -563,6 +561,9 @@
                   $.each(crisisClickers, function( i, crisisClicker){
                     _this.loadLayer(data, crisisClicker.otherItem.type, crisisClicker.clientId, labelCode, crisisID, crisisName);
                   });
+                  if ( data.selected.indexOf(data.node.id) < 0) {
+                	  map.defaultView();
+                  }                  
                 } else if(nodeLevel == "clicker"){
                   _this.loadLayer(data, crisisType, clientId, labelCode, crisisID, crisisName);
                 } else if(nodeLevel == "label"){
@@ -725,7 +726,10 @@
                         map.removeLayer(data.crisisLayer);
                       });
                     }
-                    map.defaultView();
+                    var bounds = eval(crisisIdMap[crisisID][0].otherItem.bounds);
+                    var northEast = L.latLng(bounds[3], bounds[2]);
+                    var southWest = L.latLng(bounds[1], bounds[0]);
+                    map.fitBounds(L.latLngBounds(southWest, northEast));                    
                   } else {
                     toastr.info("<b>"+ crisisName + "</b><br/>" + crisisType + " clicker locations Added to Map.");
                     if(labelCode != null){
