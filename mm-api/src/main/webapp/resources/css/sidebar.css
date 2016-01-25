@@ -523,16 +523,7 @@ li.ui-autocomplete-category {
   background-color: rgba(0, 0, 0, 0.6);
   display: none;
 }
-.modal-dialog {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 300;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: none;
-}
+
 .login-dialog {
   position: fixed;
   left: 0;
@@ -570,7 +561,16 @@ li.ui-autocomplete-category {
   width: 40%;
   height: 50%;
 }
-
+.modal_dialog {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 300;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+}
 .modalDialog {
     position: fixed;
     font-family: Arial, Helvetica, sans-serif;
@@ -586,12 +586,10 @@ li.ui-autocomplete-category {
     transition: opacity 400ms ease-in;
     pointer-events: none;
 }
-
 .modalDialog:target {
     opacity:1;
     pointer-events: auto;
 }
-
 .video-div {
     width: 700px;
     height: 520px;

@@ -240,7 +240,7 @@
                 var url = MicroMaps.config.API + "download/geojson/id/" + node.clientId;
                 if(node.id == '1') {
                   $('#loading-widget').hide();
-                  window.open(MicroMaps.config.HOST + 'json/vanuatu_real_time.zip');
+                  window.open(MicroMaps.config.HOST + 'resources/json/vanuatu_real_time.zip');
                   return;
                 }
                 $.ajax({
@@ -584,7 +584,7 @@
                   var API = crisisType.toLowerCase() == "video" ? MicroMaps.config.API.replace("JSONP", "file") : MicroMaps.config.API;
 
                   if(clientId == 1){
-                    var url = "json/vanuatu_real_time.json";
+                    var url = "resources/json/vanuatu_real_time.json";
                     $.ajax({
                         url: url,
                         success: function(response) {
