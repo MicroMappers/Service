@@ -1,20 +1,16 @@
 package qa.qcri.mm.api.controller;
 
-import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import qa.qcri.mm.api.service.GeoService;
-import qa.qcri.mm.api.template.CrisisGISModel;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import qa.qcri.mm.api.service.GeoService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,18 +19,16 @@ import java.util.List;
  * Time: 11:33 AM
  * To change this template use File | Settings | File Templates.
  */
-@Path("/geo")
-@Component
+@RestController
+@RequestMapping("/geo")
 public class GeoController {
     protected static Logger logger = Logger.getLogger("GeoController");
 
     @Autowired
     GeoService geoService;
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
-    @Path("/JSON/geoMap/qdate/{lastupdated}")
-    public String getMapGeoJSONBasedOnDate(@PathParam("lastupdated") String lastupdated) {
+    @RequestMapping(value = "/JSON/geoMap/qdate/{lastupdated}", method = RequestMethod.GET)
+    public String getMapGeoJSONBasedOnDate(@PathVariable("lastupdated") String lastupdated) {
         ///System.out.print("updated : " + lastupdated);
         String requestedDate = null;
         String returnValue = "";
@@ -64,10 +58,7 @@ public class GeoController {
         return returnValue;
     }
 
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
-    @Path("/JSON/geoMap")
+    @RequestMapping(value = "/JSON/geoMap", method = RequestMethod.GET)
     public String getMapGeoJSON() {
         String returnValue = "";
         try {
@@ -80,12 +71,9 @@ public class GeoController {
         }
         return returnValue;
     }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
-    @Path("/JSONP/geoMap/qdate/{lastupdated}")
-    public String getMapGeoJSONPBasedOnDate(@PathParam("lastupdated") String lastupdated) {
-        //System.out.print("updated : " + lastupdated);
+    
+    @RequestMapping(value = "/JSONP/geoMap/qdate/{lastupdated}", method = RequestMethod.GET)
+    public String getMapGeoJSONPBasedOnDate(@PathVariable("lastupdated") String lastupdated) {
 
         String returnValue = "";
         try {
@@ -106,9 +94,7 @@ public class GeoController {
         return returnValue;
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.WILDCARD})
-    @Path("/JSONP/geoMap")
+    @RequestMapping(value = "/JSONP/geoMap", method = RequestMethod.GET)
     public String getMapGeoJSONP() {
 
         String returnValue = "";
@@ -122,10 +108,5 @@ public class GeoController {
 
         return returnValue;
     }
-
-
-
-
-
 
 }

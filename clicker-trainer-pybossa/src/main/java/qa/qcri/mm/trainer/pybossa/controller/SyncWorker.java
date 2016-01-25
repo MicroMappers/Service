@@ -29,7 +29,7 @@ public class SyncWorker implements Worker {
 	public void work() {
 		String threadName = Thread.currentThread().getName();
 		logger.info("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
-		//System.out.println("cron Start");
+
         try {
             microMapperWorker.processTaskPublish();
             microMapperWorker.processTaskImport();
@@ -42,7 +42,6 @@ public class SyncWorker implements Worker {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             logger.info(e.getMessage());
         }
-       // System.out.println("cron End");
 
     }
 	
