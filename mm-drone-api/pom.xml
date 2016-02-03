@@ -189,7 +189,7 @@
     </dependencies>
 
     <build>
-        <finalName>MMDRONE</finalName>
+        <finalName>uaviators</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
