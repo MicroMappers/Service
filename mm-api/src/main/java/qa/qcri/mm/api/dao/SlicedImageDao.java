@@ -1,6 +1,6 @@
 package qa.qcri.mm.api.dao;
 
-import qa.qcri.mm.api.entity.ImageMetaData;
+import qa.qcri.mm.api.entity.SlicedImage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,8 +9,8 @@ import qa.qcri.mm.api.entity.ImageMetaData;
  * Time: 12:23 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ImageMetaDataDao  extends AbstractDao<ImageMetaData, String>  {
+public interface SlicedImageDao  extends AbstractDao<SlicedImage, String>  {
 
-    void saveMapBoxDataTile(ImageMetaData imageMetaData);
+    void saveMapBoxDataTile(SlicedImage imageMetaData);
 
 }

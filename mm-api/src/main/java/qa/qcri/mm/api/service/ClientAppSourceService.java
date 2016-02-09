@@ -1,5 +1,7 @@
 package qa.qcri.mm.api.service;
 
+import org.json.simple.JSONArray;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jlucas
@@ -17,4 +19,5 @@ public interface ClientAppSourceService {
 
     void handleMapBoxDataSource(String jsonString);
     void handleMapBoxGistDataSource(String url);
+	JSONArray getBoundsByLatLng(double[] coorindates);
 }
