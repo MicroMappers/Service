@@ -1,5 +1,8 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,6 +10,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.ClientAppSourceDao;
 import qa.qcri.mm.api.dao.ImageMetaDataDao;
 import qa.qcri.mm.api.entity.ClientApp;
@@ -20,9 +24,6 @@ import qa.qcri.mm.api.util.Communicator;
 import qa.qcri.mm.api.util.DataFormatValidator;
 import qa.qcri.mm.api.util.GISUtil;
 import qa.qcri.mm.api.util.GeoLocation;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,7 +46,7 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addExternalDataSouceWithClientAppID(String fileURL, Long clientAppID) {
+    public boolean addExternalDataSouceWithClientAppID(String fileURL, Long clientAppID) {
         System.out.println("fileURL : " + fileURL );
         System.out.println("clientAppID : " + clientAppID );
 
@@ -66,7 +67,7 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
                 clientAppSourceDao.createNewSource(ca2);
             }
         }
-
+        return dublicateFound;
     }
 
     @Override
