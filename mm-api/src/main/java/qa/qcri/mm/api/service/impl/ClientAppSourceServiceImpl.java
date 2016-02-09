@@ -1,5 +1,8 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,11 +10,12 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.ClientAppSourceDao;
-import qa.qcri.mm.api.dao.ImageMetaDataDao;
+import qa.qcri.mm.api.dao.SlicedImageDao;
 import qa.qcri.mm.api.entity.ClientApp;
 import qa.qcri.mm.api.entity.ClientAppSource;
-import qa.qcri.mm.api.entity.ImageMetaData;
+import qa.qcri.mm.api.entity.SlicedImage;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.ClientAppSourceService;
 import qa.qcri.mm.api.store.CodeLookUp;
@@ -20,9 +24,6 @@ import qa.qcri.mm.api.util.Communicator;
 import qa.qcri.mm.api.util.DataFormatValidator;
 import qa.qcri.mm.api.util.GISUtil;
 import qa.qcri.mm.api.util.GeoLocation;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,7 +42,7 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
     ClientAppService clientAppService;
 
     @Autowired
-    ImageMetaDataDao imageMetaDataDao;
+    SlicedImageDao slicedImageDao;
 
     @Override
     @Transactional(readOnly = false)
@@ -133,8 +134,8 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
                 String lng = String.valueOf(dblLng);
 
                 JSONArray bounds = this.getBoundsByLatLng(aJson);
-                ImageMetaData imageMetaData = new ImageMetaData(fname, lat, lng, bounds.toJSONString());
-                imageMetaDataDao.saveMapBoxDataTile(imageMetaData);
+                SlicedImage slicedImage = new SlicedImage(fname, lat, lng, bounds.toJSONString());
+                slicedImageDao.saveMapBoxDataTile(slicedImage);
 
             }
         } catch (ParseException e) {
@@ -174,9 +175,9 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
 
                 JSONArray bounds = this.getBoundsByLatLng(coorindates);
 
-                ImageMetaData imageMetaData = new ImageMetaData(fname, lat, lng, bounds.toJSONString());
+                SlicedImage slicedImage = new SlicedImage(fname, lat, lng, bounds.toJSONString());
 
-                imageMetaDataDao.saveMapBoxDataTile(imageMetaData);
+                slicedImageDao.saveMapBoxDataTile(slicedImage);
 
             }
         } catch (ParseException e) {
@@ -213,7 +214,7 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
         return jsonArray;
     }
 
-    private JSONArray getBoundsByLatLng(double[] coorindates ){
+    public JSONArray getBoundsByLatLng(double[] coorindates ){
 
         double dblLat = coorindates[0];
         double dblLng = coorindates[1];

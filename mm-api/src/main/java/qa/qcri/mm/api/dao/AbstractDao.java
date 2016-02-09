@@ -9,7 +9,7 @@ import java.util.List;
 public interface AbstractDao<E, I extends Serializable> {
 
     E findById(I id);
-    void save(E e);
+    I save(E e);
     List<E> findAll();
     void saveOrUpdate(E e);
     void delete(E e);
