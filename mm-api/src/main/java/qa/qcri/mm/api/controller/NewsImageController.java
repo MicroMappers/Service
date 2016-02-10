@@ -15,7 +15,6 @@ public class NewsImageController {
 	@Autowired
 	private NewsImageService newsImageService;
 	
-	@SuppressWarnings("static-access")
 	@RequestMapping(value = "/start/{id}", method = RequestMethod.GET)
 	public String startGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
 		if(newsImageService.isRunning()){
@@ -26,7 +25,6 @@ public class NewsImageController {
 		return "Success";
 	}
 	
-	@SuppressWarnings("static-access")
 	@RequestMapping(value = "/stop/{id}", method = RequestMethod.GET)
 	public String endGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
 		newsImageService.setRunning(false);
