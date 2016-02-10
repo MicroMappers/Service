@@ -18,6 +18,9 @@ public class NewsImageController {
 	@SuppressWarnings("static-access")
 	@RequestMapping(value = "/start/{id}", method = RequestMethod.GET)
 	public String startGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
+		if(newsImageService.isRunning()){
+			return "Service is alredy running.";
+		}
 		newsImageService.setRunning(true);
 		newsImageService.pull(clientAppID);
 		return "Success";
