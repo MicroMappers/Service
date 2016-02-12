@@ -46,9 +46,15 @@ public class PersistenceConfig {
 	@Value("${hibernate.dialect}")
 	private String dialect;
 
-	@Value("${dataSource.persistentUnitName}")
-	private String persistentUnitName;
-	
+	@Value("${aidr_predict.hibernate.dialect}")
+	private String aidrPredictDialect;
+
+	@Value("${aidr_predict.jdbc.driver}")
+	private String aidrPredictDriver;
+
+	@Value("${aidr_predict.dataSource.persistentUnitName}")
+	private String aidrPredictPersistentUnitName;
+
 	@Value("${aidr_predict.jdbc.url}")
 	private String aidrPredictUrl;
 
@@ -57,8 +63,6 @@ public class PersistenceConfig {
 
 	@Value("${aidr_predict.jdbc.password}")
 	private String aidrPredictPassword;
-
-
 
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
@@ -69,46 +73,58 @@ public class PersistenceConfig {
 		dataSource.setPassword(password);
 		return dataSource;
 	}
-	
+
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
-      LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-      sessionFactory.setDataSource(dataSource());
-      sessionFactory.setPackagesToScan(new String[] { "qa.qcri.mm.api.entity" });
-      sessionFactory.setHibernateProperties(hibernateProperties());
- 
-      return sessionFactory;
-    }
-	
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(dataSource());
+		sessionFactory
+				.setPackagesToScan(new String[] { "qa.qcri.mm.api.entity" });
+		sessionFactory.setHibernateProperties(hibernateProperties());
+
+		return sessionFactory;
+	}
+
 	@Bean(destroyMethod = "close")
 	public DataSource aidrPredictDataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl(aidrPredictUrl);
-		dataSource.setDriverClassName(driver);
+		dataSource.setDriverClassName(aidrPredictDriver);
 		dataSource.setUsername(aidrPredictUsername);
 		dataSource.setPassword(aidrPredictPassword);
 		return dataSource;
 	}
-	
+
 	@Bean
 	public LocalSessionFactoryBean aidrPredictSessionFactory() {
-      LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-      sessionFactory.setDataSource(aidrPredictDataSource());
-      sessionFactory.setPackagesToScan(new String[] { "qa.qcri.mm.api.aidr_predict_entity" });
-      sessionFactory.setHibernateProperties(hibernateProperties());
- 
-      return sessionFactory;
-    }
-	
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(aidrPredictDataSource());
+		sessionFactory
+				.setPackagesToScan(new String[] { "qa.qcri.mm.api.aidr_predict_entity" });
+		sessionFactory.setHibernateProperties(aidrPredictHibernateProperties());
+
+		return sessionFactory;
+	}
+
 	Properties hibernateProperties() {
-	      return new Properties() {
-	         {
-	            setProperty("hibernate.hbm2ddl.auto", "update");
-	            setProperty("hibernate.dialect", dialect);
-	            setProperty("hibernate.show_sql", "true");	            
-	         }
-	      };
-	   }
+		return new Properties() {
+			{
+				setProperty("hibernate.hbm2ddl.auto", "create");
+				setProperty("hibernate.dialect", dialect);
+				setProperty("hibernate.show_sql", "true");
+			}
+		};
+	}
+
+	Properties aidrPredictHibernateProperties() {
+		return new Properties() {
+			{
+				setProperty("hibernate.hbm2ddl.auto", "update");
+				setProperty("hibernate.dialect", aidrPredictDialect);
+				setProperty("hibernate.show_sql", "true");
+			}
+		};
+	}
 
 	/* configuring jpa vendor adapter */
 	@Bean
@@ -121,21 +137,23 @@ public class PersistenceConfig {
 		return vendorAdapter;
 	}
 
-	/*protected Properties getJpaProperties() {
-		Properties properties = new Properties();
-		properties.setProperty(NAMING_STRATEGY,	RespectfulImprovedNamingStrategy.class.getName());
-		return properties;
-	}*/
+	/*
+	 * protected Properties getJpaProperties() { Properties properties = new
+	 * Properties(); properties.setProperty(NAMING_STRATEGY,
+	 * RespectfulImprovedNamingStrategy.class.getName()); return properties; }
+	 */
 
 	/* Configuring Entity manager factory */
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(aidrPredictDataSource());
-		entityManagerFactory.setPackagesToScan("qa.qcri.mm.api.aidr_predict_entity");
+		entityManagerFactory
+				.setPackagesToScan("qa.qcri.mm.api.aidr_predict_entity");
 		entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());
-		//entityManagerFactory.setJpaProperties(getJpaProperties());
-		entityManagerFactory.setPersistenceUnitName(persistentUnitName);
+		// entityManagerFactory.setJpaProperties(getJpaProperties());
+		entityManagerFactory
+				.setPersistenceUnitName(aidrPredictPersistentUnitName);
 		entityManagerFactory.afterPropertiesSet();
 		return entityManagerFactory.getObject();
 	}
