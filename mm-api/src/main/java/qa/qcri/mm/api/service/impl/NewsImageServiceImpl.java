@@ -68,7 +68,9 @@ public class NewsImageServiceImpl implements NewsImageService {
 	                	     newsImages.add(newsImage);
 	                		}
 	                	}
+	                	System.out.println("Saving NewsImages :" +newsImages.size());
 	                	newsImageDao.saveAll(newsImages);
+	                	System.out.println("Saved.");
 	                	csvReader.close();
                 	}
                 }
