@@ -253,11 +253,11 @@
 			<version>1.1.4.RELEASE</version>
 		</dependency>				
 		
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.socialsignin</groupId>
 			<artifactId>spring-social-security</artifactId>
-			<version>${org.socialsignin.spring.security.version}</version>
-		</dependency>
+			<version>1.0.3.RELEASE</version>
+		</dependency> -->
 
     </dependencies>
 
