@@ -109,7 +109,7 @@ public class PersistenceConfig {
 	Properties hibernateProperties() {
 		return new Properties() {
 			{
-				setProperty("hibernate.hbm2ddl.auto", "create");
+				setProperty("hibernate.hbm2ddl.auto", "update");
 				setProperty("hibernate.dialect", dialect);
 				setProperty("hibernate.show_sql", "true");
 			}

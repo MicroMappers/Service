@@ -18,7 +18,13 @@ public class NewsImageDaoImpl extends AbstractDaoImpl<NewsImage, Long>
 	@Override
 	public void saveAll(List<NewsImage> newsImages) {
 		for (NewsImage newsImage : newsImages) {
-			save(newsImage);
+			Long id = null;
+			try {
+				id = save(newsImage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("News Image Id: "+ id);
 		}
 	}
 }
