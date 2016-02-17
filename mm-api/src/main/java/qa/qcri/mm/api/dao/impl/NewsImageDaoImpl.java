@@ -3,11 +3,13 @@ package qa.qcri.mm.api.dao.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import qa.qcri.mm.api.dao.NewsImageDao;
 import qa.qcri.mm.api.entity.NewsImage;
 
 @Repository
+@Transactional(readOnly = false)
 public class NewsImageDaoImpl extends AbstractDaoImpl<NewsImage, Long>
 		implements NewsImageDao {
 

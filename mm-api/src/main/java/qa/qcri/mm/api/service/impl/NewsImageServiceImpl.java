@@ -12,7 +12,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import qa.qcri.mm.api.dao.NewsImageDao;
 import qa.qcri.mm.api.entity.NewsImage;
@@ -21,7 +20,6 @@ import qa.qcri.mm.api.service.NewsImageService;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Service("newsImageService")
-@Transactional(readOnly = true)
 public class NewsImageServiceImpl implements NewsImageService {
 
 	@Autowired
