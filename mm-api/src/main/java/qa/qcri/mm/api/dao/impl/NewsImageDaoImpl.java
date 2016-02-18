@@ -9,7 +9,6 @@ import qa.qcri.mm.api.dao.NewsImageDao;
 import qa.qcri.mm.api.entity.NewsImage;
 
 @Repository
-@Transactional(readOnly = false)
 public class NewsImageDaoImpl extends AbstractDaoImpl<NewsImage, Long>
 		implements NewsImageDao {
 
@@ -18,6 +17,7 @@ public class NewsImageDaoImpl extends AbstractDaoImpl<NewsImage, Long>
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void saveAll(List<NewsImage> newsImages) {
 		for (NewsImage newsImage : newsImages) {
 			Long id = null;

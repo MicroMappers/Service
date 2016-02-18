@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import qa.qcri.mm.api.service.NewsImageService;
+import qa.qcri.mm.api.util.MessageConstants;
 
 @RestController
 @RequestMapping("/newsimage")
@@ -18,17 +19,16 @@ public class NewsImageController {
 	@RequestMapping(value = "/start/{id}", method = RequestMethod.GET)
 	public String startGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
 		if(newsImageService.isRunning()){
-			return "Service is alredy running.";
+			return MessageConstants.SERVICE_ALREADY_RUNNING;
 		}
-		newsImageService.setRunning(true);
-		newsImageService.pull(clientAppID);
-		return "Success";
+		newsImageService.startFetchingDataFromGdelt(clientAppID);
+		return MessageConstants.SUCCESS;
 	}
 	
 	@RequestMapping(value = "/stop/{id}", method = RequestMethod.GET)
 	public String endGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
-		newsImageService.setRunning(false);
-		return "Success";
+		newsImageService.stopFetchingDataFromGdelt(clientAppID);
+		return MessageConstants.SUCCESS;
 	}
 
 }

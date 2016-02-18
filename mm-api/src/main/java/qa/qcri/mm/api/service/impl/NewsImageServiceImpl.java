@@ -1,15 +1,18 @@
 package qa.qcri.mm.api.service.impl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,12 @@ public class NewsImageServiceImpl implements NewsImageService {
 	@Autowired
 	private NewsImageDao newsImageDao;
 	
+	@Value("${gdelt.url}")
+	private String gdeltURL;
+	
+	@Value("${gdelt.file.extension}")
+	private String gdeltFileExtension;
+	
 	private static boolean running = false;
 	
 	@Override
@@ -40,36 +49,27 @@ public class NewsImageServiceImpl implements NewsImageService {
 	public void setRunning(boolean running) {
 		this.running = running;
 	}
+	
+	@Override
+	@SuppressWarnings("static-access")
+	public void stopFetchingDataFromGdelt(Long clientAppID) {
+		this.running = false;
+	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	@Async
-	public void pull(Long clientAppID) {
+	public void startFetchingDataFromGdelt(Long clientAppID) {
+		this.running = true;
 		while(running){
             try {
-                String fileURL =  sendGet("http://data.gdeltproject.org/micromappers/lastupdate.txt");
-                System.out.println("Fetching Data.....");
+                String fileURL =  sendGet(gdeltURL);
 
-                if(fileURL.indexOf(".mmic.txt") > -1){
-                	boolean dublicateFound = clientAppSourceService.addExternalDataSouceWithClientAppID(fileURL, clientAppID);
-                	
-                	if(!dublicateFound) {
-	                	// Saving file data into database
-	                	InputStream input = new URL(fileURL).openStream();
-	                	Reader reader = new InputStreamReader(input, "UTF-8");
-	                	CSVReader csvReader = new CSVReader(reader);
-	                	String[] row = null;
-	                	List<NewsImage> newsImages = new ArrayList<>();
-	                	while((row = csvReader.readNext()) != null) {
-	                		if(row[1].indexOf("http") > -1) {
-	                		 NewsImage newsImage = new NewsImage(row[0], row[1], row[6], row[2], row[3], row[4], row[5], row[7]);
-	                		 newsImage.setClientAppID(clientAppID);
-	                	     newsImages.add(newsImage);
-	                		}
-	                	}
-	                	System.out.println("Saving NewsImages :" +newsImages.size());
+                if(fileURL.indexOf(gdeltFileExtension) > -1){
+                	boolean duplicateFound = clientAppSourceService.addExternalDataSouceWithClientAppID(fileURL, clientAppID);
+                	if(!duplicateFound) {
+                		List<NewsImage> newsImages = readDataFromFile(fileURL, clientAppID);
 	                	newsImageDao.saveAll(newsImages);
-	                	System.out.println("Saved.");
-	                	csvReader.close();
                 	}
                 }
                 Thread.sleep(900000);
@@ -81,6 +81,24 @@ public class NewsImageServiceImpl implements NewsImageService {
                 e.printStackTrace();
             }
         }
+	}
+	
+	// Fetching data from file and parse data in to list of NewsImage
+	public List<NewsImage> readDataFromFile(String fileURL, Long clientAppID) throws MalformedURLException, IOException {
+    	InputStream input = new URL(fileURL).openStream();
+    	Reader reader = new InputStreamReader(input, "UTF-8");
+    	CSVReader csvReader = new CSVReader(reader);
+    	String[] row = null;
+    	List<NewsImage> newsImages = new ArrayList<>();
+    	while((row = csvReader.readNext()) != null) {
+    		if(row[1].indexOf("http") > -1) {
+    		 NewsImage newsImage = new NewsImage(row[0], row[1], row[6], row[2], row[3], row[4], row[5], row[7]);
+    		 newsImage.setClientAppID(clientAppID);
+    	     newsImages.add(newsImage);
+    		}
+    	}
+    	csvReader.close();
+    	return newsImages;
 	}
 	
 	private String sendGet(String url) {
