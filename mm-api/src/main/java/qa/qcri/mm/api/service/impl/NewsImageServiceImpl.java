@@ -44,6 +44,11 @@ public class NewsImageServiceImpl implements NewsImageService {
 	
 	private static boolean gdeltPullStatus = false;
 	
+	@Override
+	public boolean getGdeltPullStatus() {
+		return gdeltPullStatus;
+	}
+
 	@SuppressWarnings("static-access")
 	@Override
 	public void stopFetchingDataFromGdelt(Long clientAppID) {

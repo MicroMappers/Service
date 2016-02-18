@@ -18,7 +18,7 @@ public class NewsImageController {
 	
 	@RequestMapping(value = "/start/{id}", method = RequestMethod.POST)
 	public String startGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
-		if(newsImageService.isRunning()){
+		if(newsImageService.getGdeltPullStatus()){
 			return MessageConstants.SERVICE_ALREADY_RUNNING;
 		}
 		newsImageService.startFetchingDataFromGdelt(clientAppID);
