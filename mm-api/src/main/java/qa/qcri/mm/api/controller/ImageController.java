@@ -17,7 +17,7 @@ public class ImageController {
     @Autowired
     SlicedImageService slicedImageService;
     
-    @RequestMapping(value = "/slice/{clientAppId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/slice/{clientAppId}", method = RequestMethod.POST)
     public void sliceImage(@PathVariable("clientAppId") Long clientAppId) {
     	slicedImageService.sliceImage(clientAppId);
     	

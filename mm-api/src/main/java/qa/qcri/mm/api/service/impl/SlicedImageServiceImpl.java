@@ -89,13 +89,10 @@ public class SlicedImageServiceImpl implements SlicedImageService {
 						
 						String imageFileExtension = FilenameUtils.getExtension(file.getName());
 						sourceImage.setId(sourceImageId);
-						
-						switch (imageFileExtension.toLowerCase()) {
+						ImageFormats imageFormat = getImageFormat(imageFileExtension.toLowerCase());
+						switch (imageFormat) {
 
-						case "jpg":
-							processJPEGImage(imageMetaDataList, sourceImage, file, rows, columns);
-							break;
-						case "jpeg":
+						case JPEG:
 							processJPEGImage(imageMetaDataList, sourceImage, file, rows, columns);
 							break;
 						default:
@@ -104,7 +101,7 @@ public class SlicedImageServiceImpl implements SlicedImageService {
 						}
 					}
 					//Persisting to db in a batch of 100 records
-					if (imageMetaDataList.size() > 10) {
+					if (imageMetaDataList.size() > 100) {
 						try{
 							for (SlicedImage imageMetaData : imageMetaDataList) {
 								slicedImageDao.saveMapBoxDataTile(imageMetaData);
@@ -276,9 +273,9 @@ public class SlicedImageServiceImpl implements SlicedImageService {
 			return ImageFormats.TIFF;
 		case "bmp":
 			return ImageFormats.BMP;
-		case "JPG":
+		case "jpg":
 			return ImageFormats.JPEG;
-		case "JPEG":
+		case "jpeg":
 			return ImageFormats.JPEG;
 		default:
 			return null;
