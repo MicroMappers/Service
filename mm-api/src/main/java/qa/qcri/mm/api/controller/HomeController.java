@@ -16,4 +16,12 @@ public class HomeController {
         return view;  
     }
     
+    @ResponseBody 
+    @RequestMapping(value = "/index")
+    public ModelAndView admin(){
+    	ModelAndView view = new ModelAndView();  
+        view.setViewName("app/index");   
+        return view;  
+    }
+    
 }
