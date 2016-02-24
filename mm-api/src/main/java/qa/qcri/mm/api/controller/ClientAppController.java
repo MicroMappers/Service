@@ -18,7 +18,7 @@ import qa.qcri.mm.api.template.ClientAppModel;
  * To change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/clientapp")
+@RequestMapping("rest/clientapp")
 public class ClientAppController {
     @Autowired
     private ClientAppService clientAppService;

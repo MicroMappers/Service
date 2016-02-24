@@ -17,7 +17,7 @@ import qa.qcri.mm.api.service.ClientService;
  * To change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/client")
+@RequestMapping("rest/client")
 public class ClientController {
     @Autowired
     private ClientService clientService;
@@ -25,5 +25,10 @@ public class ClientController {
     @RequestMapping(value = "/id/{clientid}", method = RequestMethod.GET)
     public Client getCrisisByID(@PathVariable("clientid") Long clientid){
         return clientService.findClientbyID("clientID", clientid) ;
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String getPing(){
+        return "Hello World from Client!" ;
     }
 }

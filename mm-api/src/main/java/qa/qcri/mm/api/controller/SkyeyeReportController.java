@@ -17,7 +17,7 @@ import qa.qcri.mm.api.service.SkyeyeReportService;
  * change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/skyeye")
+@RequestMapping("rest/skyeye")
 public class SkyeyeReportController {
 
 	protected static Logger logger = Logger.getLogger("SkyeyeReportController");

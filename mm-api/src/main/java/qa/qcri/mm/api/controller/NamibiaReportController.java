@@ -21,7 +21,7 @@ import qa.qcri.mm.api.service.NamibiaReportService;
  * To change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/namibia")
+@RequestMapping("rest/namibia")
 public class NamibiaReportController {
 
     protected static Logger logger = Logger.getLogger("NamibiaReportController");

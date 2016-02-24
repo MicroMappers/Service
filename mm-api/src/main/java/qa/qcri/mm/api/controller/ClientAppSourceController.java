@@ -25,7 +25,7 @@ import qa.qcri.mm.api.store.StatusCodeType;
  * To change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/source")
+@RequestMapping("rest/source")
 public class ClientAppSourceController {
 
     protected static Logger logger = Logger.getLogger("ClientAppSourceController");

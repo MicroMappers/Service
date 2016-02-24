@@ -20,7 +20,7 @@ import qa.qcri.mm.api.service.GeoService;
  * To change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/geo")
+@RequestMapping("rest/geo")
 public class GeoController {
     protected static Logger logger = Logger.getLogger("GeoController");
 

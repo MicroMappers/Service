@@ -25,7 +25,7 @@ import qa.qcri.mm.api.template.ClientAppDeploymentModel;
  * To change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/deployment")
+@RequestMapping("/rest/deployment")
 public class ClientAppDeploymentController {
 
     @Autowired

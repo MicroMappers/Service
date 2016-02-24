@@ -20,7 +20,7 @@ import qa.qcri.mm.api.service.VanuatuReportService;
  * change this template use File | Settings | File Templates.
  */
 @RestController
-@RequestMapping("/pam")
+@RequestMapping("rest/pam")
 public class VanuatuReportController {
 
 	protected static Logger logger = Logger.getLogger("pamController");
