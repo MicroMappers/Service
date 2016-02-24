@@ -1,4 +1,4 @@
-var app = angular.module('micromaps', [ 'ngRoute', 'ngResource']);
+var app = angular.module('micromaps', [ 'ngRoute', 'ngResource', 'ngAnimate', 'ui.bootstrap']);
 
 app.config(['$routeProvider', function($routeProvider) {
            
