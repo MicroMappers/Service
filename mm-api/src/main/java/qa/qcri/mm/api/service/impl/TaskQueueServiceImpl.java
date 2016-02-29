@@ -1,8 +1,12 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.TaskQueueDao;
 import qa.qcri.mm.api.dao.TaskQueueResponseDao;
 import qa.qcri.mm.api.entity.ClientApp;
@@ -11,9 +15,6 @@ import qa.qcri.mm.api.entity.TaskQueueResponse;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.StatusCodeType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service("taskStatusLookUpService")
 @Transactional(readOnly = true)
@@ -94,5 +95,9 @@ public class TaskQueueServiceImpl implements TaskQueueService {
         return responses;
     }
 
+    @Override
+    public List<TaskQueue> getAll() {
+        return taskQueueDao.getAll();
+    }
 
 }

@@ -1,10 +1,10 @@
 package qa.qcri.mm.api.service;
 
 
+import java.util.List;
+
 import qa.qcri.mm.api.entity.TaskQueue;
 import qa.qcri.mm.api.entity.TaskQueueResponse;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,5 +24,6 @@ public interface TaskQueueService {
     List<TaskQueue> getTaskQueueByClientApp(Long clientAppID);
     List<TaskQueue> getTotalNumberOfTaskQueue(Long clientAppID);
     List<TaskQueueResponse> getTaskQueueResponseByClientApp(String shortName);
+	List<TaskQueue> getAll();
 
 }

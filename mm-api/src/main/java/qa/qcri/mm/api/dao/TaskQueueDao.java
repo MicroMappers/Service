@@ -3,9 +3,9 @@ package qa.qcri.mm.api.dao;
 
 
 
-import qa.qcri.mm.api.entity.TaskQueue;
-
 import java.util.List;
+
+import qa.qcri.mm.api.entity.TaskQueue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +22,5 @@ public interface TaskQueueDao extends AbstractDao<TaskQueue, String>  {
     List<TaskQueue> findTaskQueueSetByStatus(Long clientAppID, Integer status);
     List<TaskQueue> findTaskQueueSetByclientApp(Long clientAppID);
     List<TaskQueue> findTotalTaskQueueSet(Long clientAppID);
-    List<TaskQueue> findLatestTaskQueue(Long clientAppID)  ;
-
+    List<TaskQueue> findLatestTaskQueue(Long clientAppID);
 }

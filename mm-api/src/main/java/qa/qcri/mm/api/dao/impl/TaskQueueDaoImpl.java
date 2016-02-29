@@ -1,14 +1,14 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.api.dao.TaskQueueDao;
 import qa.qcri.mm.api.entity.TaskQueue;
 import qa.qcri.mm.api.store.StatusCodeType;
-
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -70,6 +70,11 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
     public List<TaskQueue> findLatestTaskQueue(Long clientAppID) {
         Criterion criterion = Restrictions.eq("clientAppID",clientAppID);
         return getMaxOrderByCriteria(criterion, "updated");
+    }
+    
+    @Override
+    public List<TaskQueue> getAll() {
+        return getAll();
     }
 
 }

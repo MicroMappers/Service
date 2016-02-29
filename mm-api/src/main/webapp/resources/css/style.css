@@ -18,3 +18,6 @@
 	height: 47px;
 	margin-top: 3px;
 }
+.no-margin-top {
+	margin-top: 0px;
+}
