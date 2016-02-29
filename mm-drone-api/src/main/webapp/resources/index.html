@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Humanitarian UAV Network</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link type="text/css"
+	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css"
+	rel="stylesheet" />
+<link rel="icon" href="resources/media/images/drone/favicon.ico"
+	type="image/x-icon">
+<link rel="stylesheet" href="resources/dist/leaflet.css" />
+<link rel="stylesheet" href="resources/dist/Control.OSMGeocoder.css" />
+<link rel="stylesheet" href="resources/media/css/screen.css" />
+<link rel="stylesheet"
+	href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="resources/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="resources/dist/MarkerCluster.Default.css" />
+
+<script src="resources/dist/leaflet.js"></script>
+<script src="resources/dist/leaflet.markercluster-src.js"></script>
+<script src="resources/dist/Control.OSMGeocoder.js"></script>
+<script src="resources/js/jquery-1.10.2.js"></script>
+<script src="resources/js/jquery-ui.js"></script>
+<script type="text/javascript"
+	src="resources/js/jquery.youtubepopup.min.js"></script>
+<script type="text/javascript"
+	src="resources/js/jquery.jscrollpane.min.js"></script>
+<script type="text/javascript" src="resources/js/Control.Loading.js"></script>
+<script type="text/javascript" src="resources/js/droneApp.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script>
+
+<script>
+        var geoLayerCollection = [];
+        var mapDataCollection = [];
+
+        var geoInfoProperty;
+        var indexID;				
+    </script>
+</head>
+<body>
+	<header>
+
+		<div>
+			<a href="http://uaviators.org/map" class="goToUAVHome"></a>
+		</div>
+		<!-- <div><a id="subscribe-btn" href="#subscribeModal" class="subscribeModal" title="Subscribe Me"><img src='media/images/subscribe.png' width="50px" height="50px"></a></div>
+        <div><a href="#openModal" class="addUAV" id="newUAV"></a></div> -->
+
+		<nav id="primary_nav_wrap"
+			style="position: absolute; right: 10px; top: 20px">
+			<ul>
+				<li><a href="#" style="padding-left: 90px"><i
+						class="fa fa-bars"
+						style="font-size: 26px; margin-top: 5px; background-color: white"></i></a>
+					<ul>
+						<li><a href="#openModal" id="newUAV"><i
+								class="fa fa-map-marker"></i> Add Imagery</a></li>
+						<li><a id="subscribe-btn" href="#subscribeModal"
+							title="Subscribe Me"><i class="fa fa-envelope"></i> Imagery
+								Alerts</a></li>
+					</ul></li>
+			</ul>
+		</nav>
+
+	</header>
+	<div id='loading-gif'>
+		<img src="resources/media/images/loading3.gif" width="80" height="80" />
+	</div>
+	<div id="map"></div>
+
+	<div id="sidebar">
+		<div id="posts-list-widget-tweet" class="widget posts-list">
+			<div class="post-thumbnail">
+				<ol id="tweetList"></ol>
+			</div>
+		</div>
+	</div>
+
+	<div id="openModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<form id="uavInfo" name="uavInfo"
+				action="http://st1.uaviators.org/drone/rest/web/add">
+				<fieldset>
+					<legend>Add Location</legend>
+					<ol>
+						<div>
+							<div>
+								<div>
+									<input id="locationRef" type="text"
+										placeholder="Paste reference to location, place, town, etc. here and click Search -->"></input>
+									<button id="searchBtn" onclick="search()" class="btn"
+										style="margin-top: -27px; margin-bottom: 10px; margin-right: 5px;">
+										<i class="icon-search"></i> Search
+									</button>
+								</div>
+								<div id="geocoding" style="display: block; position: relative;">
+									<div id="map_canvas" style="width: 630px; height: 180px;"></div>
+									<div id="coordinates">
+										<i class="icon-map-marker"></i> Approximate UAV location: <strong>
+											Longitude:</strong> <span id="lon"></span>, <strong>Latitude:</strong>
+										<span id="lat"></span>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<script type="text/javascript"
+							src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+						<script src="resources/js/addUAV.js"></script>
+					</ol>
+
+				</fieldset>
+
+				<fieldset>
+					<legend>Info</legend>
+					<ol>
+						<li>
+							<p class='existingEmail' style="display: none;">Enter the
+								email address you used to upload the post</p> <label for=email>Email</label>
+							<input id=email name=email type=email
+							placeholder="example@domain.com" required autofocus></input> <br />
+							<label for=vURL>URL</label> <input id=vURL name=vURL type=text
+							placeholder="Please enter youtube, vimeo, or photo url" required></input>
+
+						</li>
+					</ol>
+					<input id="agree" name="agree" type="checkbox" checked>I
+					acknowledge that this post is relevant to the mission of the
+					Humanitarian UAV Network and that it does not violate privacy or
+					copyrights. I also confirm that I have read the Network's <a
+						href="http://uaviators.org/docs" target="_blank">Code of
+						Conduct</a>.</input>
+					<div class='btn-divider'>
+						<button type="button" id="cancel" name="cancel"
+							onclick="window.location.href='#close';" style="margin-top: 5px;">Cancel</button>
+						<button type="submit" id="submit" name="submit"
+							style="margin-top: 5px;">Submit</button>
+					</div>
+				</fieldset>
+
+
+			</form>
+		</div>
+	</div>
+	<div id="uavOpenModal" class="modalDialog">
+		<div>
+			<a href="#close" title="close" class="close" id="videoClose"
+				onclick="$('#uavVideo').attr('src', '');">X</a>
+			<div id='flag-btn' class='video-btn'>
+				<img src="resources/media/images/flag.png" width="40" height="32"
+					title="Report" />
+			</div>
+			<div id='edit-btn' class='video-btn'>
+				<img src="resources/media/images/pencil.png" width="40" height="32"
+					title="Edit" />
+			</div>
+			<div id='delete-btn' class='video-btn'>
+				<img src="resources/media/images/trash_can.png" width="40"
+					height="32" title="Delete" />
+			</div>
+			<div id='prev-btn' class='video-btn'
+				style="background-color: transparent">
+				<img src="resources/media/images/back_enabled_hover.png" width="40"
+					height="32" title="Prev Video" />
+			</div>
+			<div id='next-btn' class='video-btn'
+				style="background-color: transparent">
+				<img src="resources/media/images/forward_enabled_hover.png"
+					width="40" height="32" title="Next Video" />
+			</div>
+			<div id='zoom-in' class='zoom-btn myIcon'>
+				<img src="resources/media/images/zoom_in.png" width="32" height="30"
+					title="Zoom In" />
+			</div>
+			<div id='zoom-out' class='zoom-btn'>
+				<img src="resources/media/images/zoom_out.png" width="32"
+					height="30" title="Prev Zoom Out" />
+			</div>
+			<div id="uavVideo1"
+				style="width: 700px; height: 520px; overflow: auto">
+				<iframe id="uavVideo" name="uavVideo" width="680" height="500"
+					frameborder="0" style="display: none"></iframe>
+				<img id="diasterImg" src="" width="680" height="500" />
+			</div>
+		</div>
+	</div>
+	<div id="commentDialog" class='alertDialog'>
+		<div>
+			<label for='flagComment'>Please comment on why you are
+				flagging this:</label><br /> <input id='flagComment' name='flagComment'
+				type='text' required autofocus></input>
+		</div>
+	</div>
+	<div id="deleteDialog" class='alertDialog'>
+		<div>
+			<label for='deleteComment'>Please enter your email to confirm
+				you own this:</label><br /> <input id='deleteEmail' name='deleteEmail'
+				type='text' required autofocus></input>
+		</div>
+	</div>
+	<div id="subscribeModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<form id="subscribeForm">
+				<div style="text-align: center; height: 520px">
+					<br />
+					<br /> <span style="font-size: 25px; color: grey; margin-top: 50px">Sign
+						up for Email Alerts</span> <br /> <span class='fadded-line'></span> <span
+						style="font-size: 12px">To receive alerts when new imagery
+						is added to the map, please add your information below.</span> <br />
+					<table style="margin: auto">
+						<tr style="height: 50px">
+							<td style="font-size: 15px">Name</td>
+							<td><input type='text' id="subscribe_name" name='name'
+								class='form-control' required /></td>
+						</tr>
+						<tr style="height: 57px">
+							<td style="font-size: 15px">Email</td>
+							<td><input type='email' id="subscribe_email" name='email'
+								class='form-control' required /></td>
+						</tr>
+						<tr style="height: 50px">
+							<td style="font-size: 15px; vertical-align: top">Email
+								Prefrence</td>
+							<td style="font-size: 15px; text-align: left"><input
+								type="radio" name="preference" value="IMAGERY_ADDED" required>As
+								soon as imagery is added<br />
+							<br /> <input type="radio" name="preference" value="DAILY"
+								required>Daily Digest<br />
+							<br /> <input type="radio" name="preference" value="WEEKLY"
+								required>Weekly Digest<br />
+							<br /></td>
+						</tr>
+						<tr style="height: 50px">
+							<td colspan='2' style="text-align: center"><button
+									type="submit" id="subscribe" class="subscribe-btn"
+									style="margin-top: 5px;">Sign Up</button></td>
+						</tr>
+					</table>
+					<div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,9 +1,9 @@
 package qa.qcri.mm.trainer.pybossa.service;
 
+import java.util.List;
+
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,5 +24,6 @@ public interface TaskQueueService {
     void deleteAbandonedTaskQueue(Long taskQueueID);
     List<TaskQueue> getLastActiveTaskQueue(Long clientAppID);
     List<TaskQueueResponse> getCompletedTaskQueue(Long clientAppID);
+	List<TaskQueue> getTaskQueueByClientAppId(Long clientAppID);
 
 }

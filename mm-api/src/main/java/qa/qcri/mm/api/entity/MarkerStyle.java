@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Created by jlucas on 5/19/15.
  */
 @Entity
-@Table(name = "markerStyle")
+@Table(name = "marker_style")
 public class MarkerStyle implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
@@ -16,16 +16,16 @@ public class MarkerStyle implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column (name = "clientAppID", nullable = false)
+    @Column (name = "client_app_id", nullable = false)
     private Long clientAppID;
 
-    @Column (name = "appType", nullable = false)
+    @Column (name = "app_type", nullable = false)
     private String appType;
 
     @Column (name = "style", nullable = false)
     private String style;
 
-    @Column (name = "isDefault", nullable = false)
+    @Column (name = "is_default", nullable = false)
     private boolean isDefault;
 
     public MarkerStyle() {

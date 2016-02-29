@@ -1,18 +1,18 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.trainer.pybossa.dao.TaskQueueDao;
 import qa.qcri.mm.trainer.pybossa.dao.TaskQueueResponseDao;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.service.TaskQueueService;
 import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service("taskQueueService")
 @Transactional(readOnly = true)
@@ -34,7 +34,7 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     @Override
     @Transactional(readOnly = false)
     public void updateTaskQueue(TaskQueue taskQueue) {
-        TaskQueue queue;
+        /*TaskQueue queue;
         if(taskQueue.getDocumentID()!=null){
             queue = taskQueueDao.findTaskQueue(taskQueue.getTaskID(),taskQueue.getClientAppID(), taskQueue.getDocumentID()).get(0);
         }
@@ -42,10 +42,10 @@ public class TaskQueueServiceImpl implements TaskQueueService {
             queue = taskQueueDao.findTaskQueueByTaskID(taskQueue.getClientAppID(), taskQueue.getTaskID()).get(0);
         }
         queue.setStatus(taskQueue.getStatus());
-        queue.setUpdated(new Date());
+        queue.setUpdated(new Date());*/
 
         try{
-            taskQueueDao.createTaskQueue(queue);
+            taskQueueDao.createTaskQueue(taskQueue);
         }
         catch (Exception ex){
             System.out.println("updateTaskQueue Exception : " + ex.getMessage());
@@ -61,6 +61,11 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     @Override
     public List<TaskQueue> getTaskQueueByDocument(Long clientAppID, Long documentID) {
         return taskQueueDao.findTaskQueueByDocument(clientAppID, documentID );  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    
+    @Override
+    public List<TaskQueue> getTaskQueueByClientAppId(Long clientAppID) {
+        return taskQueueDao.findTaskQueueByClientAppId(clientAppID);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

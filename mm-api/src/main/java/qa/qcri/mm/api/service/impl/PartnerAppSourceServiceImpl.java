@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
 import qa.qcri.mm.api.service.ClientAppSourceService;
 import qa.qcri.mm.api.service.PartnerAppSourceService;
 import qa.qcri.mm.api.util.Communicator;
@@ -122,7 +121,7 @@ public class PartnerAppSourceServiceImpl implements PartnerAppSourceService {
 		JSONObject idDto = (JSONObject)obj.get("idDTO") ;
 
 		long userId = (long)idDto.get("userId")  ;
-		if(idDto.get("userId")== 6){
+		if(userId == 6){
 			return true;
 		}
 

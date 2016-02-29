@@ -18,29 +18,29 @@ public class Crisis implements Serializable {
     private Long id;
 
 
-    @Column (name = "crisisID", nullable = true)
+    @Column (name = "collection_id", nullable = true)
     private Long crisisID;
 
-    @Column (name = "clientAppID", nullable = true)
+    @Column (name = "client_app_id", nullable = true)
     private Long clientAppID;
 
-    @Column (name = "displayName", nullable = true)
+    @Column (name = "display_name", nullable = true)
     private String displayName;
 
     @Column (name = "description", nullable = true)
     private String description;
 
-    @Column (name = "activationStart", nullable = true)
+    @Column (name = "activation_start", nullable = true)
     private Date activationStart;
 
-    @Column (name = "activationEnd", nullable = true)
+    @Column (name = "activation_end", nullable = true)
     private Date activationEnd;
 
-    @Column (name = "clickerType", nullable = true)
+    @Column (name = "clicker_type", nullable = true)
     private String clickerType;
 
     @OneToOne
-    @JoinColumn(name="clientAppID" ,nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name="client_app_id" ,nullable = false, insertable = false, updatable = false)
     private ClientApp clientApp;
 
 

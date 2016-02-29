@@ -1,5 +1,7 @@
 package qa.qcri.mm.api.service;
 
+import org.json.simple.JSONArray;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jlucas
@@ -9,7 +11,7 @@ package qa.qcri.mm.api.service;
  */
 public interface ClientAppSourceService {
 
-    void addExternalDataSouceWithClientAppID(String fileURL, Long clientAppID);
+    boolean addExternalDataSouceWithClientAppID(String fileURL, Long clientAppID);
     void addExternalDataSourceWithClassifiedData(String fileURL, Long crisisID);
 
     void addExternalDataSouceWithAppType(String fileURL, Integer appType);
@@ -17,4 +19,5 @@ public interface ClientAppSourceService {
 
     void handleMapBoxDataSource(String jsonString);
     void handleMapBoxGistDataSource(String url);
+	JSONArray getBoundsByLatLng(double[] coorindates);
 }

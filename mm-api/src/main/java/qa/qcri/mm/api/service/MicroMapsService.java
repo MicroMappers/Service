@@ -1,11 +1,12 @@
 package qa.qcri.mm.api.service;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import qa.qcri.mm.api.entity.ClientApp;
-import qa.qcri.mm.api.template.MicroMapsCrisisModel;
-import qa.qcri.mm.api.template.CrisisGISModel;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+
+import qa.qcri.mm.api.entity.Crisis;
+import qa.qcri.mm.api.template.CrisisGISModel;
+import qa.qcri.mm.api.template.MicroMapsCrisisModel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,5 +25,9 @@ public interface MicroMapsService {
     String generateImageClickerKML(Long clientAppID) throws Exception;
     String generateAericalClickerKML(Long clientAppID) throws Exception;
     String getGeoClickerByCrisis(Long crisisID) throws Exception;
+	String getGeoClickerByClientAppAndAfterCreatedDate(Long clientAppID, Long createdDate) throws Exception;
+	String getGeoClickerDataForDownload(Long clientAppID) throws Exception;
+	boolean createZip(String zipFileName, String filePath, String fileName);
+	List<Crisis> findCrisisByClientAppID(Long clientAppID);
 
 }

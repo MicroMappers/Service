@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 import qa.qcri.mm.trainer.pybossa.service.Worker;
 
 /**
@@ -26,7 +27,9 @@ public class SchedulerService {
 	
     //set 5 sec. for testing. update to 5min later
     //"0 0/5 * * * ?"
-	@Scheduled(cron="0/3 * * * * ?")
+	//@Scheduled(cron="0/3 * * * * ?")
+	//@Scheduled(cron="0 0/3 * * * ?")
+	@Scheduled(fixedDelay = 10000)
 	public void doSchedule() {
 	//	logger.debug("Start schedule");
 

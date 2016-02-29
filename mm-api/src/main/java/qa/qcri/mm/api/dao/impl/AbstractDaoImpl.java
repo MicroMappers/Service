@@ -1,17 +1,24 @@
 package qa.qcri.mm.api.dao.impl;
 
-import org.hibernate.*;
-import org.hibernate.criterion.*;
-import org.hibernate.transform.Transformers;
-import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.api.dao.AbstractDao;
-
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import qa.qcri.mm.api.dao.AbstractDao;
+
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDao<E,I> {
 
-    private Class<E> entityClass;
+    private final Class<E> entityClass;
 
     protected AbstractDaoImpl(Class<E> entityClass) {
         this.entityClass = entityClass;
@@ -42,9 +49,9 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     }
 
     @Override
-    public void save(E e) {
+    public I save(E e) {
         Session session = getCurrentSession();
-        session.save(e);
+        return (I) session.save(e);
     }
 
     @Override

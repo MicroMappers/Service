@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "taskRun")
+@Table(name = "task_run")
 public class TaskRun  implements Serializable {
 
     private static final long serialVersionUID = -5527566248002296042L;
@@ -23,7 +23,7 @@ public class TaskRun  implements Serializable {
     //duplicateInfo
 
     @Lob
-    @Column(name = "duplicateInfo", length = 100000 )
+    @Column(name = "duplicate_info", length = 100000 )
     private String duplicateInfo;
 
 
@@ -32,7 +32,7 @@ public class TaskRun  implements Serializable {
     private String info;
 
     @Lob
-    @Column(name = "updateInfo", length = 100000 )
+    @Column(name = "update_info", length = 100000 )
     private String updateInfo;
 
 

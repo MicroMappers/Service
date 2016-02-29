@@ -1,8 +1,12 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.trainer.pybossa.dao.ClientAppAnswerDao;
 import qa.qcri.mm.trainer.pybossa.dao.TaskQueueResponseDao;
 import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
@@ -13,9 +17,6 @@ import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
 import qa.qcri.mm.trainer.pybossa.service.ClientAppService;
 import qa.qcri.mm.trainer.pybossa.service.TaskQueueService;
 import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,7 +50,12 @@ public class ClientAppResponseServiceImpl implements ClientAppResponseService {
     @Transactional(readOnly = false)
     public void processTaskQueueResponse(TaskQueueResponse taskQueueResponse) {
 
-        taskQueueResponseDao.addTaskQueueResponse(taskQueueResponse);
+        try {
+			taskQueueResponseDao.addTaskQueueResponse(taskQueueResponse);
+		} catch (Exception e) {
+			System.out.println(taskQueueResponse.getResponse());
+			e.printStackTrace();
+		}
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

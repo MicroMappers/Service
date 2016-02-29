@@ -1,12 +1,9 @@
 package qa.qcri.mm.api.util;
 
-import qa.qcri.mm.api.store.URLReference;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -47,10 +44,9 @@ public class DataFileUtil {
     public static boolean createAfile(String fileContent, String geoFileName){
         boolean isSucced = false;
 
-        geoFileName = "a.json";
-
         try {
             File f = new File(geoFileName);
+            //f.mkdirs();
             PrintWriter writer = new PrintWriter(f, "UTF-8");
             writer.println(fileContent);
             writer.close();

@@ -1,20 +1,14 @@
 package qa.qcri.mm.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import qa.qcri.mm.api.entity.ClientApp;
-import qa.qcri.mm.api.service.ClientAppService;
-import qa.qcri.mm.api.store.CodeLookUp;
-import qa.qcri.mm.api.store.StatusCodeType;
-import qa.qcri.mm.api.template.ClientAppModel;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import qa.qcri.mm.api.service.ClientAppService;
+import qa.qcri.mm.api.template.ClientAppModel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,22 +17,14 @@ import java.util.List;
  * Time: 1:44 AM
  * To change this template use File | Settings | File Templates.
  */
-@Path("/clientapp")
-@Component
+@RestController
+@RequestMapping("rest/clientapp")
 public class ClientAppController {
     @Autowired
     private ClientAppService clientAppService;
-
-
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/allactive")
+    
+    @RequestMapping(value = "/allactive", method = RequestMethod.GET)
     public List<ClientAppModel> getAllActive(){
         return clientAppService.getAllActiveClientApps();
     }
-
-
-
-
 }

@@ -1,17 +1,19 @@
 package qa.qcri.mm.trainer.pybossa.format.impl;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.trainer.pybossa.dao.CrisisDao;
-import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
-import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
-import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ImageMetaData;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,11 +57,13 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
 
                 String tweetID = null;
                 String imgURL = (String)this.getStringValueFromInfoJson(array, "imgurl");
-
+                                
+                //String bounds = this.getStringValueFromInfoJson(array, "geo");
+                String bounds = "[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]";
 
                 JSONObject finalProperties = new JSONObject();
                 finalProperties.put("imgURL", imgURL);
-                finalProperties.put("bounds", this.getStringValueFromInfoJson(array, "geo"));
+                finalProperties.put("bounds", bounds);
                 finalProperties.put("taskid", this.taskQueue.getTaskID());
 
                 JSONObject features = this.getFeature(imgURL);
@@ -138,9 +142,10 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
             JSONArray latlng = new JSONArray();
 
             ImageMetaData aData = imageMetaDataList.get(0);
-
+            
+            latlng.add(Double.valueOf(aData.getLng())) ;            
             latlng.add(Double.valueOf(aData.getLat())) ;
-            latlng.add(Double.valueOf(aData.getLng())) ;
+            
 
             geometry.put("coordinates", latlng) ;
 

@@ -1,14 +1,15 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.trainer.pybossa.dao.ReportTemplateDao;
 import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,6 +56,11 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
     @Override
     public List<ReportTemplate> getReportTemplateSearchByTwittID(String field, String value) {
         return reportTemplateDao.getReportTemplateSearchBy(field, value);  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    
+    @Override
+    public List<ReportTemplate> getReportTemplatesByUrl(String url) {
+        return reportTemplateDao.getReportTemplateSearchBy("url", url); 
     }
 
     private boolean isNumeric(String data){

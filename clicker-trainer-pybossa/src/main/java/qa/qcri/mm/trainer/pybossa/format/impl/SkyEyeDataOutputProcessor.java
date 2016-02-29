@@ -1,16 +1,16 @@
 package qa.qcri.mm.trainer.pybossa.format.impl;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
-import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
-import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,7 +50,9 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
                 String imgURL = this.getStringValueFromInfoJson(array, "imgurl");
                 finalProperties.put("imgURL", imgURL);
 
-                JSONArray bounds = (JSONArray)parser.parse(this.getStringValueFromInfoJson(array, "geo"));
+                //JSONArray bounds = (JSONArray)parser.parse(this.getStringValueFromInfoJson(array, "geo"));
+                JSONArray bounds = (JSONArray)parser.parse("[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]");
+                		
                 finalProperties.put("bounds", bounds);
                 finalProperties.put("taskid", this.taskQueue.getTaskID());
 
@@ -186,9 +188,8 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
         double cLat =  (lat1 + lat2) / 2;
         double cLng =  (lng1 + lng2) / 2;
 
-
-        latlng.add(cLat) ;
         latlng.add(cLng) ;
+        latlng.add(cLat) ;        
 
         geometry.put("coordinates", latlng) ;
 

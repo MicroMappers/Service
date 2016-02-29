@@ -16,21 +16,21 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "clientAppAnswer")
+@Table(name = "client_app_answer")
 public class ClientAppAnswer implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
     @Id
-    @Column(name = "clientAppID")
+    @Column(name = "client_app_id")
     private Long clientAppID;
 
     @Column (name = "answer", nullable = false)
     private String answer;
 
-    @Column (name = "activeAnswerKey", nullable = true)
+    @Column (name = "active_answer_key", nullable = true)
     private String activeAnswerKey;
 
-    @Column (name = "answerMarkerInfo", nullable = true)
+    @Column (name = "answer_marker_info", nullable = true)
     private String answerMarkerInfo;
 
     @Column (name = "created", nullable = false)

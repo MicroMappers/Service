@@ -1,5 +1,16 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,22 +18,28 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import qa.qcri.mm.api.dao.CrisisDao;
+import qa.qcri.mm.api.dao.MarkerStyleDao;
 import qa.qcri.mm.api.dao.TaskQueueResponseDao;
-import qa.qcri.mm.api.entity.*;
+import qa.qcri.mm.api.entity.ClientApp;
+import qa.qcri.mm.api.entity.ClientAppAnswer;
+import qa.qcri.mm.api.entity.Crisis;
+import qa.qcri.mm.api.entity.MarkerStyle;
+import qa.qcri.mm.api.entity.TaskQueue;
+import qa.qcri.mm.api.entity.TaskQueueResponse;
 import qa.qcri.mm.api.service.ClientAppAnswerService;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.MicroMapsService;
 import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.store.URLReference;
-import qa.qcri.mm.api.template.*;
-import qa.qcri.mm.api.dao.CrisisDao;
-import qa.qcri.mm.api.dao.MarkerStyleDao;
+import qa.qcri.mm.api.template.AerialClickerKMLModel;
+import qa.qcri.mm.api.template.CrisisGISModel;
+import qa.qcri.mm.api.template.ImageClickerKMLModel;
+import qa.qcri.mm.api.template.MicroMapsCrisisModel;
+import qa.qcri.mm.api.template.TextClickerKMLModel;
 import qa.qcri.mm.api.util.DataFileUtil;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -114,9 +131,10 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             JSONObject aObject = new JSONObject();
             aObject.put("clientAppID",c.getClientAppID()) ;
             aObject.put("crisisID",c.getCrisisID()) ;
-            aObject.put("crisis",c.getCrisisName()) ;
+            //aObject.put("crisis",c.getCrisisName()) ;
             aObject.put("name",c.getDisplayName()) ;
             aObject.put("type",c.getClickerType()) ;
+            aObject.put("bounds", c.getBounds());
             aObject.put("activationStart",c.getActivationStart().toString()) ;
             if(c.getActivationEnd() == null){
                 aObject.put("activationEnd","") ;
@@ -136,6 +154,94 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         }
         return models;
     }
+    
+    @Override
+    public String getGeoClickerByClientAppAndAfterCreatedDate(Long clientAppID,Long createdDate) throws Exception{
+
+        List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
+        ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
+
+        JSONObject geoClickerOutput = new JSONObject();
+        JSONArray features = new JSONArray();
+
+        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+
+        for(TaskQueue t: taskQueueList){
+
+            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
+
+            if(responses.size() > 0 ){
+                if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
+                	TaskQueueResponse taskQueueResponse = responses.get(0);                	
+                	if(taskQueueResponse.getCreated().compareTo(new Date(createdDate)) >= 0){
+                		JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponse.getResponse());
+                        for(Object a : eachFeatureArrary){
+                            features.add(a);
+                        }
+                	}               
+                }
+            }
+
+        }
+
+        geoClickerOutput.put("type", "FeatureCollection");
+        geoClickerOutput.put("features", features);
+        
+        return geoClickerOutput.toJSONString();     
+    }
+    
+    @Override
+    public List<Crisis> findCrisisByClientAppID(Long clientAppID){
+    	return crisisDao.findCrisisByClientAppID(clientAppID);
+    }
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public String getGeoClickerDataForDownload(Long clientAppID) throws Exception{
+
+        JSONObject geoClickerOutput = new JSONObject();
+        JSONArray features = new JSONArray();
+        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        
+        List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
+        JSONArray bounds = null;
+        if(crisises != null && !crisises.isEmpty()){
+        	Crisis crisis = crisises.get(0);
+        	bounds = (JSONArray)parser.parse(crisis.getBounds());
+        }
+        
+        for(TaskQueue t: taskQueueList){
+            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
+            if(responses.size() > 0 ){
+                if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
+                    JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
+                    for(Object a : eachFeatureArrary){
+                    	JSONObject jsonObject = (JSONObject) a;
+                    	
+                    	if(jsonObject != null && jsonObject.get("properties") != null 
+                    			&& jsonObject.get("geometry") != null && bounds != null){
+                    		
+                    		JSONObject geometryObject = (JSONObject) jsonObject.get("geometry");
+                        	JSONArray coordinates = (JSONArray) geometryObject.get("coordinates");                        	
+                        	
+                    		if( ((Number)coordinates.get(0)).doubleValue() >= ((Number)bounds.get(0)).doubleValue() 
+                    				&& ((Number)coordinates.get(0)).doubleValue() <= ((Number)bounds.get(2)).doubleValue()
+                    				&& ((Number)coordinates.get(1)).doubleValue() >= ((Number)bounds.get(1)).doubleValue() 
+                    				&& ((Number)coordinates.get(1)).doubleValue() <= ((Number)bounds.get(3)).doubleValue()){
+                    			
+                    			features.add(a);
+                    		
+                    		}
+                    	}
+                    }
+                }
+            }
+        }
+        geoClickerOutput.put("developedBy", "Qatar Computing Research Institute");
+        geoClickerOutput.put("type", "FeatureCollection");
+        geoClickerOutput.put("features", features);
+        return geoClickerOutput.toJSONString();     
+    }
 
     @Override
     public String getGeoClickerByClientApp(Long clientAppID) throws Exception{
@@ -152,11 +258,6 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         if(!DataFileUtil.doesFileExist(fileName)) {
             JSONArray features = new JSONArray();
 
-            if(crisises.size() > 0)
-            {
-                Crisis c =  crisises.get(0);
-            }
-
             System.out.println("crisis :" + clientApp.getName());
 
             List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
@@ -171,23 +272,58 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                     if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
                         JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
                         for(Object a : eachFeatureArrary){
-                            features.add((JSONObject) a);
+                            features.add(a);
                         }
 
                     }
                 }
 
             }
-
+            
+            geoClickerOutput.put("developedBy", "Qatar Computing Research Institute");
             geoClickerOutput.put("type", "FeatureCollection");
-            geoClickerOutput.put("features", features);
-            System.out.println(geoClickerOutput.toJSONString());
-            DataFileUtil.createAfile(geoClickerOutput.toJSONString(), fileName);
+            geoClickerOutput.put("features", features);            
+            //System.out.println(geoClickerOutput.toJSONString());
+            
+            // if crisis is archived
+            if(crisises != null && !crisises.isEmpty()){
+            	Crisis crisis = crisises.get(0);
+            	if(crisis.getActivationEnd() != null){
+            		DataFileUtil.createAfile(geoClickerOutput.toJSONString(), fileName);
+            	}
+            }
+            
+            return geoClickerOutput.toJSONString();
         }
+        return DataFileUtil.getDataFileContent(fileName);        
+    }
+    
+    @Override
+    public boolean createZip(String zipFileName, String filePath, String fileName){
+    	byte[] buffer = new byte[1024];
+    	try {
+			FileOutputStream fos = new FileOutputStream(zipFileName);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+			
+			ZipEntry ze= new ZipEntry(fileName);
+			zos.putNextEntry(ze);
+			FileInputStream in = new FileInputStream(filePath);
+   
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				zos.write(buffer, 0, len);
+			}
 
-        String content = DataFileUtil.getDataFileContent(fileName);
-
-        return content;
+			in.close();
+			zos.closeEntry();
+			zos.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return false;
     }
 
     @Override
@@ -215,7 +351,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                         if (!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")) {
                             JSONArray eachFeatureArrary = (JSONArray) parser.parse(responses.get(0).getResponse());
                             for (Object a : eachFeatureArrary) {
-                                features.add((JSONObject) a);
+                                features.add(a);
                             }
 
                         }
