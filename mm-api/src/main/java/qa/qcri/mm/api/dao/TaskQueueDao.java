@@ -14,7 +14,7 @@ import qa.qcri.mm.api.entity.TaskQueue;
  * Time: 7:29 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface TaskQueueDao extends AbstractDao<TaskQueue, String>  {
+public interface TaskQueueDao extends AbstractDao<TaskQueue, Long>  {
 
     List<TaskQueue> findTaskQueue(Long taskID, Long clientAppID, Long documentID);
     List<TaskQueue> findTaskQueueByDocument(Long clientAppID, Long documentID);
@@ -23,4 +23,6 @@ public interface TaskQueueDao extends AbstractDao<TaskQueue, String>  {
     List<TaskQueue> findTaskQueueSetByclientApp(Long clientAppID);
     List<TaskQueue> findTotalTaskQueueSet(Long clientAppID);
     List<TaskQueue> findLatestTaskQueue(Long clientAppID);
+    Long getTaskQueueCountByclientAppId(Long clientAppID);
+	Long getTaskQueueCountByclientAppAndStatus(Long clientAppID, Integer status);
 }

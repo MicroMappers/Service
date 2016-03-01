@@ -2,7 +2,9 @@ package qa.qcri.mm.api.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +20,7 @@ import qa.qcri.mm.api.store.StatusCodeType;
  * To change this template use File | Settings | File Templates.
  */
 @Repository
-public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> implements TaskQueueDao {
+public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, Long> implements TaskQueueDao {
 
     protected TaskQueueDaoImpl(){
         super(TaskQueue.class);
@@ -58,6 +60,27 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
     public List<TaskQueue> findTaskQueueSetByclientApp(Long clientAppID) {
         return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
     }
+    
+    @Override
+    public Long getTaskQueueCountByclientAppId(Long clientAppID) {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.count("id"));
+		criteria.add(Restrictions.eq("clientAppID", clientAppID));
+		Long result = (Long) criteria.uniqueResult();
+		return result;
+    }
+    
+    @Override
+    public Long getTaskQueueCountByclientAppAndStatus(Long clientAppID, Integer status) {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.count("id"));
+		criteria.add(Restrictions.conjunction()
+                .add(Restrictions.eq("clientAppID", clientAppID))
+                .add(Restrictions.eq("status", status)));
+		Long result = (Long) criteria.uniqueResult();
+		return result;
+    }
+    
 
     @Override
     public List<TaskQueue> findTotalTaskQueueSet(Long clientAppID) {

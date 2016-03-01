@@ -40,32 +40,23 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     }
 
     @Override
-    public List<TaskQueue> getTaskQueueByStatus(String column, Integer status) {
-        return taskQueueDao.findTaskQueueByStatus(column,status);  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public List<TaskQueue> getTaskQueueByClientAppStatus(Long clientAppID, Integer status) {
         return taskQueueDao.findTaskQueueSetByStatus(clientAppID, status);  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-
-    @Override
-    public Integer getCountTaskQeueByStatus(String column, Integer status) {
-        return taskQueueDao.findTaskQueueByStatus(column,status).size();  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Integer getCountTaskQeueByStatusAndClientApp(Long clientAppID, Integer status) {
-        List<TaskQueue> taskQueueList = taskQueueDao.findTaskQueueSetByStatus(clientAppID, status);
-        if(taskQueueList!=null)
-            return taskQueueList.size();  //To change body of implemented methods use File | Settings | File Templates.
-        return 0;
     }
 
     @Override
     public List<TaskQueue> getTaskQueueByClientApp(Long clientAppID) {
         return taskQueueDao.findTaskQueueSetByclientApp(clientAppID);
+    }
+    
+    @Override
+    public Long getTaskQueueCountByClientAppId(Long clientAppID) {
+        return taskQueueDao.getTaskQueueCountByclientAppId(clientAppID);
+    }
+    
+    @Override
+    public Long getTaskQueueCountByClientAppIdAndStatus(Long clientAppID, Integer status) {
+        return taskQueueDao.getTaskQueueCountByclientAppAndStatus(clientAppID, status);
     }
 
     @Override

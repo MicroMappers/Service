@@ -43,25 +43,14 @@ public class ClientAppController {
     	List<ClientAppModel> aList = new ArrayList<ClientAppModel>();
     	
     	for (ClientApp clientApp : appList) {
-    		List<TaskQueue> taskQueues = taskQueueService.getTaskQueueByClientApp(clientApp.getClientAppID());
-    		Integer totalTask = taskQueues.size();
-			Integer availableTask = getAvailableTaskCount(taskQueues);
-			ClientAppModel model = new ClientAppModel(clientApp.getClientAppID(),
+    		Long clientAppID = clientApp.getClientAppID();
+    		Long totalTask = taskQueueService.getTaskQueueCountByClientAppId(clientAppID);
+			Long availableTask = taskQueueService.getTaskQueueCountByClientAppIdAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+			ClientAppModel model = new ClientAppModel(clientAppID,
 					clientApp.getPlatformAppID(), clientApp.getCrisisID(), clientApp.getName(),
 					clientApp.getShortName(), clientApp.getAppType(), clientApp.getStatus(), availableTask, totalTask);
             aList.add(model);
         }
     	return aList;
     }
-    
-    private int getAvailableTaskCount(List<TaskQueue> taskList) {
-    	int availableTask = 0;
-    	for (TaskQueue taskQueue : taskList) {
-			if(taskQueue.getStatus() == StatusCodeType.TASK_LIFECYCLE_COMPLETED) {
-				availableTask++;
-			}
-		}
-    	return availableTask;
-    }
-    
 }

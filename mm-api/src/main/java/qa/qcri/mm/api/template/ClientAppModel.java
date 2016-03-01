@@ -15,8 +15,8 @@ public class ClientAppModel {
     private String shortName;
     private Integer appType;
     private Integer status;
-    private Integer taskAvailable;
-    private Integer totalTask;
+    private Long taskAvailable;
+    private Long totalTask;
 
     public ClientAppModel(){}
 
@@ -32,7 +32,7 @@ public class ClientAppModel {
 
     public ClientAppModel(Long id, Long platformID, Long crisisID, String name,
 			String shortName, Integer appType, Integer status,
-			Integer taskAvailable, Integer totalTask) {
+			Long taskAvailable, Long totalTask) {
 		super();
 		this.id = id;
 		this.platformID = platformID;
@@ -101,19 +101,19 @@ public class ClientAppModel {
 		this.status = status;
 	}
 
-	public Integer getTaskAvailable() {
+	public Long getTaskAvailable() {
 		return taskAvailable;
 	}
 
-	public void setTaskAvailable(Integer taskAvailable) {
+	public void setTaskAvailable(Long taskAvailable) {
 		this.taskAvailable = taskAvailable;
 	}
 
-	public Integer getTotalTask() {
+	public Long getTotalTask() {
 		return totalTask;
 	}
 
-	public void setTotalTask(Integer totalTask) {
+	public void setTotalTask(Long totalTask) {
 		this.totalTask = totalTask;
 	}
 	
