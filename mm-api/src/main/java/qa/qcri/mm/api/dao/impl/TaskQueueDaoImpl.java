@@ -1,5 +1,6 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -72,6 +73,30 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, Long> implement
                 .add(Restrictions.eq("clientAppID", clientAppID))
                 .add(Restrictions.ne("status", StatusCodeType.TASK_ABANDONED)));
 		Long result = (Long) criteria.uniqueResult();
+		return result;
+    }
+    
+    @Override
+    public List<Object> getTotalTaskInQueue() {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.projectionList()
+				.add(Projections.groupProperty("clientAppID"))
+				.add(Projections.rowCount())
+				);
+		criteria.add(Restrictions.ne("status", StatusCodeType.TASK_ABANDONED));
+		List<Object> result = criteria.list();
+		return result;
+    }
+    
+    @Override
+    public List<Object> getTotalTaskInQueueByStatus(Integer status) {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.projectionList()
+				.add(Projections.groupProperty("clientAppID"))
+				.add(Projections.rowCount())
+				);
+		criteria.add(Restrictions.eq("status", status));
+		List<Object> result = criteria.list();
 		return result;
     }
     

@@ -1,7 +1,10 @@
 package qa.qcri.mm.api.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.lang.Integer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +55,28 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     @Override
     public Long getTotalTaskInQueueByclientAppId(Long clientAppID) {
         return taskQueueDao.getTotalTaskInQueueByclientAppId(clientAppID);
+    }
+    
+    @Override
+    public Map<Long, Long> getTotalTaskInQueueMapWithClientAppId() {
+        List<Object> totalTasksInQueue = taskQueueDao.getTotalTaskInQueue();
+        Map<Long,Long> clientAppWithTotalTaskMap = new HashMap<Long,Long>();
+        for (Object totalTaskByClientApp : totalTasksInQueue) {
+        	Object[] obj = (Object[]) totalTaskByClientApp;
+        	clientAppWithTotalTaskMap.put(Long.parseLong(obj[0].toString()), Long.parseLong(obj[1].toString()));
+		}
+        return clientAppWithTotalTaskMap;
+    }
+    
+    @Override
+    public Map<Long, Long> getTotalTaskInQueueByStatusMapWithClientAppId(Integer status) {
+        List<Object> totalTasksInQueueByStatus = taskQueueDao.getTotalTaskInQueueByStatus(status);
+        Map<Long,Long> clientAppWithTotalTaskByStatusMap = new HashMap<Long,Long>();
+        for (Object object : totalTasksInQueueByStatus) {
+        	Object[] obj = (Object[]) object;
+        	clientAppWithTotalTaskByStatusMap.put(Long.parseLong(obj[0].toString()), Long.parseLong(obj[1].toString()));
+		}
+        return clientAppWithTotalTaskByStatusMap;
     }
     
     @Override

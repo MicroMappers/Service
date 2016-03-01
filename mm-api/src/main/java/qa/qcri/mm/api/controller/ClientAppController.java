@@ -2,6 +2,7 @@ package qa.qcri.mm.api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import qa.qcri.mm.api.entity.ClientApp;
-import qa.qcri.mm.api.entity.TaskQueue;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.StatusCodeType;
@@ -41,11 +41,13 @@ public class ClientAppController {
     public List<ClientAppModel> getAll(){
     	List<ClientApp> appList = clientAppService.getAllClientApp();
     	List<ClientAppModel> aList = new ArrayList<ClientAppModel>();
+    	Map<Long, Long> totalTaskInQueue = taskQueueService.getTotalTaskInQueueMapWithClientAppId();
+    	Map<Long, Long> totalTaskAvailableInQueue = taskQueueService.getTotalTaskInQueueByStatusMapWithClientAppId(StatusCodeType.TASK_LIFECYCLE_COMPLETED);
     	
     	for (ClientApp clientApp : appList) {
     		Long clientAppID = clientApp.getClientAppID();
-    		Long totalTask = taskQueueService.getTotalTaskInQueueByclientAppId(clientAppID);
-			Long availableTask = taskQueueService.getTaskQueueCountByClientAppIdAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+    		Long totalTask = totalTaskInQueue.containsKey(clientAppID) ? totalTaskInQueue.get(clientAppID) : 0L ;
+			Long availableTask = totalTaskAvailableInQueue.containsKey(clientAppID) ? totalTaskAvailableInQueue.get(clientAppID) : 0L ;
 			ClientAppModel model = new ClientAppModel(clientAppID,
 					clientApp.getPlatformAppID(), clientApp.getCrisisID(), clientApp.getName(),
 					clientApp.getShortName(), clientApp.getAppType(), clientApp.getStatus(), availableTask, totalTask);

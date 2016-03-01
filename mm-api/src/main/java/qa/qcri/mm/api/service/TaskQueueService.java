@@ -2,6 +2,7 @@ package qa.qcri.mm.api.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import qa.qcri.mm.api.entity.TaskQueue;
 import qa.qcri.mm.api.entity.TaskQueueResponse;
@@ -24,5 +25,6 @@ public interface TaskQueueService {
 	List<TaskQueue> getAll();
 	Long getTotalTaskInQueueByclientAppId(Long clientAppID);
 	Long getTaskQueueCountByClientAppIdAndStatus(Long clientAppID, Integer status);
-
+	Map<Long, Long> getTotalTaskInQueueMapWithClientAppId();
+	Map<Long, Long> getTotalTaskInQueueByStatusMapWithClientAppId(Integer status);
 }

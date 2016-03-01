@@ -3,6 +3,7 @@ package qa.qcri.mm.api.dao;
 
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import qa.qcri.mm.api.entity.TaskQueue;
@@ -24,4 +25,6 @@ public interface TaskQueueDao extends AbstractDao<TaskQueue, Long>  {
     List<TaskQueue> findLatestTaskQueue(Long clientAppID);
     Long getTotalTaskInQueueByclientAppId(Long clientAppID);
 	Long getTaskQueueCountByclientAppAndStatus(Long clientAppID, Integer status);
+	List<Object> getTotalTaskInQueue();
+	List<Object> getTotalTaskInQueueByStatus(Integer status);
 }
