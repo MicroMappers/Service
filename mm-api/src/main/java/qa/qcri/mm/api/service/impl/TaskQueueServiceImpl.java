@@ -50,8 +50,8 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     }
     
     @Override
-    public Long getTaskQueueCountByClientAppId(Long clientAppID) {
-        return taskQueueDao.getTaskQueueCountByclientAppId(clientAppID);
+    public Long getTotalTaskInQueueByclientAppId(Long clientAppID) {
+        return taskQueueDao.getTotalTaskInQueueByclientAppId(clientAppID);
     }
     
     @Override
@@ -60,8 +60,8 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     }
 
     @Override
-    public List<TaskQueue> getTotalNumberOfTaskQueue(Long clientAppID) {
-        return taskQueueDao.findTotalTaskQueueSet(clientAppID);  //To change body of implemented methods use File | Settings | File Templates.
+    public Long getTotalNumberOfTaskQueue(Long clientAppID) {
+        return taskQueueDao.getTotalTaskInQueueByclientAppId(clientAppID);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

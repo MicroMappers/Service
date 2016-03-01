@@ -44,7 +44,7 @@ public class ClientAppController {
     	
     	for (ClientApp clientApp : appList) {
     		Long clientAppID = clientApp.getClientAppID();
-    		Long totalTask = taskQueueService.getTaskQueueCountByClientAppId(clientAppID);
+    		Long totalTask = taskQueueService.getTotalTaskInQueueByclientAppId(clientAppID);
 			Long availableTask = taskQueueService.getTaskQueueCountByClientAppIdAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
 			ClientAppModel model = new ClientAppModel(clientAppID,
 					clientApp.getPlatformAppID(), clientApp.getCrisisID(), clientApp.getName(),

@@ -61,11 +61,16 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, Long> implement
         return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
     }
     
+    /* (non-Javadoc)
+     * total task in queue by clientappID where status is not TASK_ABANDONED
+     */
     @Override
-    public Long getTaskQueueCountByclientAppId(Long clientAppID) {
+    public Long getTotalTaskInQueueByclientAppId(Long clientAppID) {
     	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
-		criteria.setProjection(Projections.count("id"));
-		criteria.add(Restrictions.eq("clientAppID", clientAppID));
+		criteria.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.conjunction()
+                .add(Restrictions.eq("clientAppID", clientAppID))
+                .add(Restrictions.ne("status", StatusCodeType.TASK_ABANDONED)));
 		Long result = (Long) criteria.uniqueResult();
 		return result;
     }
@@ -73,7 +78,7 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, Long> implement
     @Override
     public Long getTaskQueueCountByclientAppAndStatus(Long clientAppID, Integer status) {
     	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
-		criteria.setProjection(Projections.count("id"));
+		criteria.setProjection(Projections.rowCount());
 		criteria.add(Restrictions.conjunction()
                 .add(Restrictions.eq("clientAppID", clientAppID))
                 .add(Restrictions.eq("status", status)));
@@ -81,14 +86,6 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, Long> implement
 		return result;
     }
     
-
-    @Override
-    public List<TaskQueue> findTotalTaskQueueSet(Long clientAppID) {
-        return findByCriteria(Restrictions.conjunction()
-                .add(Restrictions.eq("clientAppID", clientAppID))
-                .add(Restrictions.ne("status", StatusCodeType.TASK_ABANDONED)));
-    }
-
     @Override
     public List<TaskQueue> findLatestTaskQueue(Long clientAppID) {
         Criterion criterion = Restrictions.eq("clientAppID",clientAppID);
