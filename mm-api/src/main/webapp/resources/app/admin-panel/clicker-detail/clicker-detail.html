@@ -1,0 +1,129 @@
+<div class="row">
+	<div class="col-md-12"><h3><!-- <button type="button" class="btn btn-default" uib-tooltip="Back to list" tooltip-placement="top"><i class="fa fa-arrow-left"></i></button> --> Text GeoClicker</h3></div>
+</div>
+<hr class="no-margin-top"/>
+{{clicker}}
+<div class="row">
+	<div class="col-md-9">
+	</div>
+	<div class="col-md-3">
+		<button ng-show="!isEditMode" type="button" class="btn btn-default" ng-click="switchEditMode(true)" style="outline:none;" aria-hidden="false">
+			<span class="fa fa-pencil"></span> Edit
+		</button>
+		<button ng-show="isEditMode" class="btn btn-primary" ng-click="saveOrUpdateCoordinator(form)">
+			<i class="fa fa-save"></i> Update
+		</button>
+		<button ng-show="isEditMode" class="btn btn-default" ng-click="switchEditMode(false)">
+			<i class="fa fa-times"></i> Cancel
+		</button>
+	</div>
+</div><br/><br/>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-4"><strong> Crisis Name </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<select class="form-control" ng-model="temp_clicker.crisis" ng-options="c.id as c.displayName for c in crisis">
+		      		<option value="">--Select--</option>
+		      	</select>
+		      </span>
+		      <span class="col-md-10" ng-hide="isEditMode">
+		      	{{clicker.crisisName}}
+		      </span>
+			</div>
+		</div><br/>
+		
+		<div class="row">
+			<div class="col-md-4"><strong> App Type </strong></div>
+			<div class="col-md-8">
+		      <span class="col-md-10">
+		      	{{client_app_type[clicker.appType]}}
+		      </span>
+			</div>
+		</div><br/>
+		
+		<div class="row">
+			<div class="col-md-4"><strong> Classifier Name </strong></div>
+			<div class="col-md-8">
+		      <span class="col-md-10" ng-if="clicker.classifierName">
+		      	{{clicker.classifierName}}
+		      </span>
+		      <span class="col-md-10" ng-if="!clicker.classifierName">
+		      	NA
+		      </span>
+			</div>
+		</div><br/>
+		
+		<div class="row">
+			<div class="col-md-4"><strong> Task run per task </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<input type="number" min="0" class="form-control" ng-model="temp_clicker.taskRunsPerTask"></select>
+		      </span>
+		      <span class="col-md-10" ng-hide="isEditMode">
+		      	{{clicker.taskRunsPerTask}}
+		      </span>
+			</div>
+		</div><br/>
+		
+	</div>
+	<div class="col-md-6">
+		
+		<div class="row">
+			<div class="col-md-4"><strong> Status </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<select class="form-control" ng-model="temp_clicker.status">
+		      		<option value="">--Select--</option>
+		      		<option value={{$index}} ng-repeat="status in client_app_status">{{status}}</option>
+		      	</select>
+		      </span>
+		      <span class="col-md-10" ng-hide="isEditMode">
+		      	{{client_app_status[clicker.status]}}
+		      </span>
+			</div>
+		</div><br/>
+		
+		<div class="row">
+			<div class="col-md-4"><strong> Custom Report defined </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<i ng-show="temp_clicker.isCustom" ng-click="toggleIsCustom()" uib-tooltip="Yes" tooltip-placement="right" class="fa fa-toggle-on fa-2x text-primary" style="cursor: pointer"></i>
+		      	<i ng-hide="temp_clicker.isCustom" ng-click="toggleIsCustom()" uib-tooltip="No" tooltip-placement="right" class="fa fa-toggle-off fa-2x text-primary" style="cursor: pointer"></i>
+		      </span>
+		      <span class="col-md-10" ng-hide="isEditMode">
+		      	<span ng-show="clicker.translationRequired">Yes</span><span ng-hide="clicker.translationRequired">No</span>
+		      </span>
+			</div>
+		</div><br/>
+		
+		<div class="row">
+			<div class="col-md-4"><strong> Translation Required </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<i ng-show="temp_clicker.translationRequired" ng-click="toggleTranslationRequired()" uib-tooltip="Yes" tooltip-placement="Yes" class="fa fa-toggle-on fa-2x text-primary" style="cursor: pointer"></i>
+		      	<i ng-hide="temp_clicker.translationRequired" ng-click="toggleTranslationRequired()" uib-tooltip="No" tooltip-placement="No" class="fa fa-toggle-off fa-2x text-primary" style="cursor: pointer"></i>
+		      </span>
+		      <span class="col-md-10" ng-hide="isEditMode">
+		      	<span ng-show="clicker.translationRequired">Yes</span><span ng-hide="clicker.translationRequired">No</span>
+		      </span>
+			</div>
+		</div><br/>
+		
+		<div class="row" ng-show="(!isEditMode && clicker.translationRequired) || 
+					(isEditMode && temp_clicker.translationRequired)">
+			<div class="col-md-4"><strong> Translation ID </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<input type="number" min="0" class="form-control" ng-model="temp_clicker.tcProjectID"></select>
+		      </span>
+		      <span class="col-md-10" ng-hide="isEditMode">
+		      	{{clicker.tcProjectID}}
+		      </span>
+			</div>
+		</div><br ng-show="clicker.translationRequired"/>
+	</div>
+</div>
+{{temp_clicker}}

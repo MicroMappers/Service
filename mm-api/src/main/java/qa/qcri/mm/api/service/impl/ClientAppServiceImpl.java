@@ -1,10 +1,14 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.ClientAppDao;
 import qa.qcri.mm.api.entity.Client;
 import qa.qcri.mm.api.entity.ClientApp;
@@ -13,9 +17,6 @@ import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.store.URLReference;
 import qa.qcri.mm.api.template.ClientAppModel;
 import qa.qcri.mm.api.util.Communicator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -210,5 +211,10 @@ public class ClientAppServiceImpl implements ClientAppService {
             }
         }
         return false;
+    }
+    
+    @Override
+    public ClientApp getClientAppById(Long id) {
+        return clientAppDao.getClientAppById(id);
     }
 }

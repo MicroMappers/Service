@@ -2,10 +2,10 @@ package qa.qcri.mm.api.service;
 
 
 
+import java.util.List;
+
 import qa.qcri.mm.api.entity.ClientApp;
 import qa.qcri.mm.api.template.ClientAppModel;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,4 +30,5 @@ public interface ClientAppService {
     String enableForClientAppStatusByCrisisID(Long crisisID, Integer status);
     List<ClientApp> getClientAppByPlatformAppID(Long platformAppID);
     List<ClientApp> getAllClientApp();
+	ClientApp getClientAppById(Long id);
 }

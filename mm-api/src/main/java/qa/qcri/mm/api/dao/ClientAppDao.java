@@ -2,9 +2,9 @@ package qa.qcri.mm.api.dao;
 
 
 
-import qa.qcri.mm.api.entity.ClientApp;
-
 import java.util.List;
+
+import qa.qcri.mm.api.entity.ClientApp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,5 +26,6 @@ public interface ClientAppDao extends AbstractDao<ClientApp, String>  {
     List<ClientApp> getAllActiveClientApp();
     List<ClientApp> findClientAppByPlatFormID(Long platformAppID);
     List<ClientApp> findAllClientApps();
+	ClientApp getClientAppById(Long id);
 
 }
