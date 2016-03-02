@@ -2,7 +2,6 @@
 	<div class="col-md-12"><h3><!-- <button type="button" class="btn btn-default" uib-tooltip="Back to list" tooltip-placement="top"><i class="fa fa-arrow-left"></i></button> --> Text GeoClicker</h3></div>
 </div>
 <hr class="no-margin-top"/>
-{{clicker}}
 <div class="row">
 	<div class="col-md-9">
 	</div>
@@ -24,13 +23,14 @@
 		<div class="row">
 			<div class="col-md-4"><strong> Crisis Name </strong></div>
 			<div class="col-md-8">
-			  <span class="col-md-10" ng-show="isEditMode">
+			  <span class="col-md-10" ng-show="isEditMode && clicker.crisisID == null">
 		      	<select class="form-control" ng-model="temp_clicker.crisis" ng-options="c.id as c.displayName for c in crisis">
 		      		<option value="">--Select--</option>
 		      	</select>
 		      </span>
-		      <span class="col-md-10" ng-hide="isEditMode">
-		      	{{clicker.crisisName}}
+		      <span class="col-md-10" ng-show="!isEditMode || clicker.crisisID != null">
+		      	<span ng-if="clicker.crisisID">{{clicker.crisisName}}</span>
+		      	<span ng-if="!clicker.crisisID">N/A</span>
 		      </span>
 			</div>
 		</div><br/>
@@ -51,7 +51,7 @@
 		      	{{clicker.classifierName}}
 		      </span>
 		      <span class="col-md-10" ng-if="!clicker.classifierName">
-		      	NA
+		      	N/A
 		      </span>
 			</div>
 		</div><br/>
@@ -126,4 +126,3 @@
 		</div><br ng-show="clicker.translationRequired"/>
 	</div>
 </div>
-{{temp_clicker}}

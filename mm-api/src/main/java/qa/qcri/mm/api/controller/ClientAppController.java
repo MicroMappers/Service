@@ -57,7 +57,7 @@ public class ClientAppController {
     
     @RequestMapping(method = RequestMethod.GET)
     public List<ClientAppModel> getAll(){
-    	List<ClientApp> appList = clientAppService.getAllClientApp();
+    	List<ClientApp> appList = clientAppService.getAvailableClientApp();
     	List<ClientAppModel> aList = new ArrayList<ClientAppModel>();
     	Map<Long, Long> totalTaskInQueue = taskQueueService.getTotalTaskInQueueMapWithClientAppId();
     	Map<Long, Long> totalTaskAvailableInQueue = taskQueueService.getTotalTaskInQueueByStatusMapWithClientAppId(StatusCodeType.TASK_LIFECYCLE_COMPLETED);

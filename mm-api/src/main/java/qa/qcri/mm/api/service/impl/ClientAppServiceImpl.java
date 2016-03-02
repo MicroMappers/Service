@@ -199,6 +199,11 @@ public class ClientAppServiceImpl implements ClientAppService {
 
         return aList;  //To change body of implemented methods use File | Settings | File Templates.
     }
+    
+    @Override
+    public List<ClientApp> getAvailableClientApp() {
+    	return clientAppDao.getAvailableClientApp();
+    }
 
 
     private boolean findActiveMobilePushClientApp(){

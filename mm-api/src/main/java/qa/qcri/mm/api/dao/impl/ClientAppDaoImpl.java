@@ -94,6 +94,15 @@ public class ClientAppDaoImpl extends AbstractDaoImpl<ClientApp, String> impleme
                 .add(Restrictions.eq("status", StatusCodeType.MICROMAPPER_ONLY))
                 .add(Restrictions.eq("status", StatusCodeType.AIDR_MICROMAPPER_BOTH)));
     }
+    
+    @Override
+    public List<ClientApp> getAvailableClientApp() {
+        return findByCriteria(Restrictions.disjunction()
+                .add(Restrictions.eq("status", StatusCodeType.AIDR_ONLY))
+                .add(Restrictions.eq("status", StatusCodeType.MICROMAPPER_ONLY))
+                .add(Restrictions.eq("status", StatusCodeType.AIDR_MICROMAPPER_BOTH))
+                .add(Restrictions.eq("status", StatusCodeType.CLIENT_APP_PENDING)));
+    }
 
 
     @Override

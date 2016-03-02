@@ -31,4 +31,5 @@ public interface ClientAppService {
     List<ClientApp> getClientAppByPlatformAppID(Long platformAppID);
     List<ClientApp> getAllClientApp();
 	ClientApp getClientAppById(Long id);
+	List<ClientApp> getAvailableClientApp();
 }
