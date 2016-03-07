@@ -13,6 +13,7 @@ import qa.qcri.mm.api.dao.ClientAppDao;
 import qa.qcri.mm.api.entity.Client;
 import qa.qcri.mm.api.entity.ClientApp;
 import qa.qcri.mm.api.service.ClientAppService;
+import qa.qcri.mm.api.service.CrisisService;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.store.URLReference;
 import qa.qcri.mm.api.template.ClientAppModel;
@@ -26,13 +27,15 @@ import qa.qcri.mm.api.util.Communicator;
  * To change this template use File | Settings | File Templates.
  */
 @Service("clientAppService")
-@Transactional(readOnly = true)
 public class ClientAppServiceImpl implements ClientAppService {
 
     protected static Logger logger = Logger.getLogger("ClientAppService");
 
     @Autowired
     private ClientAppDao clientAppDao;
+  
+    @Autowired
+    private CrisisService crisisService;
 
     @Override
     public ClientApp findClientAppByID(String columnName, Long id) {
@@ -222,4 +225,20 @@ public class ClientAppServiceImpl implements ClientAppService {
     public ClientApp getClientAppById(Long id) {
         return clientAppDao.getClientAppById(id);
     }
+
+	@Override
+	public ClientAppModel updateClientApp(ClientAppModel model) {
+		
+		if(model != null) {
+			ClientApp clientApp = findClientAppByID("clientAppID", model.getId());
+			clientApp.setStatus(model.getStatus());
+			clientApp.setIsCustom(model.getIsCustom());
+			clientApp.setTcProjectID(model.getTcProjectID());
+			clientApp.setTaskRunsPerTask(model.getTaskRunsPerTask());
+			clientAppDao.saveOrUpdate(clientApp);
+			crisisService.createCrisisForClientApp(model);
+		}
+		
+		return null;
+	}
 }

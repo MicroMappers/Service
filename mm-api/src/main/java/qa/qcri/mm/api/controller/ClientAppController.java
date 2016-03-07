@@ -132,4 +132,11 @@ public class ClientAppController {
 		
         return classifierName;
     }
+
+    @RequestMapping(value = "/update", method={RequestMethod.POST})
+    public void updateClickerDetails(ClientAppModel model) {
+    	
+    	if(model != null) {
+    	}
+    }
 }

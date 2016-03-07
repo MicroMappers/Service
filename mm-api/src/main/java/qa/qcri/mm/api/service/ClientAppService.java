@@ -32,4 +32,5 @@ public interface ClientAppService {
     List<ClientApp> getAllClientApp();
 	ClientApp getClientAppById(Long id);
 	List<ClientApp> getAvailableClientApp();
+	ClientAppModel updateClientApp(ClientAppModel model);
 }
