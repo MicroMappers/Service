@@ -26,12 +26,12 @@ import qa.qcri.mm.api.template.CrisisModel;
 @RequestMapping("/crisis")
 public class CrisisController {
 
-	private Logger logger = Logger.getLogger(CrisisController.class);
+	private final Logger logger = Logger.getLogger(CrisisController.class);
 	
 	@Autowired
 	private CrisisService crisisService;
 	
-	@Value("${manager.url}")
+	@Value("${managerAPI}")
 	private String managerAPI;
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -39,7 +39,7 @@ public class CrisisController {
 		HttpClient httpClient = new DefaultHttpClient();
         String jsonResponse = "";
         List<CrisisModel> crisisModels = new ArrayList<>();        
-        String url = managerAPI + "/public/collection/list/micromappers/enabled?micromappersEnabled=true";
+        String url = managerAPI + "/public/collection/list?micromappersEnabled=true";
         try {
             HttpGet request = new HttpGet(url);
             request.addHeader("content-type", "application/json");

@@ -12,6 +12,7 @@ app.controller('ClickerDetailCtrl', function ($scope, ClickersService, CrisisSer
 	
 	$scope.toggleTranslationRequired = function() {
 		$scope.temp_clicker.translationRequired = !$scope.temp_clicker.translationRequired;
+		$scope.temp_clicker.tcProjectID = null;
 	};
 	
 	$scope.toggleIsCustom = function() {
@@ -21,8 +22,22 @@ app.controller('ClickerDetailCtrl', function ($scope, ClickersService, CrisisSer
 	$scope.switchEditMode = function(mode) {
 		if(mode) {
 			$scope.temp_clicker = angular.copy($scope.clicker);
+			$scope.temp_clicker.status = $scope.temp_clicker.status + "";
+			$scope.temp_clicker.translationRequired = $scope.temp_clicker.tcProjectID != null;
 		}
 		$scope.isEditMode = mode;
+	}; 
+	
+	$scope.updateClicker = function() {
+		if($scope.selectedCrisis) {
+			console.log($scope.selectedCrisis);
+			$scope.temp_clicker.crisisID = $scope.selectedCrisis.crisisID;
+			$scope.temp_clicker.crisisName = $scope.selectedCrisis.displayName;
+		}
+		ClickersService.update($scope.temp_clicker).$promise.then(function(data){
+			$scope.clicker = angular.copy($scope.temp_clicker);
+			$scope.isEditMode = false;
+		});
 	};
 	
 });

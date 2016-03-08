@@ -27,6 +27,7 @@ import qa.qcri.mm.api.util.Communicator;
  * To change this template use File | Settings | File Templates.
  */
 @Service("clientAppService")
+@Transactional
 public class ClientAppServiceImpl implements ClientAppService {
 
     protected static Logger logger = Logger.getLogger("ClientAppService");
@@ -230,15 +231,16 @@ public class ClientAppServiceImpl implements ClientAppService {
 	public ClientAppModel updateClientApp(ClientAppModel model) {
 		
 		if(model != null) {
-			ClientApp clientApp = findClientAppByID("clientAppID", model.getId());
+			ClientApp clientApp = findClientAppByID("id", model.getId());
 			clientApp.setStatus(model.getStatus());
 			clientApp.setIsCustom(model.getIsCustom());
 			clientApp.setTcProjectID(model.getTcProjectID());
 			clientApp.setTaskRunsPerTask(model.getTaskRunsPerTask());
 			clientAppDao.saveOrUpdate(clientApp);
-			crisisService.createCrisisForClientApp(model);
+			if(model.getCrisisSrID() == null && model.getCrisisID() != null) {
+				crisisService.createCrisisForClientApp(model);
+			}
 		}
-		
 		return null;
 	}
 }

@@ -11,6 +11,7 @@ package qa.qcri.mm.api.template;
 public class ClientAppModel {
     private Long id;
     private Long platformID;
+    private Long crisisSrID;
     private Long crisisID;
     private String crisisName;
     private String classifierName;
@@ -51,7 +52,7 @@ public class ClientAppModel {
 		this.totalTask = totalTask;
 	}
 
-	public ClientAppModel(Long id, Long platformID, Long crisisID,
+	public ClientAppModel(Long id, Long platformID, Long crisisSrID, Long crisisID,
 			String crisisName, String classifierName, String name,
 			String shortName, Integer appType, Integer status,
 			Long taskAvailable, Long totalTask, Integer taskRunsPerTask,
@@ -59,6 +60,7 @@ public class ClientAppModel {
 		super();
 		this.id = id;
 		this.platformID = platformID;
+		this.crisisSrID = crisisSrID;
 		this.crisisID = crisisID;
 		this.crisisName = crisisName;
 		this.classifierName = classifierName;
@@ -183,6 +185,14 @@ public class ClientAppModel {
 
 	public void setClassifierName(String classifierName) {
 		this.classifierName = classifierName;
+	}
+
+	public Long getCrisisSrID() {
+		return crisisSrID;
+	}
+
+	public void setCrisisSrID(Long crisisSrID) {
+		this.crisisSrID = crisisSrID;
 	}
 	
 }

@@ -15,6 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,17 +80,18 @@ public class ClientAppController {
     	ClientApp clientApp = clientAppService.getClientAppById(id);
     	List<Crisis> crisis = crisisService.findCrisisByClientAppID(clientApp.getClientAppID());
     	String crisisName = null;
-    	Long crisisID = null;
+    	Long crisisID = null, crisisSrID = null;
     	if(!crisis.isEmpty()){
     		crisisName = crisis.get(0).getDisplayName();
     		crisisID = crisis.get(0).getCrisisID();
+    		crisisSrID = crisis.get(0).getId();
     	}
     	String classifierName = null;
 		if (clientApp.getNominalAttributeID() != null) {
 			classifierName = getClassifierName(clientApp.getNominalAttributeID());
 		}
     	ClientAppModel model = new ClientAppModel(clientApp.getClientAppID(),
-				clientApp.getPlatformAppID(), crisisID, crisisName, classifierName, clientApp.getName(),
+				clientApp.getPlatformAppID(), crisisSrID, crisisID, crisisName, classifierName, clientApp.getName(),
 				clientApp.getShortName(), clientApp.getAppType(), clientApp.getStatus(), null, null,
 				clientApp.getTaskRunsPerTask(), clientApp.getIsCustom(), clientApp.getTcProjectID());
         return model;
@@ -133,10 +135,10 @@ public class ClientAppController {
         return classifierName;
     }
 
-    @RequestMapping(value = "/update", method={RequestMethod.POST})
-    public void updateClickerDetails(ClientAppModel model) {
-    	
+    @RequestMapping(value = "/{id}", method={RequestMethod.PUT})
+    public void updateClickerDetails(@PathVariable("id") long id, @RequestBody ClientAppModel model) {
     	if(model != null) {
+    		clientAppService.updateClientApp(model);
     	}
     }
 }
