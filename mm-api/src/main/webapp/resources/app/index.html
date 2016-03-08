@@ -1,0 +1,55 @@
+<html>
+<head>
+	<title>Micromaps - Realtime crisis mapping</title>
+	<link rel="stylesheet" href="resources/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="resources/css/style.css">	
+</head>
+<body ng-app="micromaps">
+
+	<div class="headerWrapper">
+		<div class="header">
+			<div class="col-md-2 col-xs-1" tooltip-placement="right"
+				uib-tooltip="Micromaps">
+				<a href="#" class="pull-right"> 
+				<img src="resources/images/MicroMappers-Logo.png" class="micromappers-logo">
+				</a>
+			</div>
+			<div class="col-md-6 col-xs-3"></div>
+			<div class="col-md-2 col-xs-4"></div>
+			<div class="col-md-2 col-xs-3">
+				<!-- <div class="btn-group" uib-dropdown dropdown-append-to-body style="margin-top: 11px">
+			      <div class="dropdown-toggle" uib-dropdown-toggle style="cursor: pointer; color: white">				      	      	
+			      	<img ng-src="{{profile.profile_pic}}" height="32" width="32" style="border-radius: 4px">
+			      	<b>{{profile.name}}</b>
+			      	
+			      	<img src="http://pbs.twimg.com/profile_images/635772676900950016/u9GfJrSU_normal.jpg" height="32" width="32" style="border-radius: 4px">
+			      	<b>Aman Agrawal</b>
+			      	<i class="fa fa-caret-down"></i>
+			      </div>
+			      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="btn-append-to-body" style="margin-left: -12px;">
+			        <li role="menuitem"><a href="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+			      </ul>
+			    </div> -->  
+			</div>
+		</div>
+	</div>
+	
+	<div ng-view class="container"></div>
+	
+	<script src="resources/lib/angular.min.js"></script>
+	<script src="resources/lib/angular-route.min.js"></script>
+	<script src="resources/lib/angular-animate.min.js"></script>
+	<script src="resources/lib/angular-resource.min.js"></script>
+	<script src="resources/lib/ui-bootstrap-tpls.min.js"></script>
+	<script src="resources/app/app.js"></script>
+	
+	<script src="resources/app/services/clickers-service.js"></script>
+	<script src="resources/app/services/crisis-service.js"></script>
+	
+	<script src="resources/app/admin-panel/clickers-list/clickers-list-ctrl.js"></script>
+	<script src="resources/app/admin-panel/clicker-detail/clicker-detail-ctrl.js"></script>
+	
+</body>
+</html>

@@ -1,5 +1,6 @@
 package qa.qcri.mm.api.template;
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: jlucas
@@ -10,12 +11,21 @@ package qa.qcri.mm.api.template;
 public class ClientAppModel {
     private Long id;
     private Long platformID;
+    private Long crisisSrID;
     private Long crisisID;
+    private String crisisName;
+    private String classifierName;
     private String name;
     private String shortName;
     private Integer appType;
+    private Integer status;
+    private Long taskAvailable;
+    private Long totalTask;
+    private Integer taskRunsPerTask;
+    private Boolean isCustom;
+    private Integer tcProjectID;
 
-   // public ClientAppModel(){}
+    public ClientAppModel(){}
 
     public ClientAppModel(Long id, Long platformID, Long crisisID, String name, String shortName, Integer appType) {
         this.id = id;
@@ -25,8 +35,47 @@ public class ClientAppModel {
         this.shortName = shortName;
         this.appType = appType;
     }
+    
 
-    public Long getId() {
+    public ClientAppModel(Long id, Long platformID, Long crisisID, String name,
+			String shortName, Integer appType, Integer status,
+			Long taskAvailable, Long totalTask) {
+		super();
+		this.id = id;
+		this.platformID = platformID;
+		this.crisisID = crisisID;
+		this.name = name;
+		this.shortName = shortName;
+		this.appType = appType;
+		this.status = status;
+		this.taskAvailable = taskAvailable;
+		this.totalTask = totalTask;
+	}
+
+	public ClientAppModel(Long id, Long platformID, Long crisisSrID, Long crisisID,
+			String crisisName, String classifierName, String name,
+			String shortName, Integer appType, Integer status,
+			Long taskAvailable, Long totalTask, Integer taskRunsPerTask,
+			Boolean isCustom, Integer tcProjectID) {
+		super();
+		this.id = id;
+		this.platformID = platformID;
+		this.crisisSrID = crisisSrID;
+		this.crisisID = crisisID;
+		this.crisisName = crisisName;
+		this.classifierName = classifierName;
+		this.name = name;
+		this.shortName = shortName;
+		this.appType = appType;
+		this.status = status;
+		this.taskAvailable = taskAvailable;
+		this.totalTask = totalTask;
+		this.taskRunsPerTask = taskRunsPerTask;
+		this.isCustom = isCustom;
+		this.tcProjectID = tcProjectID;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -73,4 +122,77 @@ public class ClientAppModel {
     public void setAppType(Integer appType) {
         this.appType = appType;
     }
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Long getTaskAvailable() {
+		return taskAvailable;
+	}
+
+	public void setTaskAvailable(Long taskAvailable) {
+		this.taskAvailable = taskAvailable;
+	}
+
+	public Long getTotalTask() {
+		return totalTask;
+	}
+
+	public void setTotalTask(Long totalTask) {
+		this.totalTask = totalTask;
+	}
+
+	public Integer getTaskRunsPerTask() {
+		return taskRunsPerTask;
+	}
+
+	public void setTaskRunsPerTask(Integer taskRunsPerTask) {
+		this.taskRunsPerTask = taskRunsPerTask;
+	}
+
+	public Boolean getIsCustom() {
+		return isCustom;
+	}
+
+	public void setIsCustom(Boolean isCustom) {
+		this.isCustom = isCustom;
+	}
+
+	public Integer getTcProjectID() {
+		return tcProjectID;
+	}
+
+	public void setTcProjectID(Integer tcProjectID) {
+		this.tcProjectID = tcProjectID;
+	}
+
+	public String getCrisisName() {
+		return crisisName;
+	}
+
+	public void setCrisisName(String crisisName) {
+		this.crisisName = crisisName;
+	}
+
+	public String getClassifierName() {
+		return classifierName;
+	}
+
+	public void setClassifierName(String classifierName) {
+		this.classifierName = classifierName;
+	}
+
+	public Long getCrisisSrID() {
+		return crisisSrID;
+	}
+
+	public void setCrisisSrID(Long crisisSrID) {
+		this.crisisSrID = crisisSrID;
+	}
+	
 }
