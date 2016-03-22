@@ -1,0 +1,14 @@
+<!-- <button type="button" class="btn btn-default" uib-tooltip="Back to list" tooltip-placement="top"><i class="fa fa-arrow-left"></i></button> -->
+<div class="row">
+	<div class="col-md-12"><h3>{{clientapp.name}}</h3></div>
+</div>
+<hr class="no-margin-top"/>
+
+<ul class="nav nav-tabs">
+  <li ng-class="{active: checkPath('detail')}"><a href ng-click="gotoURL('/clicker/detail/')">Clicker Detail</a></li>
+  <li ng-class="{active: checkPath('answers')}"><a href ng-click="gotoURL('/clicker/answers/')">Clicker Answers</a></li>
+  <li ng-class="{active: checkPath('events')}"><a href ng-click="gotoURL('/clicker/events/')">Clicker Events</a></li>
+  <li ng-class="{active: checkPath('styles')}"><a href ng-click="gotoURL('/clicker/styles/')">Clicker Styles</a></li>
+</ul>
+<br/>
+<div ui-view></div>

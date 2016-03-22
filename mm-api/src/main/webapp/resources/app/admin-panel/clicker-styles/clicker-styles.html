@@ -1,0 +1,106 @@
+<div class="row">
+	<div class="col-md-9">
+	</div>
+	<div class="col-md-3">
+		<button ng-show="!isEditMode" type="button" class="btn btn-default" ng-click="switchEditMode(true)" style="outline:none;" aria-hidden="false">
+			<span class="fa fa-pencil"></span> Edit
+		</button>
+		<button ng-show="isEditMode" class="btn btn-primary" ng-click="update()">
+			<i class="fa fa-save"></i> Update
+		</button>
+		<button ng-show="isEditMode" class="btn btn-default" ng-click="switchEditMode(false)">
+			<i class="fa fa-times"></i> Cancel
+		</button>		
+	</div>
+</div><br/><br/>
+
+<div class="row" ng-repeat="label in answers" ng-if="$index%2 == 0">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-4"><strong> {{label.qa}} </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	
+		      	<div class="input-group">
+				  <input type="text" class="form-control" placeholder="Choose Color" 
+				  	ng-model="tempStyleMapByLabel[label.qa].markerColor" aria-describedby="basic-addon2" 
+				  	ng-style="{'border-color': tempStyleMapByLabel[label.qa].markerColor }">
+				  <span class="input-group-addon" colorpicker colorpicker-position="bottom" 
+				  	ng-model="tempStyleMapByLabel[label.qa].markerColor" 
+				  	ng-style="{'background-color': tempStyleMapByLabel[label.qa].markerColor, 'border-color': tempStyleMapByLabel[label.qa].markerColor }" 
+				  	style="cursor: pointer"></span>
+				</div>
+				
+		      </span>
+		      <span class="col-md-10" ng-show="!isEditMode">
+		      
+		      	<button class="btn" ng-if="styleMapByLabel[label.qa].markerColor" 
+		      		ng-style="{'background-color': styleMapByLabel[label.qa].markerColor}" type="button">
+   					<span class="badge" style="background-color: white; color: black; width: 70px">
+   						{{styleMapByLabel[label.qa].markerColor}}
+   					</span>
+				</button>
+								
+		      </span>
+			</div>
+		</div><br/>
+	</div>
+		
+	<div class="col-md-6" ng-if="answers[$index + 1]">
+		<div class="row">
+			<div class="col-md-4"><strong> {{answers[$index + 1].qa}} </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	
+		      	<div class="input-group">
+				  <input type="text" class="form-control" placeholder="Choose Color" 
+				  	ng-model="tempStyleMapByLabel[answers[$index + 1].qa].markerColor" aria-describedby="basic-addon2" 
+				  	ng-style="{'border-color': tempStyleMapByLabel[answers[$index + 1].qa].markerColor }">
+				  <span class="input-group-addon" colorpicker colorpicker-position="bottom" 
+				  	ng-model="tempStyleMapByLabel[answers[$index + 1].qa].markerColor" 
+				  	ng-style="{'background-color': tempStyleMapByLabel[answers[$index + 1].qa].markerColor, 'border-color': tempStyleMapByLabel[answers[$index + 1].qa].markerColor }" 
+				  	style="cursor: pointer"></span>
+				</div>
+				
+		      </span>
+		      <span class="col-md-10" ng-show="!isEditMode">
+		      	
+		      	<button class="btn" ng-if="styleMapByLabel[answers[$index + 1].qa].markerColor" 
+		      		ng-style="{'background-color': styleMapByLabel[answers[$index + 1].qa].markerColor}" 
+		      			type="button">
+   					<span class="badge" style="background-color: white; color: black; width: 70px">
+   						{{styleMapByLabel[answers[$index + 1].qa].markerColor}}
+   					</span>
+				</button>
+				
+				<!-- <span style="border-bottom: 7px solid" 
+					ng-style="border-color: styleMapByLabel[answers[$index + 1].qa].markerColor">
+					{{styleMapByLabel[answers[$index + 1].qa].markerColor}}
+				</span> -->
+				
+		      </span>
+			</div>
+		</div><br/>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-4"><strong> App Type </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<select class="form-control" ng-model="tempAppType">
+		      		<option value="">--Select--</option>
+		      		<option value="Text">Text</option>
+		      		<option value="Image">Image</option>
+		      		<option value="Aerial">Aerial</option>
+		      	</select>
+		      </span>
+		      <span class="col-md-10" ng-show="!isEditMode">
+		      	<span>{{clickerStyles.appType}}</span>
+		      </span>
+			</div>
+		</div><br/>
+	</div>
+</div>

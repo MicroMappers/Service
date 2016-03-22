@@ -5,7 +5,7 @@ app.controller('ClickersListCtrl', function ($scope, $location, ClickersService,
 	$scope.clickers = data;
 	
 	$scope.goToDetail = function(id) {
-		$location.path("/clickers/"+id);
+		$location.path("/clicker/detail/"+id);
 	};
 	
 });

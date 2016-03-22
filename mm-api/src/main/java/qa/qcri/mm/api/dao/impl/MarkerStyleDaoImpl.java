@@ -1,11 +1,12 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.api.dao.MarkerStyleDao;
 import qa.qcri.mm.api.entity.MarkerStyle;
-
-import java.util.List;
 
 /**
  * Created by jlucas on 5/19/15.
@@ -28,4 +29,9 @@ public class MarkerStyleDaoImpl extends AbstractDaoImpl<MarkerStyle, String> imp
     public List<MarkerStyle> findByClientAppID(long clientAppID) {
         return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
     }
+
+    @Override
+	public void update(MarkerStyle markerStyle) {
+		saveOrUpdate(markerStyle);
+	}
 }
