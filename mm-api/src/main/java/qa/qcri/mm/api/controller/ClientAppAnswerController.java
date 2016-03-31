@@ -2,6 +2,7 @@ package qa.qcri.mm.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ public class ClientAppAnswerController {
 		return clientAppAnswer;
     }
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method={RequestMethod.PUT})
     public void updateClickerDetails(@RequestBody ClientAppAnswer clientAppAnswer) {
     	if(clientAppAnswer != null) {

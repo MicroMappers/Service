@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +65,7 @@ public class ClientAppEventController {
 		return clientApps;
     }
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "/{id}/generateEvents/{geoClientApp}", method={RequestMethod.GET})
     public String generateEvents(@PathVariable("id") long id, @PathVariable("geoClientApp") long geoClientAppId) {
 		ClientApp clientApp = clientAppService.getClientAppById(id);
@@ -80,6 +82,7 @@ public class ClientAppEventController {
 		return "success";
     }
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method={RequestMethod.POST})
     public void saveMarkerStyle(@RequestBody ClientAppEvent markerStyle) {
     	if(markerStyle != null) {

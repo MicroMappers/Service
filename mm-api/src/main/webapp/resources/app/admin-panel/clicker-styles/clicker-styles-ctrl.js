@@ -21,8 +21,6 @@ app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, C
 			};			
 		}
 		
-		console.log($scope.clickerStyles);
-		
 		$scope.styleJson = angular.fromJson($scope.clickerStyles.style);
 		if(!$scope.styleJson) {
 			$scope.clickerStyles.style = "{'type':'Aerial', 'style' : []}";
@@ -52,20 +50,19 @@ app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, C
 		});
 		$scope.tempClickerStyles.style = angular.toJson($scope.tempStyleJson);
 		
-		if($scope.tempClickerStyles) {
-			ClickerStylesService.save($scope.tempClickerStyles).$promise.then(function(data){
-				$scope.clickerStyles = angular.copy($scope.tempClickerStyles);
-				$scope.loadData();
-				$scope.isEditMode = false;
-			});
-		} else {
+		if($scope.tempClickerStyles.id) {
 			ClickerStylesService.update($scope.tempClickerStyles).$promise.then(function(data){
 				$scope.clickerStyles = angular.copy($scope.tempClickerStyles);
 				$scope.loadData();
 				$scope.isEditMode = false;
 			});
+		} else {
+			ClickerStylesService.save($scope.tempClickerStyles).$promise.then(function(data){
+				$scope.clickerStyles = angular.copy($scope.tempClickerStyles);
+				$scope.loadData();
+				$scope.isEditMode = false;
+			});
 		}
-		
 		
 	};
 	
@@ -77,31 +74,4 @@ app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, C
 		$scope.isEditMode = mode;
 	};
 	
-	/*$scope.update = function() {
-		
-		$scope.styleMapByLabel = angular.copy($scope.tempStyleMapByLabel);
-		return;
-		$scope.activeAnswerKey = [];
-		angular.forEach($scope.temp_active_answers, function(value, active_answer_key) {
-			if(value == "yes") {
-				$scope.activeAnswerKey.push({"qa": active_answer_key});
-			}
-		});
-		
-		$scope.tempClientAppAnswer = angular.copy($scope.clientAppAnswer);
-		$scope.tempClientAppAnswer.voteCutOff = $scope.tempVoteCutOff;
-		$scope.tempClientAppAnswer.activeAnswerKey = angular.toJson($scope.activeAnswerKey);
-		ClickerAnswersService.update($scope.tempClientAppAnswer).$promise.then(function(data){
-			$scope.clientAppAnswer = angular.copy($scope.tempClientAppAnswer);
-			$scope.active_answers = {};
-			angular.forEach($scope.answers, function(obj) {
-			  if($scope.clientAppAnswer.activeAnswerKey.indexOf(obj.qa) >= 0) {
-				  $scope.active_answers[obj.qa] = "yes";
-			  } else {
-				  $scope.active_answers[obj.qa] = "no";
-			  }
-			});
-			$scope.isEditMode = false;
-		});
-	  };*/
 });

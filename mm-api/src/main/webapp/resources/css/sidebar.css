@@ -94,14 +94,14 @@ div#logo {
     width: 95%;
     padding-top: 10px;
 }
-.admin-div{
+.adminDiv{
 	margin: 5px 0;
     position: absolute;
     bottom: 35px;
     width: 48px;
     left: 5px;
 }
-.admin-div a.admin{
+.adminDiv a.admin{
    	background: #b20000;
     padding-left: 9%;
     width: 50%;

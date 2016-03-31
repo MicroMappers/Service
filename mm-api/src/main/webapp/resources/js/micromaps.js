@@ -139,6 +139,16 @@
             var map = MicroMaps.maps;
 
             _this.init = function () {
+            	
+            	$.ajax({
+                    url: MicroMaps.config.ROOT + "isadmin",
+                    success: function(data) {
+                    	if(data != true) {
+                    		$(".adminDiv").remove();
+                    	}
+                    }
+            	});
+            	
                 _this.load();
                 return this;
             };

@@ -1,4 +1,3 @@
-{{clicker.otherClientApp}}
 <div class="row">
 	<div class="col-md-2">
 	</div>
@@ -9,7 +8,7 @@
 		  	<td>
 		  		{{clientapp.name}}
 		  		<select class="form-control" 
-		  			ng-if="clicker.appType == 4 events.length == 0 && otherClientApps.length > 1" 
+		  			ng-if="clicker.appType == 4 && events.length == 0 && otherClientApps.length > 1" 
 		  			ng-model="clicker.otherClientApp" ng-options="o as o.name for o in otherClientApps">
 		      		<option value="">--Select--</option>
 		      	</select>

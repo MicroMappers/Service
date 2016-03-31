@@ -41,7 +41,7 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 	@Override
     public String execute(Connection<?> connection) {
 		
-		System.out.println("In userconnection signup");
+		//System.out.println("In userconnection signup");
 		
 		if(connection instanceof OAuth1Connection){
 			OAuth1Connection<?> oauthConnection = (OAuth1Connection<?>) connection;
@@ -60,14 +60,14 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 	         */
 	        
 	        
-	        System.out.println("Micromapss Login Process");
+	        //System.out.println("Micromapss Login Process");
 	        
 	        userConnection.setProviderId("springSocialSecurity");
 	        userConnection.setDisplayName(data.getDisplayName());
 	        userConnection.setRank(1);
 	        userConnectionService.register(userConnection);
 	        
-	        System.out.println("Micromapss Login Process1");
+	        //System.out.println("Micromapss Login Process1");
 	        
 	        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 	        UserAccount user = new UserAccount();
@@ -79,18 +79,18 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 	        user.setUserName(profile.getUsername());
 	        userService.save(user);
 	        
-	        System.out.println("Micromapss Login Process2");
+	        //System.out.println("Micromapss Login Process2");
 	        
 	        UserAccount userAccount = userService.fetchByUserName(profile.getUsername());
-	        System.out.println("Micromapss Login Process3");
-	        System.out.println(userAccount);
+	        //System.out.println("Micromapss Login Process3");
+	        //System.out.println(userAccount);
 	        Role role = roleRepository.findByRoleType(RoleType.NORMAL);
 	        
-	        System.out.println("Micromapss Login Process4");
+	        //System.out.println("Micromapss Login Process4");
 	        System.out.println(role);
 	        
 	        UserAccountRole userAccountRole = new UserAccountRole(userAccount, role);
-	        System.out.println(userAccountRole);
+	        //System.out.println(userAccountRole);
 	        userRoleRepository.save(userAccountRole);	        
 	        
 	        return profile.getUsername();
@@ -116,10 +116,10 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 			userConnection.setDisplayName(data.getDisplayName());
 			userConnection.setRank(1);
 			
-			System.out.println("Micromapss Login Process0");
+			//System.out.println("Micromapss Login Process0");
 			userConnectionService.register(userConnection);
 			
-			System.out.println("Micromapss Login Process1");
+			//System.out.println("Micromapss Login Process1");
 
 			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			UserAccount user = new UserAccount();
@@ -131,17 +131,17 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 			user.setEmail(profile.getEmail());
 			userService.save(user);
 			
-			System.out.println("Micromapss Login Process2");
+			//System.out.println("Micromapss Login Process2");
 			
 			UserAccount userAccount = userService.fetchByUserName(profile.getEmail());
 	        Role role = roleRepository.findByRoleType(RoleType.NORMAL);
 	        
-	        System.out.println("Micromapss Login Process3");
-	        System.out.println(role);
+	        //System.out.println("Micromapss Login Process3");
+	        //System.out.println(role);
 	        
 	        UserAccountRole userAccountRole = new UserAccountRole(userAccount, role);
 	        userRoleRepository.save(userAccountRole);
-	        System.out.println(userAccountRole);
+	        //System.out.println(userAccountRole);
 			
 			return profile.getEmail();
 		}

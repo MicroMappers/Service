@@ -1,6 +1,7 @@
 package qa.qcri.mm.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class MarkerStyleController {
     	}
     }
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method={RequestMethod.PUT})
     public void updateMarkerStyle(@PathVariable("id") long id, @RequestBody MarkerStyle markerStyle) {
     	if(markerStyle != null) {
