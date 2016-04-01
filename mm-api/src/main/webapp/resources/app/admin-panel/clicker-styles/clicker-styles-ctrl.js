@@ -1,4 +1,4 @@
-app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, ClickerStylesService, 
+app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, $state, ClickerStylesService, 
 		clickerAnswers, clickerStyles) {
 	
 	$scope.clientapp.id = $stateParams.id;
@@ -58,9 +58,8 @@ app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, C
 			});
 		} else {
 			ClickerStylesService.save($scope.tempClickerStyles).$promise.then(function(data){
-				$scope.clickerStyles = angular.copy($scope.tempClickerStyles);
-				$scope.loadData();
-				$scope.isEditMode = false;
+				//$location.path('/clicker/styles/' + $scope.clientapp.id);
+				$state.go($state.current, {}, {reload: true});
 			});
 		}
 		
