@@ -1,14 +1,17 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.api.dao.TaskQueueDao;
 import qa.qcri.mm.api.entity.TaskQueue;
 import qa.qcri.mm.api.store.StatusCodeType;
-
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +21,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Repository
-public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> implements TaskQueueDao {
+public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, Long> implements TaskQueueDao {
 
     protected TaskQueueDaoImpl(){
         super(TaskQueue.class);
@@ -58,18 +61,65 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
     public List<TaskQueue> findTaskQueueSetByclientApp(Long clientAppID) {
         return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
     }
-
+    
+    /* (non-Javadoc)
+     * total task in queue by clientappID where status is not TASK_ABANDONED
+     */
     @Override
-    public List<TaskQueue> findTotalTaskQueueSet(Long clientAppID) {
-        return findByCriteria(Restrictions.conjunction()
+    public Long getTotalTaskInQueueByclientAppId(Long clientAppID) {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.conjunction()
                 .add(Restrictions.eq("clientAppID", clientAppID))
                 .add(Restrictions.ne("status", StatusCodeType.TASK_ABANDONED)));
+		Long result = (Long) criteria.uniqueResult();
+		return result;
     }
-
+    
+    @Override
+    public List<Object> getTotalTaskInQueue() {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.projectionList()
+				.add(Projections.groupProperty("clientAppID"))
+				.add(Projections.rowCount())
+				);
+		criteria.add(Restrictions.ne("status", StatusCodeType.TASK_ABANDONED));
+		List<Object> result = criteria.list();
+		return result;
+    }
+    
+    @Override
+    public List<Object> getTotalTaskInQueueByStatus(Integer status) {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.projectionList()
+				.add(Projections.groupProperty("clientAppID"))
+				.add(Projections.rowCount())
+				);
+		criteria.add(Restrictions.eq("status", status));
+		List<Object> result = criteria.list();
+		return result;
+    }
+    
+    @Override
+    public Long getTaskQueueCountByclientAppAndStatus(Long clientAppID, Integer status) {
+    	Criteria criteria = getCurrentSession().createCriteria(TaskQueue.class);
+		criteria.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.conjunction()
+                .add(Restrictions.eq("clientAppID", clientAppID))
+                .add(Restrictions.eq("status", status)));
+		Long result = (Long) criteria.uniqueResult();
+		return result;
+    }
+    
     @Override
     public List<TaskQueue> findLatestTaskQueue(Long clientAppID) {
         Criterion criterion = Restrictions.eq("clientAppID",clientAppID);
         return getMaxOrderByCriteria(criterion, "updated");
+    }
+    
+    @Override
+    public List<TaskQueue> getAll() {
+        return getAll();
     }
 
 }

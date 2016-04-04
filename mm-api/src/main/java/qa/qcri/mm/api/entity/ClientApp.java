@@ -1,10 +1,17 @@
 package qa.qcri.mm.api.entity;
 
-import qa.qcri.mm.api.store.CodeLookUp;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import qa.qcri.mm.api.store.CodeLookUp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -61,6 +68,12 @@ public class ClientApp implements Serializable {
 
     @Column (name = "app_type", nullable = false)
     private Integer appType;
+    
+    @Column (name = "is_custom")
+    private Boolean isCustom;
+    
+    @Column (name = "tc_project_id", nullable = true)
+    private Integer tcProjectID;
 
     @ManyToOne
     @JoinColumn(name="client_id" ,nullable = false, insertable = false, updatable = false)
@@ -206,4 +219,20 @@ public class ClientApp implements Serializable {
     public void setAppType(Integer appType) {
         this.appType = appType;
     }
+
+	public Boolean getIsCustom() {
+		return isCustom;
+	}
+
+	public void setIsCustom(Boolean isCustom) {
+		this.isCustom = isCustom;
+	}
+
+	public Integer getTcProjectID() {
+		return tcProjectID;
+	}
+
+	public void setTcProjectID(Integer tcProjectID) {
+		this.tcProjectID = tcProjectID;
+	}
 }

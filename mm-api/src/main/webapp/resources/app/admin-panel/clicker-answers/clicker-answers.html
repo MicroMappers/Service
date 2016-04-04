@@ -1,0 +1,80 @@
+<div class="row" ng-if="answers">
+	<div class="col-md-9">
+	</div>
+	<div class="col-md-3">
+		<button ng-show="!isEditMode" type="button" class="btn btn-default" ng-click="switchEditMode(true)" style="outline:none;" aria-hidden="false">
+			<span class="fa fa-pencil"></span> Edit
+		</button>
+		<button ng-show="isEditMode" class="btn btn-primary" ng-click="update()">
+			<i class="fa fa-save"></i> Update
+		</button>
+		<button ng-show="isEditMode" class="btn btn-default" ng-click="switchEditMode(false)">
+			<i class="fa fa-times"></i> Cancel
+		</button>
+	</div>
+</div><br/><br/>
+
+<div class="row" ng-repeat="label in answers" ng-if="$index%2 == 0">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-4"><strong> {{label.qa}} </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<i ng-show="temp_active_answers[label.qa] == 'yes'" ng-click="toggleValue(label.qa)" 
+		      		uib-tooltip="Yes" tooltip-placement="Yes" class="fa fa-toggle-on fa-2x text-primary" 
+		      		style="cursor: pointer"></i>
+		      	<i ng-show="temp_active_answers[label.qa] == 'no'" ng-click="toggleValue(label.qa)" 
+		      		uib-tooltip="No" tooltip-placement="No" class="fa fa-toggle-off fa-2x text-primary" 
+		      		style="cursor: pointer"></i>
+		      </span>
+		      <span class="col-md-10" ng-show="!isEditMode">
+		      	<span ng-if="active_answers[label.qa] == 'yes'">Yes</span>
+		      	<span ng-if="active_answers[label.qa] == 'no'">No</span>
+		      </span>
+			</div>
+		</div><br/>
+	</div>
+		
+	<div class="col-md-6" ng-if="answers[$index + 1]">
+		<div class="row">
+			<div class="col-md-4"><strong> {{answers[$index + 1].qa}} </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<i ng-show="temp_active_answers[answers[$index + 1].qa] == 'yes'" ng-click="toggleValue(answers[$index + 1].qa)" 
+		      		uib-tooltip="Yes" tooltip-placement="Yes" class="fa fa-toggle-on fa-2x text-primary" 
+		      		style="cursor: pointer"></i>
+		      	<i ng-show="temp_active_answers[answers[$index + 1].qa] == 'no'" ng-click="toggleValue(answers[$index + 1].qa)" 
+		      		uib-tooltip="No" tooltip-placement="No" class="fa fa-toggle-off fa-2x text-primary" 
+		      		style="cursor: pointer"></i>
+		      </span>
+		      <span class="col-md-10" ng-show="!isEditMode">
+		      	<span ng-if="active_answers[answers[$index + 1].qa] == 'yes'">Yes</span>
+		      	<span ng-if="active_answers[answers[$index + 1].qa] == 'no'">No</span>
+		      </span>
+			</div>
+		</div><br/>
+	</div>
+</div>
+
+<div class="row" ng-if="answers">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-4"><strong> Vote cut off </strong></div>
+			<div class="col-md-8">
+			  <span class="col-md-10" ng-show="isEditMode">
+		      	<select class="form-control" ng-model="tempVoteCutOff" ng-options="v as v for v in vote_numbers">
+		      	</select>
+		      </span>
+		      <span class="col-md-10" ng-show="!isEditMode">
+		      	<span>{{clientAppAnswer.voteCutOff}}</span>
+		      </span>
+			</div>
+		</div><br/>
+	</div>
+</div>
+
+<div class="row" ng-if="!answers">
+	<div class="col-md-12 text-center">
+		No Answers available.
+	</div>
+</div>

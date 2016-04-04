@@ -12,10 +12,10 @@ public class CrisisApplicationListModel {
     private Long nominalAttributeID;
     private String name;
     private String url;
-    private Integer remaining;
-    private Integer totaltaskNumber;
+    private Long remaining;
+    private Long totaltaskNumber;
 
-    public CrisisApplicationListModel(Long nominalAttributeID, String name , String url, Integer remaining, Integer totaltaskNumber){
+    public CrisisApplicationListModel(Long nominalAttributeID, String name , String url, Long remaining, Long totaltaskNumber){
         this.nominalAttributeID = nominalAttributeID;
         this.name = name;
         this.url = url;
@@ -32,19 +32,19 @@ public class CrisisApplicationListModel {
         this.url = url;
     }
 
-    public Integer getRemaining() {
+    public Long getRemaining() {
         return remaining;
     }
 
-    public void setRemaining(Integer remaining) {
+    public void setRemaining(Long remaining) {
         this.remaining = remaining;
     }
 
-    public Integer getTotaltaskNumber() {
+    public Long getTotaltaskNumber() {
         return totaltaskNumber;
     }
 
-    public void setTotaltaskNumber(Integer totaltaskNumber) {
+    public void setTotaltaskNumber(Long totaltaskNumber) {
         this.totaltaskNumber = totaltaskNumber;
     }
 

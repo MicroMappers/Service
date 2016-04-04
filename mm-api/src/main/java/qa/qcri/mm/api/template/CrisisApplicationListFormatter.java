@@ -32,16 +32,16 @@ public class CrisisApplicationListFormatter {
         return url;
     }
 
-    public Integer getRemaining(){
-        Integer remainingTask = taskQueueService.getCountTaskQeueByStatusAndClientApp(clientApp.getClientAppID(), 1);
+    public Long getRemaining(){
+        Long remainingTask = taskQueueService.getTaskQueueCountByClientAppIdAndStatus(clientApp.getClientAppID(), 1);
 
         return remainingTask;
     }
 
-    public Integer getTotalTaskNumber(){
-        Integer totalTask = 0;
+    public Long getTotalTaskNumber(){
+        Long totalTask = 0L;
         if(taskQueueService.getTaskQueueByClientApp(clientApp.getClientAppID()) != null){
-            totalTask =   taskQueueService.getTotalNumberOfTaskQueue(clientApp.getClientAppID()).size();
+            totalTask =   taskQueueService.getTotalNumberOfTaskQueue(clientApp.getClientAppID());
         }
 
         return totalTask;
@@ -56,7 +56,7 @@ public class CrisisApplicationListFormatter {
         stringBuffer.append("<table>");
 
         String url = hostApiUrl + clientApp.getShortName();
-        Integer remainingTask = taskQueueService.getCountTaskQeueByStatusAndClientApp(clientApp.getClientAppID(), 1);
+        Long remainingTask = taskQueueService.getTaskQueueCountByClientAppIdAndStatus(clientApp.getClientAppID(), 1);
 
         stringBuffer.append(getIconColumn().toString()) ;
         stringBuffer.append(getApplicationColumn(clientApp.getName(), remainingTask, url).toString()) ;
@@ -67,7 +67,7 @@ public class CrisisApplicationListFormatter {
         return stringBuffer.toString();
     }
 
-    public StringBuffer getApplicationColumn(String applicationName, Integer remainingTask, String url){
+    public StringBuffer getApplicationColumn(String applicationName, Long remainingTask, String url){
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("<td><p>&nbsp;</p><p style='font-size: 12px;'><a href='");
         stringBuffer.append(url);

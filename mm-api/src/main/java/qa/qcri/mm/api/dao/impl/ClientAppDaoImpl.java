@@ -1,13 +1,13 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.api.dao.ClientAppDao;
 import qa.qcri.mm.api.entity.ClientApp;
 import qa.qcri.mm.api.store.StatusCodeType;
-
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,6 +51,16 @@ public class ClientAppDaoImpl extends AbstractDaoImpl<ClientApp, String> impleme
     public List<ClientApp> findAllClientAppByStatus(Integer status) {
         return findByCriteria(Restrictions.eq("status", status));  //To change body of implemented methods use File | Settings | File Templates.
     }
+    
+    @Override
+    public ClientApp getClientAppById(Long id) {
+    	ClientApp clientApp = null;
+        List<ClientApp> findByCriteria = findByCriteria(Restrictions.eq("id", id));
+        if(!findByCriteria.isEmpty()) {
+        	clientApp = findByCriteria.get(0);
+        }
+        return clientApp;
+    }
 
     @Override
     public List<ClientApp> findClientAppByPlatFormID(Long platformAppID) {
@@ -83,6 +93,15 @@ public class ClientAppDaoImpl extends AbstractDaoImpl<ClientApp, String> impleme
                 .add(Restrictions.eq("status", StatusCodeType.AIDR_ONLY))
                 .add(Restrictions.eq("status", StatusCodeType.MICROMAPPER_ONLY))
                 .add(Restrictions.eq("status", StatusCodeType.AIDR_MICROMAPPER_BOTH)));
+    }
+    
+    @Override
+    public List<ClientApp> getAvailableClientApp() {
+        return findByCriteria(Restrictions.disjunction()
+                .add(Restrictions.eq("status", StatusCodeType.AIDR_ONLY))
+                .add(Restrictions.eq("status", StatusCodeType.MICROMAPPER_ONLY))
+                .add(Restrictions.eq("status", StatusCodeType.AIDR_MICROMAPPER_BOTH))
+                .add(Restrictions.eq("status", StatusCodeType.CLIENT_APP_PENDING)));
     }
 
 

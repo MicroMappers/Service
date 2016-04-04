@@ -1,21 +1,23 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.ClientAppDao;
 import qa.qcri.mm.api.entity.Client;
 import qa.qcri.mm.api.entity.ClientApp;
 import qa.qcri.mm.api.service.ClientAppService;
+import qa.qcri.mm.api.service.CrisisService;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.store.URLReference;
 import qa.qcri.mm.api.template.ClientAppModel;
 import qa.qcri.mm.api.util.Communicator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,13 +27,16 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Service("clientAppService")
-@Transactional(readOnly = true)
+@Transactional
 public class ClientAppServiceImpl implements ClientAppService {
 
     protected static Logger logger = Logger.getLogger("ClientAppService");
 
     @Autowired
     private ClientAppDao clientAppDao;
+  
+    @Autowired
+    private CrisisService crisisService;
 
     @Override
     public ClientApp findClientAppByID(String columnName, Long id) {
@@ -198,6 +203,11 @@ public class ClientAppServiceImpl implements ClientAppService {
 
         return aList;  //To change body of implemented methods use File | Settings | File Templates.
     }
+    
+    @Override
+    public List<ClientApp> getAvailableClientApp() {
+    	return clientAppDao.getAvailableClientApp();
+    }
 
 
     private boolean findActiveMobilePushClientApp(){
@@ -211,4 +221,26 @@ public class ClientAppServiceImpl implements ClientAppService {
         }
         return false;
     }
+    
+    @Override
+    public ClientApp getClientAppById(Long id) {
+        return clientAppDao.getClientAppById(id);
+    }
+
+	@Override
+	public ClientAppModel updateClientApp(ClientAppModel model) {
+		
+		if(model != null) {
+			ClientApp clientApp = findClientAppByID("id", model.getId());
+			clientApp.setStatus(model.getStatus());
+			clientApp.setIsCustom(model.getIsCustom());
+			clientApp.setTcProjectID(model.getTcProjectID());
+			clientApp.setTaskRunsPerTask(model.getTaskRunsPerTask());
+			clientAppDao.saveOrUpdate(clientApp);
+			if(model.getCrisisSrID() == null && model.getCrisisID() != null) {
+				crisisService.createCrisisForClientApp(model);
+			}
+		}
+		return null;
+	}
 }

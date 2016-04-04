@@ -3,9 +3,9 @@ package qa.qcri.mm.api.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.entity.Client;
 import qa.qcri.mm.api.entity.ClientApp;
-
 import qa.qcri.mm.api.service.*;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.template.CrisisApplicationListFormatter;
@@ -53,8 +53,8 @@ public class TemplateServiceImpl implements TemplateService {
 
                         CrisisApplicationListFormatter formatter = new CrisisApplicationListFormatter(clientApp,client,taskQueueService) ;
                         String url = formatter.getURLLink();
-                        Integer remaining = formatter.getRemaining();
-                        Integer totalCount = formatter.getTotalTaskNumber() - formatter.getRemaining();
+                        Long remaining = formatter.getRemaining();
+                        long totalCount = formatter.getTotalTaskNumber() - formatter.getRemaining();
                         if(totalCount < 0){
                             totalCount = 0;
                         }

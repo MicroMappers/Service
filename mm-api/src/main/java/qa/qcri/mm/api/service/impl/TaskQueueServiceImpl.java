@@ -1,8 +1,15 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.lang.Integer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.TaskQueueDao;
 import qa.qcri.mm.api.dao.TaskQueueResponseDao;
 import qa.qcri.mm.api.entity.ClientApp;
@@ -11,9 +18,6 @@ import qa.qcri.mm.api.entity.TaskQueueResponse;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.StatusCodeType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service("taskStatusLookUpService")
 @Transactional(readOnly = true)
@@ -39,37 +43,50 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     }
 
     @Override
-    public List<TaskQueue> getTaskQueueByStatus(String column, Integer status) {
-        return taskQueueDao.findTaskQueueByStatus(column,status);  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public List<TaskQueue> getTaskQueueByClientAppStatus(Long clientAppID, Integer status) {
         return taskQueueDao.findTaskQueueSetByStatus(clientAppID, status);  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-
-    @Override
-    public Integer getCountTaskQeueByStatus(String column, Integer status) {
-        return taskQueueDao.findTaskQueueByStatus(column,status).size();  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Integer getCountTaskQeueByStatusAndClientApp(Long clientAppID, Integer status) {
-        List<TaskQueue> taskQueueList = taskQueueDao.findTaskQueueSetByStatus(clientAppID, status);
-        if(taskQueueList!=null)
-            return taskQueueList.size();  //To change body of implemented methods use File | Settings | File Templates.
-        return 0;
     }
 
     @Override
     public List<TaskQueue> getTaskQueueByClientApp(Long clientAppID) {
         return taskQueueDao.findTaskQueueSetByclientApp(clientAppID);
     }
+    
+    @Override
+    public Long getTotalTaskInQueueByclientAppId(Long clientAppID) {
+        return taskQueueDao.getTotalTaskInQueueByclientAppId(clientAppID);
+    }
+    
+    @Override
+    public Map<Long, Long> getTotalTaskInQueueMapWithClientAppId() {
+        List<Object> totalTasksInQueue = taskQueueDao.getTotalTaskInQueue();
+        Map<Long,Long> clientAppWithTotalTaskMap = new HashMap<Long,Long>();
+        for (Object totalTaskByClientApp : totalTasksInQueue) {
+        	Object[] obj = (Object[]) totalTaskByClientApp;
+        	clientAppWithTotalTaskMap.put(Long.parseLong(obj[0].toString()), Long.parseLong(obj[1].toString()));
+		}
+        return clientAppWithTotalTaskMap;
+    }
+    
+    @Override
+    public Map<Long, Long> getTotalTaskInQueueByStatusMapWithClientAppId(Integer status) {
+        List<Object> totalTasksInQueueByStatus = taskQueueDao.getTotalTaskInQueueByStatus(status);
+        Map<Long,Long> clientAppWithTotalTaskByStatusMap = new HashMap<Long,Long>();
+        for (Object object : totalTasksInQueueByStatus) {
+        	Object[] obj = (Object[]) object;
+        	clientAppWithTotalTaskByStatusMap.put(Long.parseLong(obj[0].toString()), Long.parseLong(obj[1].toString()));
+		}
+        return clientAppWithTotalTaskByStatusMap;
+    }
+    
+    @Override
+    public Long getTaskQueueCountByClientAppIdAndStatus(Long clientAppID, Integer status) {
+        return taskQueueDao.getTaskQueueCountByclientAppAndStatus(clientAppID, status);
+    }
 
     @Override
-    public List<TaskQueue> getTotalNumberOfTaskQueue(Long clientAppID) {
-        return taskQueueDao.findTotalTaskQueueSet(clientAppID);  //To change body of implemented methods use File | Settings | File Templates.
+    public Long getTotalNumberOfTaskQueue(Long clientAppID) {
+        return taskQueueDao.getTotalTaskInQueueByclientAppId(clientAppID);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -94,5 +111,9 @@ public class TaskQueueServiceImpl implements TaskQueueService {
         return responses;
     }
 
+    @Override
+    public List<TaskQueue> getAll() {
+        return taskQueueDao.getAll();
+    }
 
 }
