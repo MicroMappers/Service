@@ -11,4 +11,6 @@ import qa.qcri.mm.api.entity.ClientAppAnswer;
  */
 public interface ClientAppAnswerService {
     ClientAppAnswer getClientAppAnswer(Long clientAppID);
+
+	void update(ClientAppAnswer clientAppAnswer);
 }

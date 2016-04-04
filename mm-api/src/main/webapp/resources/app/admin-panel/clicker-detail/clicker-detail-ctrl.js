@@ -1,8 +1,11 @@
-app.controller('ClickerDetailCtrl', function ($scope, ClickersService, CrisisService, data) {
+app.controller('ClickerDetailCtrl', function ($scope, $stateParams, $location, ClickersService, CrisisService, data) {
 	
 	$scope.client_app_status = ["Pending", "AIDR Only", "Micromappers Only", "Inactive", "Disabled", "AIDR Micromappers Both"];
 	$scope.client_app_type = ["","Multiple Choice", "Image", "Video", "Map", "Aerial", "3W"];
 	$scope.clicker = data;
+	$scope.clientapp.id = $stateParams.id;
+	$scope.clientapp.name = data.name;
+	$scope.clientapp.currentPath = $location.path();
 	
 	CrisisService.query().$promise.then(function(crisisList){
 		$scope.crisis = crisisList;

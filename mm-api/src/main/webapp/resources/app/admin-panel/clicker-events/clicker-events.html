@@ -1,0 +1,39 @@
+<div class="row">
+	<div class="col-md-2">
+	</div>
+	<div class="col-md-6">
+		<table class="table table-bordered">
+		  <th>Clicker</th><th>Sequence</th>
+		  <tr>
+		  	<td>
+		  		{{clientapp.name}}
+		  		<select class="form-control" 
+		  			ng-if="clicker.appType == 4 && events.length == 0 && otherClientApps.length > 1" 
+		  			ng-model="clicker.otherClientApp" ng-options="o as o.name for o in otherClientApps">
+		      		<option value="">--Select--</option>
+		      	</select>
+		  	</td>
+		  	<td>1</td></tr>
+		  <tr ng-if="otherClientApps.length > 1">
+		  	<td>
+		  		Geo {{clientapp.name}}
+		  		<select class="form-control" ng-if="clicker.appType != 4 && events.length == 0" 
+		  			ng-model="clicker.otherClientApp" ng-options="o as o.name for o in otherClientApps">
+		      		<option value="">--Select--</option>
+		      	</select>
+		  	</td>
+		  	<td>2</td></tr>
+		</table>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-2">
+	</div>
+	<div class="col-md-6">
+		<button ng-show="events.length == 0 && otherClientApps.length > 1" type="button" class="btn btn-default center-block" ng-click="generateEvents()" style="outline:none;" aria-hidden="false">
+			<span class="fa fa-check"></span> Generate Events
+		</button>
+	</div>
+</div>
+

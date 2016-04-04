@@ -1,12 +1,12 @@
 package qa.qcri.mm.api.entity;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.lang.String;
-import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +26,9 @@ public class ClientAppAnswer implements Serializable {
 
     @Column (name = "answer", nullable = false)
     private String answer;
+    
+    @Column (name = "vote_cut_off", nullable = false)
+    private Integer voteCutOff;
 
     @Column (name = "active_answer_key", nullable = true)
     private String activeAnswerKey;
@@ -83,4 +86,13 @@ public class ClientAppAnswer implements Serializable {
     public void setAnswerMarkerInfo(String answerMarkerInfo) {
         this.answerMarkerInfo = answerMarkerInfo;
     }
+
+	public Integer getVoteCutOff() {
+		return voteCutOff;
+	}
+
+	public void setVoteCutOff(Integer voteCutOff) {
+		this.voteCutOff = voteCutOff;
+	}
+
 }

@@ -1,8 +1,8 @@
 package qa.qcri.mm.api.dao;
 
-import qa.qcri.mm.api.entity.ClientAppAnswer;
-
 import java.util.List;
+
+import qa.qcri.mm.api.entity.ClientAppAnswer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,5 +14,7 @@ import java.util.List;
 public interface ClientAppAnswerDao extends AbstractDao<ClientAppAnswer, String> {
 
     List<ClientAppAnswer> getClientAppAnswer(Long clientAppID);
+
+	void update(ClientAppAnswer clientAppAnswer);
 
 }

@@ -1,11 +1,12 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.api.dao.ClientAppAnswerDao;
 import qa.qcri.mm.api.entity.ClientAppAnswer;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +25,11 @@ public class ClientAppAnswerDaoImpl extends AbstractDaoImpl<ClientAppAnswer, Str
     @Override
     public List<ClientAppAnswer> getClientAppAnswer(Long clientAppID) {
          return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
+    }
+    
+    @Override
+    public void update(ClientAppAnswer clientAppAnswer) {
+        saveOrUpdate(clientAppAnswer);
     }
 
 }
