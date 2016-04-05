@@ -4,18 +4,23 @@ app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, 
 	$scope.isEditMode = false;
 	
 	$scope.clientAppAnswer = data;
-	$scope.answers = angular.fromJson($scope.clientAppAnswer.answer);
+	
+	
 	$scope.vote_numbers = [1,2,3,4,5];
-	
 	$scope.active_answers = {};
-	angular.forEach($scope.answers, function(obj) {
-	  if($scope.clientAppAnswer.activeAnswerKey.indexOf(obj.qa) >= 0) {
-		  $scope.active_answers[obj.qa] = "yes";
-	  } else {
-		  $scope.active_answers[obj.qa] = "no";
-	  }
-	});
 	
+	if ($scope.clientAppAnswer) {
+		$scope.answers = angular.fromJson($scope.clientAppAnswer.answer);
+		
+		angular.forEach($scope.answers, function(obj) {
+			if ($scope.clientAppAnswer.activeAnswerKey && 
+					$scope.clientAppAnswer.activeAnswerKey.indexOf(obj.qa) >= 0) {
+				$scope.active_answers[obj.qa] = "yes";
+			} else {
+				$scope.active_answers[obj.qa] = "no";
+			}
+		});
+	}
 	$scope.update = function() {
 		$scope.activeAnswerKey = [];
 		angular.forEach($scope.temp_active_answers, function(value, active_answer_key) {
