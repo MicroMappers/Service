@@ -15,7 +15,7 @@ import qa.qcri.mm.api.service.CrisisService;
 import qa.qcri.mm.api.service.TaskQueueService;
 
 @RestController
-@RequestMapping("/clientapp_answer")
+@RequestMapping("/rest/clientapp_answer")
 public class ClientAppAnswerController {
     
 	@Autowired

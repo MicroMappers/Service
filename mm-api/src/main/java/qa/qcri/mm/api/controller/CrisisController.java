@@ -23,7 +23,7 @@ import qa.qcri.mm.api.service.CrisisService;
 import qa.qcri.mm.api.template.CrisisModel;
 
 @RestController
-@RequestMapping("/crisis")
+@RequestMapping("/rest/crisis")
 public class CrisisController {
 
 	private final Logger logger = Logger.getLogger(CrisisController.class);

@@ -39,7 +39,7 @@ public class HomeController {
     }
     
     @ResponseBody 
-    @RequestMapping(value = "/isadmin")
+    @RequestMapping(value = "/rest/isadmin")
     public boolean isCurrentUserIsAdmin() throws Exception{
 		UserAccount userAccount = getAuthenticatedUser();
 		if (userAccount != null) {

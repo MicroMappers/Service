@@ -1,6 +1,6 @@
 app.service('CrisisService', function($resource) {
 	
-	return $resource('/MMAPI/crisis/:id/:operation', {
+	return $resource('/MMAPI/rest/crisis/:id/:operation', {
 		id: '@id',
 		operation: '@operation'
 	}, {

@@ -28,7 +28,7 @@ import qa.qcri.mm.api.util.DataFileUtil;
  */
 @RestController
 @PreAuthorize("hasRole('ROLE_USER_SPRINGSOCIALSECURITY')")
-@RequestMapping("/micromaps")
+@RequestMapping("/rest/micromaps")
 public class MicroMapsController {
 	protected static Logger logger = Logger.getLogger("MicroMapsController");
 
