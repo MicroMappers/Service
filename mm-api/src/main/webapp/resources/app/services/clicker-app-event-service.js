@@ -1,6 +1,6 @@
 app.service('ClickerAppEventService', function($resource) {
 	
-	return $resource('/MMAPI/client_app_event/:id/:operation/:otherId', {
+	return $resource('/MMAPI/rest/client_app_event/:id/:operation/:otherId', {
 		id: '@id',
 		operation: '@operation',
 		otherId: '@otherId'

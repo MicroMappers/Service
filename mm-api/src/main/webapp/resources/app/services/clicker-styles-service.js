@@ -1,6 +1,6 @@
 app.service('ClickerStylesService', function($resource) {
 	
-	return $resource('/MMAPI/marker_style/:id/:operation', {
+	return $resource('/MMAPI/rest/marker_style/:id/:operation', {
 		id: '@id',
 		operation: '@operation'
 	}, {

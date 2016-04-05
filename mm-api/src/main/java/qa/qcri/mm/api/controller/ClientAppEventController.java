@@ -20,7 +20,7 @@ import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.CrisisService;
 
 @RestController
-@RequestMapping("/client_app_event")
+@RequestMapping("/rest/client_app_event")
 public class ClientAppEventController {
     
 	@Autowired

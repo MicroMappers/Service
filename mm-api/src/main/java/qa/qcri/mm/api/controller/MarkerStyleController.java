@@ -12,7 +12,7 @@ import qa.qcri.mm.api.entity.MarkerStyle;
 import qa.qcri.mm.api.service.MarkerStyleService;
 
 @RestController
-@RequestMapping("/marker_style")
+@RequestMapping("/rest/marker_style")
 public class MarkerStyleController {
     
 	@Autowired

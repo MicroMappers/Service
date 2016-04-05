@@ -23,11 +23,8 @@
 		aerialContainer : "#aerial .content",
 		threeWContainer : "#3w .content",
 
-		//API : "http://ec2-54-148-39-119.us-west-2.compute.amazonaws.com:8080/MMAPI/rest/micromaps/JSONP/",
-		API : "/MMAPI/micromaps/JSONP/",
-		ROOT : "/MMAPI/",
-		//API : "http://199.223.234.225/MMAPI/rest/micromaps/JSONP/",
-		//API : "http://localhost:8080/MMAPI/rest/micromaps/JSONP/",
+		API : "/MMAPI/rest/micromaps/JSONP/",
+		ROOT : "/MMAPI/rest/",
 		HOST : "http://199.223.234.225/",
 		datasource : "../../data/",
 
