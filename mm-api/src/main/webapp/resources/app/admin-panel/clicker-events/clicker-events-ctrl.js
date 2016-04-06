@@ -1,9 +1,9 @@
-app.controller('ClickerEventsCtrl', function ($scope, $stateParams, $location, ClickersService, ClickerAppEventService, data) {
+app.controller('ClickerEventsCtrl', function ($scope, $stateParams, $location, $state, ClickersService, ClickerAppEventService, data) {
 	
 	$scope.client_app_status = ["Pending", "AIDR Only", "Micromappers Only", "Inactive", "Disabled", "AIDR Micromappers Both"];
 	$scope.client_app_type = ["","Multiple Choice", "Image", "Video", "Map", "Aerial", "3W"];
 	$scope.clicker = data;
-	$scope.clientapp.id = $stateParams.id;
+	$scope.clientapp.id = parseInt($stateParams.id);
 	$scope.clientapp.name = data.name;
 	$scope.clientapp.currentPath = $location.path();
 	
@@ -23,17 +23,17 @@ app.controller('ClickerEventsCtrl', function ($scope, $stateParams, $location, C
 			$scope.obj = {};
 			if($scope.clicker.appType == 4) {
 				$scope.obj = {
-						"id": $scope.clicker.otherClientApp,
-						"otherId": $scope.clientapp.id
+						clientId: $scope.clicker.otherClientApp.clientAppID,
+						geoClientAppId: $scope.clientapp.id
 				};
 			} else {
 				$scope.obj = {
-						"otherId": $scope.clicker.otherClientApp,
-						"id": $scope.clientapp.id
+						geoClientAppId: $scope.clicker.otherClientApp.clientAppID,
+						clientId: $scope.clientapp.id
 				};
 			}
-			ClickerAppEventService.generateEvents($scope.obj).$promise.then(function(data){
-				
+			ClickerAppEventService.generateEvents($scope.obj).$promise.then(function(){
+				$state.go($state.current, {}, {reload: true});
 			});
 		}
 		

@@ -62,7 +62,7 @@
 			<div class="col-md-4"><strong> Vote cut off </strong></div>
 			<div class="col-md-8">
 			  <span class="col-md-10" ng-show="isEditMode">
-		      	<select class="form-control" ng-model="tempVoteCutOff" ng-options="v as v for v in vote_numbers">
+		      	<select class="form-control" ng-model="tempData.voteCutOff" ng-options="v as v for v in vote_numbers">
 		      	</select>
 		      </span>
 		      <span class="col-md-10" ng-show="!isEditMode">

@@ -3,7 +3,11 @@ package qa.qcri.mm.api.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +22,7 @@ import qa.qcri.mm.api.entity.Crisis;
 import qa.qcri.mm.api.service.ClientAppEventService;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.CrisisService;
+import qa.qcri.mm.api.util.CommonUtil;
 
 @RestController
 @RequestMapping("/rest/client_app_event")
@@ -66,12 +71,19 @@ public class ClientAppEventController {
     }
 	
 	@PreAuthorize("hasRole('ADMIN')")
-	@RequestMapping(value = "/{id}/generateEvents/{geoClientApp}", method={RequestMethod.GET})
-    public String generateEvents(@PathVariable("id") long id, @PathVariable("geoClientApp") long geoClientAppId) {
-		ClientApp clientApp = clientAppService.getClientAppById(id);
+	@RequestMapping(value = "/generateEvents", method={RequestMethod.POST})
+    public Map<String, Object> generateEvents(@RequestBody String requestData) throws ParseException {
+		
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) parser.parse(requestData);
+		Long clientId = (Long) jsonObject.get("clientId");
+		Long geoClientAppId = (Long) jsonObject.get("geoClientAppId");
+		
+		
+		ClientApp clientApp = clientAppService.getClientAppById(clientId);
 		ClientAppEvent event = new ClientAppEvent(null, clientApp.getName(), clientApp.getClientAppID(), 1, 0L, new Date());
 		clientAppEventService.save(event);
-		event = clientAppEventService.getClientAppEvent(id);
+		event = clientAppEventService.getClientAppEvent(clientId);
 		event.setEventID(event.getClientAppEventID());
 		clientAppEventService.save(event);
 		
@@ -79,7 +91,7 @@ public class ClientAppEventController {
 		ClientAppEvent geoEvent = new ClientAppEvent(null, geoClientApp.getName(), geoClientApp.getClientAppID(), 2, event.getClientAppEventID(), new Date());
 		clientAppEventService.save(geoEvent);
 		
-		return "success";
+		return CommonUtil.returnSuccess("Events Generated Successfully.", null);
     }
 	
 	@PreAuthorize("hasRole('ADMIN')")
