@@ -8,6 +8,9 @@ app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, 
 	
 	$scope.vote_numbers = [1,2,3,4,5];
 	$scope.active_answers = {};
+	$scope.tempData  = {
+		voteCutOff: null	
+	};
 	
 	if ($scope.clientAppAnswer) {
 		$scope.answers = angular.fromJson($scope.clientAppAnswer.answer);
@@ -30,8 +33,10 @@ app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, 
 		});
 		
 		$scope.tempClientAppAnswer = angular.copy($scope.clientAppAnswer);
-		$scope.tempClientAppAnswer.voteCutOff = $scope.tempVoteCutOff;
+		//$scope.tempClientAppAnswer.voteCutOff = $scope.tempVoteCutOff;
+		$scope.tempClientAppAnswer.voteCutOff = $scope.tempData.voteCutOff;
 		$scope.tempClientAppAnswer.activeAnswerKey = angular.toJson($scope.activeAnswerKey);
+		console.log($scope.tempClientAppAnswer);
 		ClickerAnswersService.update($scope.tempClientAppAnswer).$promise.then(function(data){
 			$scope.clientAppAnswer = angular.copy($scope.tempClientAppAnswer);
 			$scope.active_answers = {};
@@ -51,7 +56,8 @@ app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, 
 		if(mode) {
 			$scope.temp_answers = angular.copy($scope.answers);
 			$scope.temp_active_answers = angular.copy($scope.active_answers);
-			$scope.tempVoteCutOff = $scope.clientAppAnswer.voteCutOff;
+			//$scope.tempVoteCutOff = $scope.clientAppAnswer.voteCutOff;
+			$scope.tempData.voteCutOff = $scope.clientAppAnswer.voteCutOff;
 		}
 		$scope.isEditMode = mode;
 	};
