@@ -37,7 +37,7 @@ public class ClientAppSourceController {
     public Response saveAppSource(@RequestBody String data){
         String returnValue = StatusCodeType.RETURN_SUCCESS;
 
-        System.out.println("saveAppSource : " + data );
+        logger.info("saveAppSource : " + data );
 
         try{
             JSONParser parser = new JSONParser();
@@ -47,17 +47,15 @@ public class ClientAppSourceController {
                 String fileURL = (String)obj.get("fileURL");
                 Long appID = (Long)obj.get("appID");
 
-                System.out.println("fileURL : " + fileURL );
-
-                System.out.println("appID : " + appID );
+                logger.info("fileURL : " + fileURL );
+                logger.info("appID : " + appID );
 
                 clientAppSourceService.addExternalDataSouceWithClientAppID(fileURL, appID);
             }
         }
         catch(Exception e){
             returnValue = StatusCodeType.RETURN_FAIL;
-            logger.error("saveAppSource got exception : " + e);
-            System.out.println("saveAppSource excpetion : " + e );
+            logger.error("saveAppSource got exception : ", e);
         }
 
         return Response.status(CodeLookUp.APP_REQUEST_SUCCESS).entity(returnValue).build();
