@@ -21,3 +21,28 @@
 .no-margin-top {
 	margin-top: 0px;
 }
+
+#loading-bar .bar {
+  background: #7F5;
+   height: 3px;
+}
+
+/* Fancy blur effect */
+#loading-bar .peg {
+  -moz-box-shadow: #7F5 1px 0 6px 1px;
+  -ms-box-shadow: #7F5 1px 0 6px 1px;
+  -webkit-box-shadow: #7F5 1px 0 6px 1px;
+  box-shadow: #7F5 1px 0 6px 1px;
+}
+
+#loading-bar-spinner {
+  top: 50%;
+  left: 50%;
+}
+
+#loading-bar-spinner .spinner-icon {
+  width: 30px;
+  height: 30px;
+  border-top-color:  #7F5;
+  border-left-color: #7F5;
+}
