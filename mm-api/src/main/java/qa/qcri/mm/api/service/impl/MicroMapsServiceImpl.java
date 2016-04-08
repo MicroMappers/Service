@@ -71,7 +71,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
     @Autowired
     TaskQueueService taskQueueService;
 
-    private JSONParser parser = new JSONParser();
+    private final JSONParser parser = new JSONParser();
 
     @Override
     public List<MicroMapsCrisisModel> getAllCries() {
@@ -113,18 +113,19 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         return models;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public JSONArray getAllCrisisJSONP() throws Exception {
 
         List<Crisis> crisises = crisisDao.getAllCrisis();
         JSONArray models = new JSONArray();
 
-        String filePath = "http://ec2-54-148-39-119.us-west-2.compute.amazonaws.com:8080/MMAPI/rest/micromaps";
+        //String filePath = "http://ec2-54-148-39-119.us-west-2.compute.amazonaws.com:8080/MMAPI/rest/micromaps";
        //http://ec2-54-148-39-119.us-west-2.compute.amazonaws.com:8080/MMAPI/rest/micromaps/JSON/aerial/id/254
 
         for(Crisis c : crisises){
-            String geoJson = filePath + File.separator + "JSON" + File.separator + c.getClickerType().toLowerCase() + File.separator + "id" + File.separator + c.getClientAppID() ;
-            String kml = filePath + File.separator + "kml" + File.separator + c.getClickerType().toLowerCase() + File.separator + "id" + File.separator + c.getClientAppID() ;
+            //String geoJson = filePath + File.separator + "JSON" + File.separator + c.getClickerType().toLowerCase() + File.separator + "id" + File.separator + c.getClientAppID() ;
+            //String kml = filePath + File.separator + "kml" + File.separator + c.getClickerType().toLowerCase() + File.separator + "id" + File.separator + c.getClientAppID() ;
 
             MarkerStyle aStyle = this.getClientAppMarkerStyle(c);
 
@@ -145,11 +146,13 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                 aObject.put("status", 0);
             }
 
-            aObject.put("geoJsonLink",geoJson) ;
-            aObject.put("kmlLink",kml) ;
-            JSONObject aStyleJson = (JSONObject)parser.parse(aStyle.getStyle());
+            //aObject.put("geoJsonLink",geoJson) ;
+            //aObject.put("kmlLink",kml) ;
+            JSONObject aStyleJson = null;
+            if(aStyle != null) {
+            	aStyleJson = (JSONObject)parser.parse(aStyle.getStyle());
+            }
             aObject.put("style",aStyleJson) ;
-
             models.add(aObject);
         }
         return models;
