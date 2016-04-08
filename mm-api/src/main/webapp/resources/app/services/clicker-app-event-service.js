@@ -1,9 +1,8 @@
 app.service('ClickerAppEventService', function($resource) {
 	
-	return $resource('/MMAPI/rest/client_app_event/:id/:operation/:otherId', {
+	return $resource('/MMAPI/rest/client_app_event/:id/:operation', {
 		id: '@id',
-		operation: '@operation',
-		otherId: '@otherId'
+		operation: '@operation'
 	}, {
 		update: {
 			method: 'PUT'
@@ -23,7 +22,7 @@ app.service('ClickerAppEventService', function($resource) {
 			isArray: true
 		},
 		generateEvents: {
-			method: 'GET',
+			method: 'POST',
 			params: {
 				operation: 'generateEvents'
 			}
