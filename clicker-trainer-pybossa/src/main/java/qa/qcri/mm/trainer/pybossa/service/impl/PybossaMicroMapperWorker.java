@@ -318,6 +318,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
         
         if(client == null){
+            System.out.println(   "client IS NULL");
             return;
         }
 
@@ -325,13 +326,11 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
         if(appList.size() > 0){
             for(int i=0; i < appList.size(); i++){
-            	if(i< 14){
-            		continue;
-            	}
-                ClientApp currentClientApp =  appList.get(i);
 
-                List<ClientAppSource> datasources = clientAppSourceService.getClientAppSourceByStatus(currentClientApp.getClientAppID(),StatusCodeType.EXTERNAL_DATA_SOURCE_ACTIVE);
-                //System.out.println(   "clientApp processTaskPublish datasources : " +  datasources.size());
+                ClientApp currentClientApp =  appList.get(i);
+                System.out.println(   "clientApp processTaskPublish currentClientApp : " +  currentClientApp.getShortName());
+                List<ClientAppSource> datasources = clientAppSourceService.getClientAppSourceByStatus(currentClientApp.getClientAppID(), StatusCodeType.EXTERNAL_DATA_SOURCE_ACTIVE);
+                System.out.println(   "clientApp processTaskPublish datasources : " +  datasources.size());
                 for(int j=0; j < datasources.size(); j++){
 
                     List<MicromapperInput> micromapperInputList = null;
