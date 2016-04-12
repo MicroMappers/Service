@@ -1,4 +1,4 @@
-app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, ClickerAnswersService, data) {
+app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, ClickerAnswersService, data, toaster) {
 	$scope.clientapp.id = $stateParams.id;
 	$scope.clientapp.currentPath = $location.path();
 	$scope.isEditMode = false;
@@ -48,7 +48,11 @@ app.controller('ClickerAnswersCtrl', function ($scope, $stateParams, $location, 
 			  }
 			});
 			$scope.isEditMode = false;
-		});
+			toaster.pop('success', "Answers updated successfully");
+		}, function(error){
+		    // error
+			toaster.pop('error', "Error in updating answers");
+		  });
 		
 	};
 	

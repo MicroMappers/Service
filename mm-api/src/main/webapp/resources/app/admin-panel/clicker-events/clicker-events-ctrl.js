@@ -34,7 +34,11 @@ app.controller('ClickerEventsCtrl', function ($scope, $stateParams, $location, $
 			}
 			ClickerAppEventService.generateEvents($scope.obj).$promise.then(function(){
 				$state.go($state.current, {}, {reload: true});
-			});
+				toaster.pop('success', "Events generated successfully");
+			}, function(error){
+			    // error
+				toaster.pop('error', "Error in generating events");
+			  });
 		}
 		
 	};
