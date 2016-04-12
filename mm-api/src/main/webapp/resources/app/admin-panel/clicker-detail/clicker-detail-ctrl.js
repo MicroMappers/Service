@@ -1,4 +1,4 @@
-app.controller('ClickerDetailCtrl', function ($scope, $stateParams, $location, ClickersService, CrisisService, data) {
+app.controller('ClickerDetailCtrl', function ($scope, $stateParams, $location, ClickersService, CrisisService, data, toaster) {
 	
 	$scope.client_app_status = ["Pending", "AIDR Only", "Micromappers Only", "Inactive", "Disabled", "AIDR Micromappers Both"];
 	$scope.client_app_type = ["","Multiple Choice", "Image", "Video", "Map", "Aerial", "3W"];
@@ -40,7 +40,11 @@ app.controller('ClickerDetailCtrl', function ($scope, $stateParams, $location, C
 		ClickersService.update($scope.temp_clicker).$promise.then(function(data){
 			$scope.clicker = angular.copy($scope.temp_clicker);
 			$scope.isEditMode = false;
-		});
+			toaster.pop('success', "Details updated successfully");
+		}, function(error){
+		    // error
+			toaster.pop('error', "Error in updating details");
+		  });
 	};
 	
 });

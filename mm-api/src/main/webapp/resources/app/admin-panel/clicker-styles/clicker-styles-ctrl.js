@@ -1,5 +1,5 @@
 app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, $state, ClickerStylesService, 
-		clickerAnswers, clickerStyles) {
+		clickerAnswers, clickerStyles, toaster) {
 	
 	$scope.clientapp.id = $stateParams.id;
 	$scope.clientapp.currentPath = $location.path();
@@ -55,12 +55,20 @@ app.controller('ClickerStylesCtrl', function ($scope, $stateParams, $location, $
 				$scope.clickerStyles = angular.copy($scope.tempClickerStyles);
 				$scope.loadData();
 				$scope.isEditMode = false;
-			});
+				toaster.pop('success', "Style updated successfully");
+			}, function(error){
+			    // error
+				toaster.pop('error', "Error in updating style");
+			  });
 		} else {
 			ClickerStylesService.save($scope.tempClickerStyles).$promise.then(function(data){
 				//$location.path('/clicker/styles/' + $scope.clientapp.id);
 				$state.go($state.current, {}, {reload: true});
-			});
+				toaster.pop('success', "Style updated successfully");
+			}, function(error){
+			    // error
+				toaster.pop('error', "Error in updating style");
+			  });
 		}
 		
 	};

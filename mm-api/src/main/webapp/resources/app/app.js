@@ -1,4 +1,4 @@
-var app = angular.module('micromaps', [ 'ui.router', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module', 'angular-loading-bar']);
+var app = angular.module('micromaps', [ 'ui.router', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module', 'angular-loading-bar', 'toaster']);
 
 app.config(function($stateProvider, $urlRouterProvider,cfpLoadingBarProvider) {
 	cfpLoadingBarProvider.includeSpinner = true; // Show the spinner.
