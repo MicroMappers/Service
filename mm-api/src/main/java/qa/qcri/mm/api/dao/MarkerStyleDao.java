@@ -12,5 +12,6 @@ public interface MarkerStyleDao extends AbstractDao<MarkerStyle, String>  {
     List<MarkerStyle> findByAppType(String appType);
     List<MarkerStyle> findByClientAppID(long clientAppID);
 	void update(MarkerStyle markerStyle);
+	void create(MarkerStyle markerStyle);
 
 }

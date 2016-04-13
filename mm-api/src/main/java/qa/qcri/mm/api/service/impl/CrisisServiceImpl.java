@@ -44,7 +44,7 @@ public class CrisisServiceImpl implements CrisisService{
 			crisis.setClientAppID(model.getId());
 			crisis.setClickerType(model.getAppType().toString());
 			crisis.setActivationStart(new Date());
-			crisisDao.save(crisis);
+			crisisDao.createCrisis(crisis);
 		}
 		
 		return crisis;

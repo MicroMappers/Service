@@ -34,4 +34,10 @@ public class MarkerStyleDaoImpl extends AbstractDaoImpl<MarkerStyle, String> imp
 	public void update(MarkerStyle markerStyle) {
 		saveOrUpdate(markerStyle);
 	}
+
+
+	@Override
+	public void create(MarkerStyle markerStyle) {
+		save(markerStyle);
+	}
 }

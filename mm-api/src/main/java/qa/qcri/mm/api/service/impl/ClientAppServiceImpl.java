@@ -85,7 +85,7 @@ public class ClientAppServiceImpl implements ClientAppService {
        ClientApp clientApp = findClientAppByCriteria("shortName",shortName);
        if(clientApp != null){
            clientApp.setStatus(status);
-           clientAppDao.saveOrUpdate(clientApp);
+           clientAppDao.update(clientApp);
        }
     }
 
@@ -236,7 +236,7 @@ public class ClientAppServiceImpl implements ClientAppService {
 			clientApp.setIsCustom(model.getIsCustom());
 			clientApp.setTcProjectID(model.getTcProjectID());
 			clientApp.setTaskRunsPerTask(model.getTaskRunsPerTask());
-			clientAppDao.saveOrUpdate(clientApp);
+			clientAppDao.update(clientApp);
 			if(model.getCrisisSrID() == null && model.getCrisisID() != null) {
 				crisisService.createCrisisForClientApp(model);
 			}
