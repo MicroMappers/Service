@@ -26,10 +26,22 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
 
     @Override
     public void createTaskQueue(TaskQueue taskQueue) {
-    	if(taskQueue.getCreated() == null){
-    		taskQueue.setCreated(new Date());
+    	Date date = new Date();
+    	if(taskQueue.getTaskQueueID() == null || taskQueue.getCreated() == null){
+			taskQueue.setCreated(date);
     	}
+    	taskQueue.setUpdated(date);
         save(taskQueue);
+    }
+    
+    @Override
+    public void updateTaskQueue(TaskQueue taskQueue) {
+    	Date date = new Date();
+    	if(taskQueue.getTaskQueueID() == null || taskQueue.getCreated() == null){
+			taskQueue.setCreated(date);
+    	}
+    		taskQueue.setUpdated(date);
+        saveOrUpdate(taskQueue);
     }
 
     @Override
