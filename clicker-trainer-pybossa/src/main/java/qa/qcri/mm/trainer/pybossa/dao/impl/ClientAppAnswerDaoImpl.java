@@ -1,7 +1,10 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.Date;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.trainer.pybossa.dao.ClientAppAnswerDao;
 import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
 
@@ -28,6 +31,9 @@ public class ClientAppAnswerDaoImpl extends AbstractDaoImpl<ClientAppAnswer, Str
     public void addClientAppAnswer(Long clientAppID, String answerJson, int cutOffValue) {
         ClientAppAnswer clientAppAnswer = new ClientAppAnswer(clientAppID, answerJson);
         clientAppAnswer.setVoteCutOff(cutOffValue);
+        if(clientAppAnswer.getCreated() == null){
+        	clientAppAnswer.setCreated(new Date());
+        }
         save(clientAppAnswer);
         //To change body of implemented methods use File | Settings | File Templates.
     }

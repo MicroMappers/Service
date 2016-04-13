@@ -40,6 +40,6 @@ public class MarkerStyleServiceImpl implements MarkerStyleService{
 	
 	@Override
     public void save(MarkerStyle markerStyle) {
-		markerStyleDao.save(markerStyle);
+		markerStyleDao.create(markerStyle);
     }
 }

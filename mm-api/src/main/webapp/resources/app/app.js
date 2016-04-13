@@ -1,7 +1,9 @@
-var app = angular.module('micromaps', [ 'ui.router', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module']);
+var app = angular.module('micromaps', [ 'ui.router', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module', 'angular-loading-bar', 'toaster']);
 
-app.config(function($stateProvider, $urlRouterProvider) {
-           
+app.config(function($stateProvider, $urlRouterProvider,cfpLoadingBarProvider) {
+	cfpLoadingBarProvider.includeSpinner = true; // Show the spinner.
+    cfpLoadingBarProvider.includeBar = true;
+	
 	$urlRouterProvider.otherwise("/asd");
 	
 	$stateProvider

@@ -62,17 +62,17 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
     protected static Logger logger = Logger.getLogger(PybossaMicroMapperWorker.class);
 
     private Client client;
-    private CVSRemoteFileFormatter cvsRemoteFileFormatter = new CVSRemoteFileFormatter();
+    private final CVSRemoteFileFormatter cvsRemoteFileFormatter = new CVSRemoteFileFormatter();
     private int MAX_PENDING_QUEUE_SIZE = 50;
-    private int MAX_IMPORT_PROCESS_QUEUE_SIZE = 300;
+    private final int MAX_IMPORT_PROCESS_QUEUE_SIZE = 300;
     private String PYBOSSA_API_TASK_PUBLSIH_URL;
 
     private String PYBOSSA_API_TASK_RUN_BASE_URL;
     private String PYBOSSA_API_TASK_BASE_URL;
 
-    private PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
-    private JSONParser parser = new JSONParser();
-    private MicroMapperPybossaFormatter pybossaFormatter = new MicroMapperPybossaFormatter();
+    private final PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
+    private final JSONParser parser = new JSONParser();
+    private final MicroMapperPybossaFormatter pybossaFormatter = new MicroMapperPybossaFormatter();
 
 
     @Autowired
@@ -376,7 +376,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
     @Override
     public void processTaskImport() throws Exception{    	   	
-        System.out.println("Data import is starting");
+        logger.info("Data import is starting");
         setClassVariable();
 
         if(client == null){
@@ -405,28 +405,22 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                         queueSize =  taskQueues.size();
                     }
                     
-                    System.out.println("TaskQueueSize: "+ queueSize);
+                    logger.info("TaskQueueSize: "+ queueSize);
                     
                     Date processStartTime = new Date();
                     
                     for(int i=0; i < queueSize; i++){
                         TaskQueue taskQueue = taskQueues.get(i);
-                        //Long taskID =  108062l;
                         Long taskID =  taskQueue.getTaskID();
                       
                         String taskQueryURL = PYBOSSA_API_TASK_BASE_URL + clientApp.getPlatformAppID() + "&id=" + taskID;
-                        System.out.print("Calling Task API: "+ taskQueryURL);                        
                         String inputData = pybossaCommunicator.sendGet(taskQueryURL);
-                        //System.out.println("inputData: "+ inputData);
-                        System.out.println("  ..  Completed");
-                        //String inputData = tasksInputData.get(taskID) == null? null : tasksInputData.get(taskID).toString();
                         try {
 
                             if (inputData != null) {
 								boolean isFound = pybossaFormatter.isTaskStatusCompleted(inputData);
-								System.out.println("isFound: "+isFound);
+								logger.info("isFound: "+isFound);
 								if (isFound) {
-									System.out.println("isFound: "+isFound);
 									boolean isProcessed = this.processTaskQueueImport(clientApp, taskQueue, taskID, geoJsonOutputModels);
 									if(isProcessed){
 				                    	// Some new data has been processed
@@ -440,20 +434,15 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            logger.error("processTaskImport: " + e);
-                            System.out.println("getTaskQueueID*******************" + taskQueue.getTaskQueueID());
-                            //To change body of catch statement use File | Settings | File Templates.
+                            logger.error("processTaskImport: " + e, e);
                         }    
                     }
                     // Map data export
                     try {
-						//reportProductService.generateGeoJsonForClientApp(clientApp.getClientAppID());
+						reportProductService.generateGeoJsonForClientApp(clientApp.getClientAppID());
 					} catch (Exception e) {
-						System.out.println(e.getMessage());
-						//e.printStackTrace();
+						logger.error(e.getMessage(), e);
 					}
-                    
-                    
 
                 }
             }
@@ -518,9 +507,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
     	boolean isProcessed = false;
         String PYBOSSA_API_TASK_RUN = PYBOSSA_API_TASK_RUN_BASE_URL + clientApp.getPlatformAppID() + "&task_id=" + taskID;
         
-        System.out.print("\nCalling Task Run API: "+ PYBOSSA_API_TASK_RUN);                  
         String importResult = pybossaCommunicator.sendGet(PYBOSSA_API_TASK_RUN) ;
-        System.out.print("  ..  Completed");
         
         if(!importResult.isEmpty() && importResult.length() > StatusCodeType.RESPONSE_MIN_LENGTH  ){
 
@@ -556,15 +543,11 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             }
 
             if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("[]")){
-            	System.out.println("Response: "+ taskQueueResponse.getResponse());
                 clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
                 taskQueue.setStatus(StatusCodeType.TASK_LIFECYCLE_COMPLETED);
                 updateTaskQueue(taskQueue);
                 isProcessed = true;
-                System.out.print(".. Created");
-            }
-            else{
-                //System.out.println("taskQueueResponse is null : No action is required or review configuration");
+                logger.info("TaskQueueResponse Created");
             }
         }
         return isProcessed;

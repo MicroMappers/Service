@@ -36,4 +36,9 @@ public class CrisisDaoImpl extends AbstractDaoImpl<Crisis, String> implements Cr
     public List<Crisis> findCrisisByCrisisID(Long crisisID) {
         return findByCriteria(Restrictions.eq("crisisID", crisisID));
     }
+
+	@Override
+	public void createCrisis(Crisis crisis) {
+		save(crisis);
+	}
 }

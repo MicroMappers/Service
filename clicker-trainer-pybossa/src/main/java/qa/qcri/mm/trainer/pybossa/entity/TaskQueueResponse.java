@@ -1,8 +1,13 @@
 package qa.qcri.mm.trainer.pybossa.entity;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +25,6 @@ public class TaskQueueResponse implements Serializable {
     @Column(name = "task_queue_id")
     private Long taskQueueID;
 
-    @Lob
     @Column (name = "response",  length = 100000)
     private String response;
 
@@ -80,4 +84,11 @@ public class TaskQueueResponse implements Serializable {
     public void setExported(boolean exported) {
         this.exported = exported;
     }
+
+	@Override
+	public String toString() {
+		return "TaskQueueResponse [taskQueueID=" + taskQueueID + ", response="
+				+ response + ", taskInfo=" + taskInfo + ", created=" + created
+				+ ", exported=" + exported + "]";
+	}
 }

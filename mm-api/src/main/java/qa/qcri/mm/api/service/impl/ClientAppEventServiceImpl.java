@@ -27,7 +27,7 @@ public class ClientAppEventServiceImpl implements ClientAppEventService{
 	
 	@Override
     public void save(ClientAppEvent clientAppEvent) {
-		clientAppEventDao.saveOrUpdate(clientAppEvent);
+		clientAppEventDao.update(clientAppEvent);
     }
 	
 	@Override

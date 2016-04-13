@@ -26,7 +26,7 @@
         <property name="packagesToScan" value="qa.qcri.mm.trainer.pybossa.entity" />
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</prop>
                 <prop key="hibernate.show_sql">false</prop>
             </props>
 

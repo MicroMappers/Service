@@ -2,10 +2,12 @@ package qa.qcri.mm.api.dao.impl;
 
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.api.dao.ClientAppSourceDao;
 import qa.qcri.mm.api.entity.ClientAppSource;
 import qa.qcri.mm.api.store.StatusCodeType;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,7 +64,9 @@ public class ClientAppSourceDaoImpl extends AbstractDaoImpl<ClientAppSource, Str
 
     @Override
     public void createNewSource(ClientAppSource clientAppSource) {
-           // save(clientAppSource);
+           if(clientAppSource.getCreated() == null){
+        	   clientAppSource.setCreated(new Date());
+           }
             save(clientAppSource);
     }
 

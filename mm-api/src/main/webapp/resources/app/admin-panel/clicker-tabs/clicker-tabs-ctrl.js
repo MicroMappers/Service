@@ -11,4 +11,8 @@ app.controller('ClickerTabsCtrl', function ($scope, $location, ClickersService, 
 		$location.path(url + $scope.clientapp.id);
 	};
 	
+	$scope.gotoList = function(url) {
+		$location.path(url);
+	};
+	
 });

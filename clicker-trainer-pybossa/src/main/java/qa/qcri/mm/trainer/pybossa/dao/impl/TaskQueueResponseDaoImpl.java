@@ -1,5 +1,6 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
@@ -26,6 +27,9 @@ public class TaskQueueResponseDaoImpl extends AbstractDaoImpl<TaskQueueResponse,
     public void addTaskQueueResponse(TaskQueueResponse taskQueueResponse) {
         //To change body of implemented methods use File | Settings | File Templates.
     	if(taskQueueResponse != null && !taskQueueResponse.getResponse().equals("[]")){
+    		if(taskQueueResponse.getCreated() == null){
+    			taskQueueResponse.setCreated(new Date());
+    		}
     	  saveOrUpdate(taskQueueResponse);
     	}        
     }

@@ -14,6 +14,7 @@ import java.util.List;
 public interface CrisisDao extends AbstractDao<Crisis, String>  {
 
     List<Crisis> getAllCrisis();
+    void createCrisis(Crisis crisis);
     List<Crisis> findCrisisByClientAppID(Long clientAppID);
     List<Crisis> findCrisisByCrisisID(Long crisisID);
 }

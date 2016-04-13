@@ -22,7 +22,6 @@ import qa.qcri.mm.trainer.pybossa.entity.Crisis;
 import qa.qcri.mm.trainer.pybossa.entity.MarkerStyle;
 import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
-import qa.qcri.mm.trainer.pybossa.entity.TyphoonRubyTextGeoClicker;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
 import qa.qcri.mm.trainer.pybossa.service.impl.PybossaCommunicator;
 import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
@@ -40,7 +39,7 @@ import qa.qcri.mm.trainer.pybossa.util.DataFormatValidator;
 public class MicroMapperPybossaFormatter {
     protected static Logger logger = Logger.getLogger(MicroMapperPybossaFormatter.class);
     
-    private PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
+    private final PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
 
 
     public MicroMapperPybossaFormatter(){}
@@ -365,8 +364,7 @@ public class MicroMapperPybossaFormatter {
                     JSONObject loc = (JSONObject)info.get("loc");
                     String locType = (String)loc.get("type");
                     
-                    if(info.get("category") == null || info.get("category").equals("")) {
-                    	
+                    /*if(info.get("category") == null || info.get("category").equals("")) {
                     	if(clientApp.getClientAppID() == 260){
 	                    	if(info.get("taskid") != null){
 	                    		String category = getCategoryFromJson((Long)info.get("taskid"));
@@ -389,8 +387,8 @@ public class MicroMapperPybossaFormatter {
             					TyphoonRubyTextGeoClicker typhoonRubyTextGeoClicker = typhoonRubyTextGeoClickers.get(0);
             					info.put("category", typhoonRubyTextGeoClicker.getTweetID());
             				}
-                    		
                     	}
+                    	
                     } else if(c.getClickerType().trim().equalsIgnoreCase("text")){
                     	if(info.get("taskid") != null){
                     		String category = (String) info.get("category");
@@ -406,7 +404,7 @@ public class MicroMapperPybossaFormatter {
                         	}
                         	info.put("category", category );
                     	}
-                	}
+                	}*/
                     
                     if(locType.equalsIgnoreCase(PybossaConf.GEOJSON_TYPE_FEATURE_COLLECTION)){
                         JSONArray features = (JSONArray)loc.get("features");
@@ -414,18 +412,10 @@ public class MicroMapperPybossaFormatter {
                         for(int i= 0; i < features.size(); i++  ){
                             JSONObject aFeature = (JSONObject)features.get(i);
                             JSONObject properties = (JSONObject)aFeature.get("properties");
-                            //System.out.println("info.get(\"category\") :" + info.get("category"));
-                            //System.out.println("appSource :" + appSource);
 
                             if(info.get("category") == null && appSource != null){
-
                                 String[] row =   CVSFileDataSourceSearch.search((String)info.get("tweetid"),appSource.getSourceURL() );
-
-                                
-
                                 if(row != null){
-                                	//System.out.println("row :" + row.length);
-                                    //tweetID,tweet,author,lat,lng,url,created,answer
                                     info.put("author", row[2] );
                                     info.put("timestamp", row[6] );
                                     info.put("category", row[7] );
@@ -441,8 +431,6 @@ public class MicroMapperPybossaFormatter {
                             properties.put("taskid", info.get("taskid") )   ;
                             properties.put("crisis_name", c.getDisplayName() )   ;
                             properties.put("crisis_type", c.getClickerType() )   ;
-
-                           // JSONObject geometry = (JSONObject)aFeature.get("geometry");
 
                             JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser,info.get("category")!=null?info.get("category"):"");
                             if(mStyle != null){
@@ -463,13 +451,8 @@ public class MicroMapperPybossaFormatter {
                         properties.put("timestamp", info.get("timestamp") )   ;
                         properties.put("tweetid", info.get("tweetid") )   ;
                         properties.put("taskid", info.get("taskid") )   ;
-                        
-
                         properties.put("crisis_name", c.getDisplayName() )   ;
                         properties.put("crisis_type", c.getClickerType() )   ;
-
-                       // JSONObject geometry = (JSONObject)geoLoc.get("geometry");
-
                         
                         uniqueIDString = String.valueOf(info.get("url") );
                         
@@ -505,10 +488,11 @@ public class MicroMapperPybossaFormatter {
             }
 
         }
-        //System.out.println("locations : " + locations.toJSONString()) ;
+        
         TaskQueueResponse taskQueueResponse = null;
         if(!locations.isEmpty()){
         	taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), uniqueIDString);
+        	logger.info("TaskQueueResponse : " + taskQueueResponse) ;
         }
         return  taskQueueResponse;
     }

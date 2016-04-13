@@ -1,5 +1,6 @@
 package qa.qcri.mm.api.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
@@ -29,6 +30,9 @@ public class ClientAppAnswerDaoImpl extends AbstractDaoImpl<ClientAppAnswer, Str
     
     @Override
     public void update(ClientAppAnswer clientAppAnswer) {
+    	if(clientAppAnswer.getCreated() == null ){
+    		clientAppAnswer.setCreated(new Date());
+    	}
         saveOrUpdate(clientAppAnswer);
     }
 
