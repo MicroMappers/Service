@@ -27,7 +27,7 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Transactional(readOnly = false)
     public void createTaskLog(TaskLog taskLog) {
         try{
-            taskLogDao.save(taskLog);
+            taskLogDao.createTaskLog(taskLog);
         }
         catch(Exception ex){
             System.out.println("createTaskLog exception : " + ex.getMessage());
@@ -39,7 +39,7 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Transactional(readOnly = false)
     public void updateTaskLog(TaskLog taskLog) {
         try{
-            taskLogDao.saveOrUpdate(taskLog);
+            taskLogDao.updateTaskLog(taskLog);
         }
         catch(Exception ex){
             System.out.println("updateTaskLog Exception: " + ex.getMessage());

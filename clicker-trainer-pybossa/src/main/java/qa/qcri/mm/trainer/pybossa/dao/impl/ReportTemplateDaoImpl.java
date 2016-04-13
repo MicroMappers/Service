@@ -1,11 +1,13 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.trainer.pybossa.dao.ReportTemplateDao;
 import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +30,9 @@ public class ReportTemplateDaoImpl extends AbstractDaoImpl<ReportTemplate, Strin
                 .add(Restrictions.eq("answer", reportTemplate.getAnswer())));
 
         if(templateList.size() == 0) {
+        	if(reportTemplate.getCreated() == null){
+        		reportTemplate.setCreated(new Date().toString());
+        	}
             save(reportTemplate);
         }
     }
@@ -38,6 +43,9 @@ public class ReportTemplateDaoImpl extends AbstractDaoImpl<ReportTemplate, Strin
         ReportTemplate reportItem = findByCriterionID(Restrictions.eq("reportTemplateID",reportTemplate.getReportTemplateID()));
         if(reportItem != null){
             reportItem.setStatus(reportTemplate.getStatus());
+            if(reportItem.getCreated() == null){
+            	reportItem.setCreated(new Date().toString());
+        	}
             saveOrUpdate(reportItem);
         }
     }

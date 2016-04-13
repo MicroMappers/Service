@@ -1,11 +1,13 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
 import qa.qcri.mm.trainer.pybossa.dao.TaskRunDao;
 import qa.qcri.mm.trainer.pybossa.entity.TaskRun;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,6 +44,9 @@ public class TaskRunDaoImpl extends AbstractDaoImpl<TaskRun, String> implements 
             TaskRun tr =  r.get(0);
             tr.setUpdateInfo(updateInfo);
             tr.setDuplicateInfo(duplicateInfo);
+            if(tr.getCreated() == null){
+            	tr.setCreated(new Date());
+            }
             saveOrUpdate(tr);
         }
         //To change body of implemented methods use File | Settings | File Templates.

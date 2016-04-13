@@ -1,5 +1,6 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -25,6 +26,9 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
 
     @Override
     public void createTaskQueue(TaskQueue taskQueue) {
+    	if(taskQueue.getCreated() == null){
+    		taskQueue.setCreated(new Date());
+    	}
         save(taskQueue);
     }
 
