@@ -45,7 +45,7 @@ public class TaskQueueServiceImpl implements TaskQueueService {
         queue.setUpdated(new Date());*/
 
         try{
-            taskQueueDao.createTaskQueue(taskQueue);
+            taskQueueDao.updateTaskQueue(taskQueue);
         }
         catch (Exception ex){
             System.out.println("updateTaskQueue Exception : " + ex.getMessage());
