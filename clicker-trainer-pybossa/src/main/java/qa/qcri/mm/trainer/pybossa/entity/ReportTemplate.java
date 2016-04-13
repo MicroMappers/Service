@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class ReportTemplate {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     @Column(name = "id")
     private Long reportTemplateID;
 

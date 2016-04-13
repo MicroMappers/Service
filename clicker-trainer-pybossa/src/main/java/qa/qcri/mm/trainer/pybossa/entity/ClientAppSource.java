@@ -1,6 +1,7 @@
 package qa.qcri.mm.trainer.pybossa.entity;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -69,7 +70,7 @@ public class ClientAppSource implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     @Column (name = "id", nullable = false)
     private Long clientAppSourceID;
 
