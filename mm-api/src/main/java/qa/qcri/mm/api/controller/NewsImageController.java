@@ -16,7 +16,7 @@ public class NewsImageController {
 	@Autowired
 	private NewsImageService newsImageService;
 	
-	@RequestMapping(value = "/start/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/start/{id}", method = RequestMethod.GET)
 	public String startGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
 		if(newsImageService.getGdeltPullStatus()){
 			return MessageConstants.SERVICE_ALREADY_RUNNING;
@@ -25,7 +25,7 @@ public class NewsImageController {
 		return MessageConstants.SUCCESS;
 	}
 	
-	@RequestMapping(value = "/stop/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/stop/{id}", method = RequestMethod.GET)
 	public String endGdeltPull(@PathVariable("id") long clientAppID) throws Exception {
 		newsImageService.stopFetchingDataFromGdelt(clientAppID);
 		return MessageConstants.SUCCESS;

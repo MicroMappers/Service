@@ -161,8 +161,8 @@ public class MicroMapsServiceImpl implements MicroMapsService {
     @Override
     public String getGeoClickerByClientAppAndAfterCreatedDate(Long clientAppID,Long createdDate) throws Exception{
 
-        List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
-        ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
+        //List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
+        //ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
 
         JSONObject geoClickerOutput = new JSONObject();
         JSONArray features = new JSONArray();
