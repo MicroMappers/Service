@@ -44,6 +44,7 @@ public class NewsImageServiceImpl implements NewsImageService {
 	
 	private static boolean gdeltPullStatus = false;
 	
+	@Override
 	public boolean getGdeltPullStatus() {
 		return gdeltPullStatus;
 	}
@@ -62,6 +63,7 @@ public class NewsImageServiceImpl implements NewsImageService {
 		
 		while(gdeltPullStatus){
             try {
+            	logger.warn("Gdelt Data Pulling Start");
             	String fileURL =  sendGet(gdeltURL);
 
                 if(fileURL.indexOf(gdeltFileExtension) > -1){
@@ -69,8 +71,12 @@ public class NewsImageServiceImpl implements NewsImageService {
                 	if(!duplicateFound) {
                 		List<NewsImage> newsImages = readDataFromFile(fileURL, clientAppID);
 	                	newsImageDao.saveAll(newsImages);
+	                	logger.warn("Gdelt Data Inserted.... ");
+                	} else {
+                		logger.warn("Gdelt Data Not Inserted due to duplicate ");
                 	}
                 }
+                //Thread.sleep(1000*60);
                 Thread.sleep(900000);
                 
             } catch (InterruptedException e) {

@@ -34,7 +34,7 @@ public class SyncWorker implements Worker {
             microMapperWorker.processTaskPublish();
             microMapperWorker.processTaskImport();
             microMapperWorker.processTaskExport();       
-            Thread.sleep(180000);
+            //Thread.sleep(180000);
         }
         catch (InterruptedException e) {
             Thread.currentThread().interrupt();
