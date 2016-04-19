@@ -134,16 +134,20 @@ public class CVSRemoteFileFormatter {
                 if(row.length == 8){
 
                     String tweetID = row[7];
-                    String tweet=row[1];
-                    String author=row[0];
-                    String lat=row[4];
-                    String lng=row[5];
-                    String imgURL = row[6];
-                    String created = row[2];
+                    // only for ecuator crisis fileter. temp. solution
+                    if(tweetID.equalsIgnoreCase("EQ-2016-000035-ECU")){
+                        String tweet=row[1];
+                        String author=row[0];
+                        String lat=row[4];
+                        String lng=row[5];
+                        String imgURL = row[6];
+                        String created = row[2];
 
 
-                    MicromapperInput source = new MicromapperInput(tweetID, tweet, author, lat, lng, imgURL, created);
-                    sourceSet.add(source);
+                        MicromapperInput source = new MicromapperInput(tweetID, tweet, author, lat, lng, imgURL, created);
+                        sourceSet.add(source);
+                    }
+
                 }
 
                 if(row.length == 10){
@@ -157,7 +161,6 @@ public class CVSRemoteFileFormatter {
                     String created = row[2];
                     String answer = row[8];
                     String documentID = row[9];
-
 
                     MicromapperInput source = new MicromapperInput(tweetID, tweet, author, lat, lng, imgURL, created, answer, documentID);
 
