@@ -63,13 +63,17 @@ public class NewsImageServiceImpl implements NewsImageService {
 		
 		while(gdeltPullStatus){
             try {
+            	logger.warn("*****************************************************************");
             	logger.warn("Gdelt Data Pulling Start");
             	String fileURL =  sendGet(gdeltURL);
-
+            	
+            	logger.warn("Fetched URL: "+fileURL);
                 if(fileURL.indexOf(gdeltFileExtension) > -1){
                 	boolean duplicateFound = clientAppSourceService.addExternalDataSouceWithClientAppID(fileURL, clientAppID);
                 	if(!duplicateFound) {
+                		logger.warn("Will insert data into clientapp");
                 		List<NewsImage> newsImages = readDataFromFile(fileURL, clientAppID);
+                		logger.warn("news image will insert: "+ newsImages == null? 0 : newsImages.size());
 	                	newsImageDao.saveAll(newsImages);
 	                	logger.warn("Gdelt Data Inserted.... ");
                 	} else {

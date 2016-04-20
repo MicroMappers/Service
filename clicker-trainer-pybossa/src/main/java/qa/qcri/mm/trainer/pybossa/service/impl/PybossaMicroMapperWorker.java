@@ -553,8 +553,8 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         return isProcessed;
     }
 
-    private void publishToPybossa(ClientApp currentClientApp, List<MicromapperInput> micromapperInputList, Long clientAppSourceID){
-        try {
+    private void publishToPybossa(ClientApp currentClientApp, List<MicromapperInput> micromapperInputList, Long clientAppSourceID) throws Exception{
+        //try {
             List<String> aidr_data = pybossaFormatter.assemblePybossaTaskPublishForm(micromapperInputList, currentClientApp);
 
             for (String temp : aidr_data) {
@@ -570,9 +570,9 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                 }
             }
             // data is consumed. need to mark as completed not to process anymore.
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        }*/
     }
 
     private void addToTaskQueue(String inputData, Long clientAppID, Integer status, Long clientAppSourceID){

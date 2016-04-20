@@ -142,14 +142,17 @@
             	
             	$.ajax({
                     url: MicroMaps.config.ROOT + "isadmin",
-                    success: function(data) {
-                    	if(data != true) {
-                    		$(".adminDiv").remove();
+                    success: function(response) {
+                    	if(response.data == "NOT_ADMIN") {
+                    		_this.load();
+                    	} else if (response.data == "ADMIN") {
+                    		$(".adminDiv").show();
+                    		_this.load();
+                    	} else {
+                    		$("#login-modal").show();
                     	}
                     }
             	});
-            	
-                _this.load();
                 return this;
             };
 
@@ -169,11 +172,12 @@
 
                 $.ajax({
                     url: MicroMaps.config.API + "crisis",
+                    url: "/MMAPI/rest/micromaps/JSON/crisis",
                     //url: "../data/crisisSample.json",
-                    dataType: "jsonp",
-                    jsonpCallback:"jsonp",
+                    dataType: "json",
+                    //jsonpCallback:"jsonp",
                     success: function(data) {
-
+                    	//console.log(data);
 
                         var sorted = data.sort(function (a, b) {
                             if (a.type > b.type) { return 1; }

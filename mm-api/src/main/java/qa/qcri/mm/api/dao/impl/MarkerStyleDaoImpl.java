@@ -18,7 +18,11 @@ public class MarkerStyleDaoImpl extends AbstractDaoImpl<MarkerStyle, String> imp
         super(MarkerStyle.class);
     }
 
-
+    @Override
+    public List<MarkerStyle> getAllMarkerStyle() {
+        return getAll();
+    }
+    
     @Override
     public List<MarkerStyle> findByAppType(String appType) {
 
