@@ -53,17 +53,18 @@ public class MicroMapperPybossaFormatter {
         while(itr.hasNext()){
             MicromapperInput micromapperInput = (MicromapperInput)itr.next();
             JSONObject info = assemblePybossaInfoFormat(micromapperInput, clientApp) ;
-
-            JSONObject tasks = new JSONObject();
-
-            tasks.put("info", info);
-            tasks.put("n_answers", clientApp.getTaskRunsPerTask());
-            tasks.put("quorum", clientApp.getQuorum());
-            tasks.put("calibration", new Integer(0));
-            tasks.put("project_id", clientApp.getPlatformAppID());
-            tasks.put("priority_0", new Integer(0));
-
-            outputFormatData.add(tasks.toJSONString());
+            
+            if(info != null) {
+            	JSONObject tasks = new JSONObject();
+	            tasks.put("info", info);
+	            tasks.put("n_answers", clientApp.getTaskRunsPerTask());
+	            tasks.put("quorum", clientApp.getQuorum());
+	            tasks.put("calibration", new Integer(0));
+	            tasks.put("project_id", clientApp.getPlatformAppID());
+	            tasks.put("priority_0", new Integer(0));
+	
+	            outputFormatData.add(tasks.toJSONString());
+            }
 
         }
 
@@ -98,11 +99,16 @@ public class MicroMapperPybossaFormatter {
     }
 
     private JSONObject createNonGeoClickerInfo(JSONObject pybossaData, MicromapperInput micromapperInput ){
-
+    	//logger.warn(micromapperInput);
         if(micromapperInput.getDocumentID() != null && micromapperInput.getAnswer()!=null){
-            pybossaData.put("tweet_category",micromapperInput.getAnswer());
-            long docID = Long.parseLong(micromapperInput.getDocumentID()) ;
-            pybossaData.put("documentID", docID);
+        	logger.warn("parsing document ID");
+            try {
+				pybossaData.put("tweet_category",micromapperInput.getAnswer());
+				long docID = Long.parseLong(micromapperInput.getDocumentID()) ;
+				pybossaData.put("documentID", docID);
+			} catch (NumberFormatException e) {
+				return null;
+			}
         }
 
 

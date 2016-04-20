@@ -223,4 +223,15 @@ public class MicromapperInput {
     public void setDocumentID(String documentID) {
         this.documentID = documentID;
     }
+	@Override
+	public String toString() {
+		return "MicromapperInput [tweetID=" + tweetID + ", tweet=" + tweet
+				+ ", author=" + author + ", lat=" + lat + ", lng=" + lng
+				+ ", url=" + url + ", created=" + created + ", answer="
+				+ answer + ", geo=" + geo + ", mediaSize=" + mediaSize
+				+ ", mediasSource=" + mediasSource + ", glide=" + glide
+				+ ", link=" + link + ", where=" + where + ", who=" + who
+				+ ", lang=" + lang + ", documentID=" + documentID + "]";
+	}
+    
 }
