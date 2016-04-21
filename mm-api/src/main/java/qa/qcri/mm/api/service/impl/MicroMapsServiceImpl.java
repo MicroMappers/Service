@@ -119,7 +119,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 	@Override
     public JSONArray getAllCrisisJSONP() throws Exception {
     	//TODO: Fetch all crisis instead of a particular crisis
-        List<Crisis> crisises = crisisDao.findCrisisByCrisisID(1596l); //crisisDao.getAllCrisis();
+        List<Crisis> crisises = /*crisisDao.findCrisisByCrisisID(1596l);*/ crisisDao.getAllCrisis();
         List<MarkerStyle> allMarkerStyle = markerStyleDao.getAllMarkerStyle();
         Map<Long, MarkerStyle> markerStyleMapByClientAppId = new HashMap<>();
         for(MarkerStyle markerStyle : allMarkerStyle){
