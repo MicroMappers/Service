@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.http.HttpHeaders;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import qa.qcri.mm.api.service.NewsImageService;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Service("newsImageService")
+@Transactional
 public class NewsImageServiceImpl implements NewsImageService {
 
 	protected static Logger logger = Logger.getLogger(NewsImageService.class);
@@ -54,6 +57,11 @@ public class NewsImageServiceImpl implements NewsImageService {
 	public void stopFetchingDataFromGdelt(Long clientAppID) {
 		this.gdeltPullStatus = false;
 	}
+	
+	@Override
+	public Long save(NewsImage newsImage) {
+		return newsImageDao.save(newsImage);
+	}
 
 	@SuppressWarnings("static-access")
 	@Override
@@ -80,8 +88,8 @@ public class NewsImageServiceImpl implements NewsImageService {
                 		logger.warn("Gdelt Data Not Inserted due to duplicate ");
                 	}
                 }
-                //Thread.sleep(1000*60);
-                Thread.sleep(900000);
+                Thread.sleep(1000*60);
+                //Thread.sleep(900000);
                 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

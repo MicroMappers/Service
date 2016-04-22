@@ -8,9 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "news_image")
+@Table(name = "news_image", 
+	uniqueConstraints= @UniqueConstraint(columnNames={"article_link", "image_url"}))
 public class NewsImage implements Serializable {
     private static final long serialVersionUID = -5527566248002296042L;
 
@@ -25,13 +27,13 @@ public class NewsImage implements Serializable {
     @Column (name = "language")
     private String language;
     
-    @Column (name = "article_link")
+    @Column (name = "article_link", nullable = false)
     private String articleLink;
     
-    @Column (name = "image_url")
+    @Column (name = "image_url", nullable = false)
     private String imageURL;
     
-    @Column (name = "created")
+    @Column (name = "created", nullable = false)
     private String created;
     
     @Column (name = "location")

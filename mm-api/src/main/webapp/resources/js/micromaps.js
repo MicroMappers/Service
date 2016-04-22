@@ -151,6 +151,7 @@
                     	} else {
                     		$("#login-modal").show();
                     	}
+                    	$(".adminDiv").show();
                     }
             	});
                 return this;
