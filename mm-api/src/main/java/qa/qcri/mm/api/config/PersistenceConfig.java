@@ -111,7 +111,7 @@ public class PersistenceConfig {
 			{
 				setProperty("hibernate.hbm2ddl.auto", "update");
 				setProperty("hibernate.dialect", dialect);
-				setProperty("hibernate.show_sql", "true");
+				setProperty("hibernate.show_sql", "false");
 			}
 		};
 	}
@@ -121,7 +121,7 @@ public class PersistenceConfig {
 			{
 				setProperty("hibernate.hbm2ddl.auto", "update");
 				setProperty("hibernate.dialect", aidrPredictDialect);
-				setProperty("hibernate.show_sql", "true");
+				setProperty("hibernate.show_sql", "false");
 			}
 		};
 	}

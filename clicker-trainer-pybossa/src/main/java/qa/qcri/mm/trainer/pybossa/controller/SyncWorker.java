@@ -31,10 +31,12 @@ public class SyncWorker implements Worker {
 		logger.info("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
 
         try {
+            /**/
             microMapperWorker.processTaskPublish();
             microMapperWorker.processTaskImport();
-            microMapperWorker.processTaskExport();       
-            //Thread.sleep(180000);
+            microMapperWorker.processTaskExport();
+             /**/
+            Thread.sleep(180000);
         }
         catch (InterruptedException e) {
             Thread.currentThread().interrupt();
