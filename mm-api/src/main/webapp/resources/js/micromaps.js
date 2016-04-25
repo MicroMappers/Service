@@ -23,7 +23,7 @@
 
     MicroMaps.maps = (function () {
         function _Map() {
-            $.log("initializing MicroMapping");
+            //$.log("initializing MicroMapping");
             /**
             * In non-strict mode, 'this' is bound to the global scope when it isn't bound to anything else.
             * In strict mode it is 'undefined'. That makes it an error to use it outside of a method.
@@ -58,7 +58,7 @@
                 $( document ).tooltip({ track: true });
 
                 $(MicroMaps.config.SidebarHeader).on( 'click', function () {
-                    $.log('closing Sidebar');
+                    //$.log('closing Sidebar');
                     sidebar.close();
                 });
 
@@ -69,7 +69,7 @@
             */
             _this.setupMap = function () {
 
-                $.log("initializing Mapview");
+                //$.log("initializing Mapview");
 
                 // map = L.map('map', {
                 //     'zoomControl': false
@@ -126,12 +126,12 @@
 
     MicroMaps.Crisis = (function () {
         function _Crisis () {
-            $.log("initializing MicroMapping Crisis Management");
+            //$.log("initializing MicroMapping Crisis Management");
             var _this = this;
 
-            var activeCrisis = {};
+            //var activeCrisis = {};
             var _crisis = [];
-            var layerLayer = {};
+            //var layerLayer = {};
             var CrisisList = {};
             var crisisIdMap = {};
             var crisisTreeMap = {};
@@ -139,17 +139,21 @@
             var map = MicroMaps.maps;
 
             _this.init = function () {
-            	
+            	$('#loading-widget').show();
             	$.ajax({
                     url: MicroMaps.config.ROOT + "isadmin",
-                    success: function(data) {
-                    	if(data != true) {
-                    		$(".adminDiv").remove();
+                    success: function(response) {
+                    	if(response.data == "NOT_ADMIN") {
+                    		_this.load();
+                    	} else if (response.data == "ADMIN") {
+                    		$(".adminDiv").show();
+                    		_this.load();
+                    	} else {
+                    		$('#loading-widget').hide();
+                    		$("#login-modal").show();
                     	}
                     }
             	});
-            	
-                _this.load();
                 return this;
             };
 
@@ -169,11 +173,8 @@
 
                 $.ajax({
                     url: MicroMaps.config.API + "crisis",
-                    //url: "../data/crisisSample.json",
-                    dataType: "jsonp",
-                    jsonpCallback:"jsonp",
+                    dataType: "json",
                     success: function(data) {
-
 
                         var sorted = data.sort(function (a, b) {
                             if (a.type > b.type) { return 1; }
@@ -192,7 +193,7 @@
                         });
 
                         var vanuatuRealTime = {label: "Vanuatu Real Time", category: "Aerial", status: 0, clientId: 1, otherItem: {type: 'Aerial', crisisID: 3}};
-                        CrisisList.push(vanuatuRealTime);
+                        //CrisisList.push(vanuatuRealTime);
 
                         _this.populateMap(CrisisList);
                         _this.populateCrisis(crisisIdMap);
@@ -227,7 +228,7 @@
                     crisisIdMap[val.otherItem.crisisID].push(val);
                   }
                 });
-            }
+            };
 
             _this.getClickerIcon = function(clicker){
                if(clicker == "Text"){
@@ -239,11 +240,11 @@
                }else if(clicker == "Aerial"){
                 return "fa fa-plane" ;
                }
-            }
+            };
 
             _this.detailMap = function(node) {
               window.open('https://api.mapbox.com/v4/uaviators.ogigbhbh/page.html?access_token=pk.eyJ1IjoidWF2aWF0b3JzIiwiYSI6IlpqZEx2UzgifQ.o6vACHfsO6CTk2yluUZwUA#17/-19.53226/169.26823', '_blank');
-            }
+            };
 
             _this.downloadGeoJson = function(node){
                 $('#loading-widget').show();
@@ -255,8 +256,7 @@
                 }
                 $.ajax({
                     url: url,
-                    dataType: "jsonp",
-                    jsonpCallback:"jsonp",
+                    dataType: "json",
                     success: function(response) {
                        $('#loading-widget').hide();
                        window.open(MicroMaps.config.HOST + response.dwonloadPath);
@@ -266,11 +266,11 @@
                       toastr.error("Only admin can able to download.");
                     }
                 });
-            }
+            };
 
             _this.downloadKML = function(node){
                 $('#loading-widget').show();
-                var API = MicroMaps.config.API.replace("JSONP", "kml")
+                var API = MicroMaps.config.API.replace("JSON", "kml");
                 $.ajax({
                     url: API + node.type.toLowerCase() + "/id/" + node.clientId,
                     dataType: "xml",
@@ -293,16 +293,14 @@
                       $('#loading-widget').hide();
                     }
                 });
-            }
+            };
 
             _this.addMarkersToLayer = function(crisisType, clientId, crisisID, crisisName, processStartTime){
 
                   var API = MicroMaps.config.API;
                   $.ajax({
-                      //url: "../data/" + "2601.json",
                       url: API + "geojson/id/" + clientId + "/createdDate/" + processStartTime,
-                      dataType: "jsonp",
-                      jsonpCallback:"jsonp",
+                      dataType: "json",
                       success: function(response) {
                           if(response.features.length <= 0){
                             return;
@@ -389,7 +387,7 @@
                                         cc++;
                                         layer.options.bounceOnAdd = false;
                                       });
-                                    }
+                                    };
                                     markerClusterGroup.addLayer(layer);
                                 }
                             });
@@ -433,17 +431,17 @@
                       }
                   });
 
-            }
+            };
 
             _this.populateCrisis = function(crisisIdMap){
 
               var socket = new Pusher('1eb98c94c2976297709d',{
                 encrypted: true
               });
-              var my_channel = socket.subscribe('micromaps');
+              socket.subscribe('micromaps');
               socket.bind('location_added',
                 function(data) {
-                  _this.addMarkersToLayer(data.clickerType, data.clientAppID, data.crisisID, data.crisisName, data.processStartTime)
+                  _this.addMarkersToLayer(data.clickerType, data.clientAppID, data.crisisID, data.crisisName, data.processStartTime);
                 }
               );
 
@@ -470,7 +468,7 @@
                           _this.detailMap(_this.downloadNode);
                         }
                     }
-                }
+                };
 
                  if (node.id == '1') {
                      delete items.kml;
@@ -479,7 +477,7 @@
                  }
 
                 return items;
-            }
+            };
 
               var crisisTreeJson = {
                   "plugins" : ["checkbox", "sort", "contextmenu"],
@@ -494,7 +492,7 @@
                   "contextmenu": {
                       'items' : customMenu
                   }
-              }
+              };
 
               var crisisArrJSON = [];
               $.each(crisisIdMap, function(crisisID, crisisClickers){
@@ -529,7 +527,7 @@
                             "clientId" : crisisClicker.clientId,
                             "crisisName" : crisisClicker.label,
                             "level" : "label"
-                        }
+                        };
                         labels.push(label);
                       });
                     }
@@ -544,9 +542,9 @@
                       "id" : crisisClickers[0].otherItem.crisisID,
                       "crisisName" : crisisClickers[0].label,
                       "children" : clickers
-                  }
+                  };
                   crisisArrJSON.push(clickerJson);
-              })
+              });
               crisisTreeJson.core.data = crisisArrJSON;
               $('#crisesView').jstree(crisisTreeJson);
 
@@ -581,17 +579,17 @@
                 }
               });
 
-            }
+            };
 
             _this.replaceURLWithHTMLLinks = function(text) {
                 var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
                 return text.replace(exp,"<a target='_blank' href='$1'>$1</a>");
-            }
+            };
 
             _this.loadLayer = function(data, crisisType, clientId, labelCode, crisisID, crisisName){
                 if(data.selected.indexOf(data.node.id) >= 0 && (crisisTreeMap[crisisID] == null || crisisTreeMap[crisisID][clientId] == null)){
                   $('#loading-widget').show();
-                  var API = crisisType.toLowerCase() == "video" ? MicroMaps.config.API.replace("JSONP", "file") : MicroMaps.config.API;
+                  var API = crisisType.toLowerCase() == "video" ? MicroMaps.config.API.replace("JSON", "file") : MicroMaps.config.API;
 
                   if(clientId == 1){
                     var url = "resources/json/vanuatu_real_time.json";
@@ -615,11 +613,8 @@
                   }
 
                   $.ajax({
-                      //url: "../data/" + crisisID + ".json",
-                      //url: "../data/" + "260.json",
                       url: API + crisisType.toLowerCase() + "/id/" + clientId,
-                      dataType: "jsonp",
-                      jsonpCallback:"jsonp",
+                      dataType: "json",
                       success: function(response) {
                           if(response.features.length <= 0){
                               toastr.warning("<b>"+ crisisName + "</b><br/>" + crisisType + " clicker locations not Found.");
@@ -721,20 +716,23 @@
                   });
                 } else {
                   if ( data.selected.indexOf(data.node.id) < 0){
+                	// Clicker is uncheked
                     if(clientId == 1){
                       map.defaultView();
                       return;
                     }
                     if(labelCode != null){
                       if(crisisTreeMap[crisisID][clientId][labelCode] != null){
-                        var crisisLayer = crisisTreeMap[crisisID][clientId][labelCode].crisisLayer
+                        var crisisLayer = crisisTreeMap[crisisID][clientId][labelCode].crisisLayer;
                         map.removeLayer(crisisLayer);
                       }
                     } else {
-                      var crisisLayers = crisisTreeMap[crisisID][clientId]
-                      $.each(crisisLayers, function(labelCode, data){
-                        map.removeLayer(data.crisisLayer);
-                      });
+                      var crisisLayers = crisisTreeMap[crisisID][clientId];
+                      if(crisisLayers) {
+	                      $.each(crisisLayers, function(labelCode, data){
+	                        map.removeLayer(data.crisisLayer);
+	                      });
+                      }
                     }
                     var bounds = eval(crisisIdMap[crisisID][0].otherItem.bounds);
                     var northEast = L.latLng(bounds[3], bounds[2]);
@@ -744,12 +742,12 @@
                     toastr.info("<b>"+ crisisName + "</b><br/>" + crisisType + " clicker locations Added to Map.");
                     if(labelCode != null){
                       if(crisisTreeMap[crisisID][clientId][labelCode] != null){
-                        var crisisLayer = crisisTreeMap[crisisID][clientId][labelCode].crisisLayer
+                        var crisisLayer = crisisTreeMap[crisisID][clientId][labelCode].crisisLayer;
                         map.addLayer(crisisLayer);
                         map.fitBounds(crisisLayer);
                       }
                     } else {
-                      var crisisLayers = crisisTreeMap[crisisID][clientId]
+                      var crisisLayers = crisisTreeMap[crisisID][clientId];
                       $.each(crisisLayers, function(labelCode, data){
                         map.addLayer(data.crisisLayer);
                         map.fitBounds(data.crisisLayer);
@@ -757,7 +755,7 @@
                     }
                   }
                 }
-            }
+            };
             _this.getIconByType = function (crisis_type) {
               if(crisis_type.toLowerCase() == "text"){
                 return "text-width";
@@ -768,7 +766,7 @@
               } else if(crisis_type.toLowerCase() == "aerial"){
                 return "plane";
               }
-            }
+            };
 
             _this.getEmbedUrl = function(origUrl) {
                 if (origUrl.match(/youtube/)) {
@@ -779,7 +777,7 @@
                     return "http://player.vimeo.com/video/" + vid;
                 }
                 return origUrl;
-            }
+            };
 
             _this.renderAerialMap = function(e, feature){
                 $('#map_task1').remove();
@@ -794,11 +792,11 @@
                 var currentGeoBoundsArray = eval(feature.properties.bounds);
                 //var currentGeoBoundsArray =  [125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036];
 
-                var southWest1 = L.latLng(currentGeoBoundsArray[3],currentGeoBoundsArray[2]),
+                /*var southWest1 = L.latLng(currentGeoBoundsArray[3],currentGeoBoundsArray[2]),
                  northEast1 = L.latLng(currentGeoBoundsArray[1],currentGeoBoundsArray[0]),
                  bounds1 = L.latLngBounds(southWest1, northEast1);
 
-                var centerPoint1 = bounds1.getCenter();
+                var centerPoint1 = bounds1.getCenter();*/
 
                 var selectedMap = L.map("map_" + divIndex,{maxZoom:32, minZoom:14}).setView([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], 21);
                 var imageBounds = [[currentGeoBoundsArray[3], currentGeoBoundsArray[2]], [currentGeoBoundsArray[1], currentGeoBoundsArray[0]]];
@@ -832,7 +830,7 @@
                         }
                     }
                 }).addTo(selectedMap);
-            }
+            };
 
             return _this.init(); /*initialize the init()*/
         }

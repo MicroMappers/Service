@@ -23,9 +23,9 @@
 		aerialContainer : "#aerial .content",
 		threeWContainer : "#3w .content",
 
-		API : "/MMAPI/rest/micromaps/JSONP/",
+		API : "/MMAPI/rest/micromaps/JSON/",
 		ROOT : "/MMAPI/rest/",
-		HOST : "http://199.223.234.225/",
+		HOST : "http://gis.micromappers.org/MMAPI/",
 		datasource : "../../data/",
 
 		image: "Image",

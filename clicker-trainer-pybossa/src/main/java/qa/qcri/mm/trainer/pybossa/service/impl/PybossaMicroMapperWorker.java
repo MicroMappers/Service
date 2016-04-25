@@ -213,10 +213,10 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
    								responseObject.put("properties", propertyObject);
    								responseArray.remove(0);
    								responseArray.add(responseObject);
-   								System.out.println("------------------------------------------------------");
-   								System.out.println("TaskQueueId: " + taskQueueResponse.getTaskQueueID()
+   								logger.info("------------------------------------------------------");
+   								logger.info("TaskQueueId: " + taskQueueResponse.getTaskQueueID()
    										+ " Processed.....");
-   								System.out.println(responseArray);
+   								logger.info(responseArray);
    								taskQueueResponse.setResponse(responseArray.toJSONString());
    								clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
    								isProcessed = true;
@@ -230,9 +230,9 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         			JSONArray responseArray = new JSONArray();
         			JSONObject responseObject = (JSONObject)parser.parse(taskQueueResponse.getResponse());
         			responseArray.add(responseObject);
-					System.out.println("------------------------------------------------------");
-					System.out.println("TaskQueueId: " + taskQueueResponse.getTaskQueueID() + "Not Processed.....");
-					System.out.println(responseArray);
+					logger.info("------------------------------------------------------");
+					logger.info("TaskQueueId: " + taskQueueResponse.getTaskQueueID() + "Not Processed.....");
+					logger.info(responseArray);
 					taskQueueResponse.setResponse(responseArray.toJSONString());
 					//clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
         		}
@@ -275,10 +275,10 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         					
         					if (markerStyleForResponse != null) {
 								responseObject.put("properties", propertyObject);
-								System.out.println("------------------------------------------------------");
-								System.out.println("TaskQueueId: " + taskQueueResponse.getTaskQueueID()
+								logger.info("------------------------------------------------------");
+								logger.info("TaskQueueId: " + taskQueueResponse.getTaskQueueID()
 										+ " Processed.....");
-								System.out.println(responseObject);
+								logger.info(responseObject);
 								taskQueueResponse.setResponse(responseObject.toJSONString());
 								clientAppResponseService.processTaskQueueResponse(taskQueueResponse);
 								break;
@@ -313,12 +313,12 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 
     @Override
     public void processTaskPublish() throws Exception{
-        System.out.println("processTaskPublish is starting");
+        logger.info("processTaskPublish is starting");
         setClassVariable();
 
         
         if(client == null){
-            System.out.println(   "client IS NULL");
+            logger.info(   "client IS NULL");
             return;
         }
 
@@ -328,9 +328,9 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             for(int i=0; i < appList.size(); i++){
 
                 ClientApp currentClientApp =  appList.get(i);
-                System.out.println(   "clientApp processTaskPublish currentClientApp : " +  currentClientApp.getShortName());
+                logger.info(   "clientApp processTaskPublish currentClientApp : " +  currentClientApp.getShortName());
                 List<ClientAppSource> datasources = clientAppSourceService.getClientAppSourceByStatus(currentClientApp.getClientAppID(), StatusCodeType.EXTERNAL_DATA_SOURCE_ACTIVE);
-                System.out.println(   "clientApp processTaskPublish datasources : " +  datasources.size());
+                logger.info(   "clientApp processTaskPublish datasources : " +  datasources.size());
                 for(int j=0; j < datasources.size(); j++){
 
                     List<MicromapperInput> micromapperInputList = null;
@@ -390,10 +390,6 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             ClientApp clientApp = (ClientApp)itr.next();
             
             List<Crisis> crises = crisisDao.getClientAppCrisisDetail(clientApp.getClientAppID());
-            if(clientApp.getAppType() != 4 && clientApp.getAppType() != 5){
-            	continue;
-            }
-           
 
             if(clientApp.getStatus().equals(StatusCodeType.MICROMAPPER_ONLY)){
                 List<TaskQueue> taskQueues =  taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(),StatusCodeType.TASK_PUBLISHED);
@@ -476,7 +472,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                 for(int i=0; i < queueSize; i++){
                     TaskQueue taskQueue = taskQueues.get(i);
                     Long taskID =  taskQueue.getTaskID();
-                    System.out.println("taskID :" + taskID);
+                    logger.info("taskID :" + taskID);
                     //String taskQueryURL = PYBOSSA_API_TASK_BASE_URL + clientApp.getPlatformAppID() + "&id=" + taskID;
                     //String inputData = pybossaCommunicator.sendGet(taskQueryURL);
                     try {
@@ -520,6 +516,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             }
             else if(clientApp.getAppType().equals(StatusCodeType.APP_MAP))
             {
+            	logger.info("processing image : "+ clientApp.getClientAppID());
                 Crisis c = this.getCrisisDetail(clientApp);
                 MarkerStyle style = this.getMarkerStyleForClientApp(clientApp, c);
                 ClientAppSource clientAppSource = clientAppSourceService.getClientAppSourceByClientAppID(taskQueue.getClientAppSourceID());
@@ -553,8 +550,8 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         return isProcessed;
     }
 
-    private void publishToPybossa(ClientApp currentClientApp, List<MicromapperInput> micromapperInputList, Long clientAppSourceID){
-        try {
+    private void publishToPybossa(ClientApp currentClientApp, List<MicromapperInput> micromapperInputList, Long clientAppSourceID) throws Exception{
+        //try {
             List<String> aidr_data = pybossaFormatter.assemblePybossaTaskPublishForm(micromapperInputList, currentClientApp);
 
             for (String temp : aidr_data) {
@@ -570,9 +567,9 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
                 }
             }
             // data is consumed. need to mark as completed not to process anymore.
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        }*/
     }
 
     private void addToTaskQueue(String inputData, Long clientAppID, Integer status, Long clientAppSourceID){
@@ -580,7 +577,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
             Object obj = parser.parse(inputData);
             JSONObject jsonObject = (JSONObject) obj;
 
-            System.out.println("addToTaskQueue : " + inputData);
+            logger.info("addToTaskQueue : " + inputData);
 
             Long taskID  = (Long)jsonObject.get("id");
             JSONObject info = (JSONObject)jsonObject.get("info");
@@ -606,10 +603,10 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
     private void searchUpdateNextAvailableAppSource(Long clientAppID){
         List<ClientAppSource> sourceList =  clientAppSourceService.getClientAppSourceByStatus(clientAppID, StatusCodeType.EXTERNAL_DATA_SOURCE_UPLOADED);
 
-        System.out.println("searchUpdateNextAvailableAppSource : " +sourceList.size());
+        logger.info("searchUpdateNextAvailableAppSource : " +sourceList.size());
 
         if(sourceList.size() > 0){
-            System.out.println("searchUpdateNextAvailableAppSource2 : " + sourceList.get(0).getClientAppSourceID());
+            logger.info("searchUpdateNextAvailableAppSource2 : " + sourceList.get(0).getClientAppSourceID());
             clientAppSourceService.updateClientAppSourceStatus(sourceList.get(0).getClientAppSourceID(), StatusCodeType.EXTERNAL_DATA_SOURCE_ACTIVE);
         }
     }

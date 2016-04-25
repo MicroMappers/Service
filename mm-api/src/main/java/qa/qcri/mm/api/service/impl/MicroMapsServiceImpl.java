@@ -7,7 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -116,23 +118,22 @@ public class MicroMapsServiceImpl implements MicroMapsService {
     @SuppressWarnings("unchecked")
 	@Override
     public JSONArray getAllCrisisJSONP() throws Exception {
-
-        List<Crisis> crisises = crisisDao.getAllCrisis();
+    	//TODO: Fetch all crisis instead of a particular crisis
+        List<Crisis> crisises = /*crisisDao.findCrisisByCrisisID(1596l);*/ crisisDao.getAllCrisis();
+        List<MarkerStyle> allMarkerStyle = markerStyleDao.getAllMarkerStyle();
+        Map<Long, MarkerStyle> markerStyleMapByClientAppId = new HashMap<>();
+        for(MarkerStyle markerStyle : allMarkerStyle){
+        	markerStyleMapByClientAppId.put(markerStyle.getClientAppID(), markerStyle);
+        }
+        
         JSONArray models = new JSONArray();
 
-        //String filePath = "http://ec2-54-148-39-119.us-west-2.compute.amazonaws.com:8080/MMAPI/rest/micromaps";
-       //http://ec2-54-148-39-119.us-west-2.compute.amazonaws.com:8080/MMAPI/rest/micromaps/JSON/aerial/id/254
-
         for(Crisis c : crisises){
-            //String geoJson = filePath + File.separator + "JSON" + File.separator + c.getClickerType().toLowerCase() + File.separator + "id" + File.separator + c.getClientAppID() ;
-            //String kml = filePath + File.separator + "kml" + File.separator + c.getClickerType().toLowerCase() + File.separator + "id" + File.separator + c.getClientAppID() ;
-
-            MarkerStyle aStyle = this.getClientAppMarkerStyle(c);
+            MarkerStyle aStyle = markerStyleMapByClientAppId.get(c.getClientAppID()); //this.getClientAppMarkerStyle(c);
 
             JSONObject aObject = new JSONObject();
             aObject.put("clientAppID",c.getClientAppID()) ;
             aObject.put("crisisID",c.getCrisisID()) ;
-            //aObject.put("crisis",c.getCrisisName()) ;
             aObject.put("name",c.getDisplayName()) ;
             aObject.put("type",c.getClickerType()) ;
             aObject.put("bounds", c.getBounds());
@@ -145,9 +146,6 @@ public class MicroMapsServiceImpl implements MicroMapsService {
                 aObject.put("activationEnd",c.getActivationEnd().toString()) ;
                 aObject.put("status", 0);
             }
-
-            //aObject.put("geoJsonLink",geoJson) ;
-            //aObject.put("kmlLink",kml) ;
             JSONObject aStyleJson = null;
             if(aStyle != null) {
             	aStyleJson = (JSONObject)parser.parse(aStyle.getStyle());

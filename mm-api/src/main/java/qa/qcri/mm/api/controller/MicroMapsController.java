@@ -62,7 +62,7 @@ public class MicroMapsController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")	
-	@RequestMapping(value = "/JSONP/download/geojson/id/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/JSON/download/geojson/id/{id}", method = RequestMethod.GET)
 	public String downloadGeojson(@PathVariable("id") long id) throws Exception {
 		String path = URLReference.GEOJSON_HOME + "app/download/";
 		String dwonloadPath = "app/download/";
@@ -87,7 +87,7 @@ public class MicroMapsController {
 				microMapsService.createZip(zipFileName, jsonFileName, id + ".json");
 			}
 		}
-		return "jsonp({\"dwonloadPath\" : \"" + dwonloadPath + "\"});";
+		return "{\"dwonloadPath\" : \"" + dwonloadPath + "\"};";
 	}
 
 	@RequestMapping(value = "/JSON/crisis", method = RequestMethod.GET)
@@ -95,10 +95,10 @@ public class MicroMapsController {
 		return microMapsService.getAllCrisisJSONP().toJSONString();
 	}
 	
-	@RequestMapping(value = "/JSONP/crisis", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/JSONP/crisis", method = RequestMethod.GET)
 	public String getAllCrisisJSONP() throws Exception {
 		return "jsonp(" + microMapsService.getAllCrisisJSONP().toJSONString() + ");";
-	}
+	}*/
 
 	@RequestMapping(value = "/JSONP/crisis/apps/id/{id}", method = RequestMethod.GET)
 	public String getAppsByCrisisJSONP(@PathVariable("id") long id) throws Exception {
@@ -110,32 +110,32 @@ public class MicroMapsController {
 		return microMapsService.getGeoClickerByClientApp(id);
 	}
 
-	@RequestMapping(value = "/JSONP/text/id/{id}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/JSONP/text/id/{id}", method = RequestMethod.GET)
 	public String getAllTextJSONP(@PathVariable("id") long id) throws Exception {
 		return "jsonp(" + microMapsService.getGeoClickerByClientApp(id) + ");";
-	}
+	}*/
 
 	@RequestMapping(value = "/JSON/image/id/{id}", method = RequestMethod.GET)
 	public String getAllImageJSON(@PathVariable("id") long id) throws Exception {
 		return microMapsService.getGeoClickerByClientApp(id);
 	}
 
-	@RequestMapping(value = "/JSONP/image/id/{id}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/JSONP/image/id/{id}", method = RequestMethod.GET)
 	public String getAllImageJSONP(@PathVariable("id") long id) throws Exception {
 		return "jsonp(" + microMapsService.getGeoClickerByClientApp(id) + ");";
-	}
+	}*/
 
 	@RequestMapping(value = "/JSON/aerial/id/{id}", method = RequestMethod.GET)
 	public String getAllAerialJSON(@PathVariable("id") long id) throws Exception {
 		return microMapsService.getGeoClickerByClientApp(id);
 	}
 
-	@RequestMapping(value = "/JSONP/aerial/id/{id}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/JSONP/aerial/id/{id}", method = RequestMethod.GET)
 	public String getAllAerialJSONP(@PathVariable("id") long id) throws Exception {
 		return "jsonp(" + microMapsService.getGeoClickerByClientApp(id) + ");";
-	}
+	}*/
 
-	@RequestMapping(value = "/JSONP/geojson/id/{id}/createdDate/{createdDate}", method = RequestMethod.GET)
+	@RequestMapping(value = "/JSON/geojson/id/{id}/createdDate/{createdDate}", method = RequestMethod.GET)
 	public String getGeojsonAfterTaskQueue(@PathVariable("id") long id, @PathVariable("createdDate") long createdDate)
 			throws Exception {
 		return "jsonp(" + microMapsService.getGeoClickerByClientAppAndAfterCreatedDate(id, createdDate) + ");";
