@@ -11,8 +11,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.http.HttpHeaders;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -26,6 +29,7 @@ import qa.qcri.mm.api.service.NewsImageService;
 import au.com.bytecode.opencsv.CSVReader;
 
 @Service("newsImageService")
+@Transactional
 public class NewsImageServiceImpl implements NewsImageService {
 
 	protected static Logger logger = Logger.getLogger(NewsImageService.class);
@@ -54,6 +58,21 @@ public class NewsImageServiceImpl implements NewsImageService {
 	public void stopFetchingDataFromGdelt(Long clientAppID) {
 		this.gdeltPullStatus = false;
 	}
+	
+	@Override
+	public Long save(NewsImage newsImage) {
+		return newsImageDao.save(newsImage);
+	}
+	
+	public void saveALl(List<NewsImage> newsImages) {
+		for(NewsImage newsImage : newsImages) {
+			try {
+				newsImageDao.save(newsImage);
+			} catch (ConstraintViolationException e) {
+				logger.info("Duplicate newsimage found.. not inserted !");
+			}
+		}
+	}
 
 	@SuppressWarnings("static-access")
 	@Override
@@ -74,7 +93,7 @@ public class NewsImageServiceImpl implements NewsImageService {
                 		logger.warn("Will insert data into clientapp");
                 		List<NewsImage> newsImages = readDataFromFile(fileURL, clientAppID);
                 		logger.warn("news image will insert: "+ newsImages == null? 0 : newsImages.size());
-	                	newsImageDao.saveAll(newsImages);
+                		saveALl(newsImages);
 	                	logger.warn("Gdelt Data Inserted.... ");
                 	} else {
                 		logger.warn("Gdelt Data Not Inserted due to duplicate ");

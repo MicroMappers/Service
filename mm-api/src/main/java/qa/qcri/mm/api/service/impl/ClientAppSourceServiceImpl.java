@@ -3,6 +3,7 @@ package qa.qcri.mm.api.service.impl;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,6 +36,9 @@ import qa.qcri.mm.api.util.GeoLocation;
 @Service("clientAppSourceService")
 @Transactional(readOnly = false)
 public class ClientAppSourceServiceImpl implements ClientAppSourceService {
+	
+	protected static Logger logger = Logger.getLogger(ClientAppSourceService.class);
+	
     @Autowired
     ClientAppSourceDao clientAppSourceDao;
 
@@ -47,14 +51,13 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
     @Override
     @Transactional(readOnly = false)
     public boolean addExternalDataSouceWithClientAppID(String fileURL, Long clientAppID) {
-        System.out.println("fileURL : " + fileURL );
-        System.out.println("clientAppID : " + clientAppID );
+        logger.warn("fileURL : " + fileURL );
+        logger.warn("clientAppID : " + clientAppID );
 
         boolean dublicateFound = clientAppSourceDao.findDuplicateSource(fileURL, clientAppID);
 
         if(!dublicateFound){
             List<ClientAppSource>  sources = clientAppSourceDao.findActiveSourcePerClient( clientAppID );
-
             if(sources.size() > 0){
                 System.out.println("sources : EXTERNAL_DATA_SOURCE_UPLOADED");
                 ClientAppSource ca1 = new ClientAppSource(clientAppID, StatusCodeType.EXTERNAL_DATA_SOURCE_UPLOADED, fileURL);
@@ -214,7 +217,8 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
         return jsonArray;
     }
 
-    public JSONArray getBoundsByLatLng(double[] coorindates ){
+    @Override
+	public JSONArray getBoundsByLatLng(double[] coorindates ){
 
         double dblLat = coorindates[0];
         double dblLng = coorindates[1];

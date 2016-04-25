@@ -101,7 +101,7 @@ public class MicroMapperPybossaFormatter {
     private JSONObject createNonGeoClickerInfo(JSONObject pybossaData, MicromapperInput micromapperInput ){
     	//logger.warn(micromapperInput);
         if(micromapperInput.getDocumentID() != null && micromapperInput.getAnswer()!=null){
-        	logger.warn("parsing document ID");
+        	logger.info("parsing document ID");
             try {
 				pybossaData.put("tweet_category",micromapperInput.getAnswer());
 				long docID = Long.parseLong(micromapperInput.getDocumentID()) ;
@@ -266,7 +266,6 @@ public class MicroMapperPybossaFormatter {
 
     public TaskQueueResponse getAnswerResponse(ClientApp clientApp, String pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
         if(clientAppAnswer == null){
-            //System.out.println("clientAppAnswer is null ");
             return null;
         }
 
@@ -334,7 +333,7 @@ public class MicroMapperPybossaFormatter {
 					JSONObject infoObject = (JSONObject) parser.parse(infoStringObject);
 					Long taskId = (Long) infoObject.get("taskid");
 					responseArrayMap.put(taskId, object);
-					System.out.println(j);
+					logger.info(j);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -370,48 +369,6 @@ public class MicroMapperPybossaFormatter {
                     JSONObject loc = (JSONObject)info.get("loc");
                     String locType = (String)loc.get("type");
                     
-                    /*if(info.get("category") == null || info.get("category").equals("")) {
-                    	if(clientApp.getClientAppID() == 260){
-	                    	if(info.get("taskid") != null){
-	                    		String category = getCategoryFromJson((Long)info.get("taskid"));
-	                    		if(category != null){
-	                        		switch(category){
-	                        			case "infrastructure":
-	                        				category = "infrastructure_damage";
-	                        				break;
-	                        			case "urgent_needs":
-	                        				category = "urgent_need";
-	                        				break;	
-	                        		}
-	                        	}
-	                        	info.put("category", category );
-	                    	}
-                    	}else if(clientApp.getClientAppID() == 79 && info.get("taskid") != null){
-                    		
-                    		List<TyphoonRubyTextGeoClicker> typhoonRubyTextGeoClickers = typhoonRubyTextGeoClickerDao.getTyphoonRubyTextGeoClickerByTaskId((Long)info.get("taskid"));
-            				if(typhoonRubyTextGeoClickers != null && !typhoonRubyTextGeoClickers.isEmpty()){
-            					TyphoonRubyTextGeoClicker typhoonRubyTextGeoClicker = typhoonRubyTextGeoClickers.get(0);
-            					info.put("category", typhoonRubyTextGeoClicker.getTweetID());
-            				}
-                    	}
-                    	
-                    } else if(c.getClickerType().trim().equalsIgnoreCase("text")){
-                    	if(info.get("taskid") != null){
-                    		String category = (String) info.get("category");
-                    		if(category != null){
-                        		switch(category){
-                        			case "infrastructure":
-                        				category = "infrastructure_damage";
-                        				break;
-                        			case "urgent_needs":
-                        				category = "urgent_need";
-                        				break;	
-                        		}
-                        	}
-                        	info.put("category", category );
-                    	}
-                	}*/
-                    
                     if(locType.equalsIgnoreCase(PybossaConf.GEOJSON_TYPE_FEATURE_COLLECTION)){
                         JSONArray features = (JSONArray)loc.get("features");
 
@@ -437,8 +394,9 @@ public class MicroMapperPybossaFormatter {
                             properties.put("taskid", info.get("taskid") )   ;
                             properties.put("crisis_name", c.getDisplayName() )   ;
                             properties.put("crisis_type", c.getClickerType() )   ;
-
-                            JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser,info.get("category")!=null?info.get("category"):"");
+                            
+                            String category = info.get("category") != null ? info.get("category").toString():"";
+                            JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser, category);
                             if(mStyle != null){
                                 properties.put("style", mStyle );
                                 locations.add(aFeature) ;
@@ -449,6 +407,7 @@ public class MicroMapperPybossaFormatter {
                     }
                     else{ // Image GeoClicker process
 
+                    	logger.info("image geo clicker process ::: " + info);
                         JSONObject geoLoc = (JSONObject)info.get("loc");
                         JSONObject properties = (JSONObject)geoLoc.get("properties");
                         properties.put("tweet", info.get("tweet") )   ;
@@ -463,25 +422,26 @@ public class MicroMapperPybossaFormatter {
                         uniqueIDString = String.valueOf(info.get("url") );
                         
                         String category = null;
-                        if (clientApp.getClientAppID() == 255) {
-							List<ReportTemplate> reportTemplatesByUrl = reportTemplateService
-									.getReportTemplatesByUrl(uniqueIDString);
-							if (reportTemplatesByUrl != null && !reportTemplatesByUrl.isEmpty()) {
-								for (ReportTemplate reportTemplate : reportTemplatesByUrl) {
-									String answer = reportTemplate.getAnswer();
-									if (answer != null && !answer.equalsIgnoreCase("none")) {
-										if (category == null || (category != null && answer.equalsIgnoreCase("severe"))) {
-											category = answer;
-										}
+						List<ReportTemplate> reportTemplatesByUrl = reportTemplateService
+								.getReportTemplatesByUrl(uniqueIDString);
+						if (reportTemplatesByUrl != null && !reportTemplatesByUrl.isEmpty()) {
+							for (ReportTemplate reportTemplate : reportTemplatesByUrl) {
+								String answer = reportTemplate.getAnswer();
+								if (answer != null && !answer.equalsIgnoreCase("none")) {
+									if (category == null || (category != null && answer.equalsIgnoreCase("severe"))) {
+										category = answer;
 									}
 								}
 							}
 						}
 						if(category != null){
-                        	info.put("category", category.trim().toLowerCase());
+							category = category.trim().toLowerCase();
+                        	info.put("category", category);
+                        } else {
+                        	category = "mild";
                         }
-                        properties.put("category", info.get("category")!=null?info.get("category"):"mild") ;
-                        JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser,info.get("category")!=null?info.get("category"):"mild");
+                        properties.put("category", category) ;
+                        JSONObject mStyle = getMarkerStyleForClientApp(markerStyle, parser, category);
                         
                         if(mStyle != null){
                         	properties.put("style", mStyle );
@@ -494,6 +454,8 @@ public class MicroMapperPybossaFormatter {
             }
 
         }
+        
+        logger.info("locations ::: " + locations);
         
         TaskQueueResponse taskQueueResponse = null;
         if(!locations.isEmpty()){
@@ -712,7 +674,7 @@ public class MicroMapperPybossaFormatter {
         return cutOffSize;
     }
 
-    private JSONObject getMarkerStyleForClientApp(MarkerStyle markerStyle, JSONParser parser, Object answer){
+    private JSONObject getMarkerStyleForClientApp(MarkerStyle markerStyle, JSONParser parser, String answer){
     	  	
         JSONObject selectedStyle = null;
         try {
@@ -722,16 +684,13 @@ public class MicroMapperPybossaFormatter {
                 for(Object a : mStyles) {
                     JSONObject aStyle = (JSONObject)a;
 
-                    //System.out.println("aStyle.get(\"label_code\") : " + aStyle.get("label_code"));
-                    //System.out.println("answer : " + answer);
-
-                    if(aStyle.get("label_code").equals(answer)){
+                    if(aStyle.get("label_code").toString().equalsIgnoreCase(answer)){
                         selectedStyle = aStyle;
                     }
                 }
         	}
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.warn("Parse Exception : " + e.getMessage());
         }
 
         return selectedStyle;

@@ -139,7 +139,7 @@
             var map = MicroMaps.maps;
 
             _this.init = function () {
-            	
+            	$('#loading-widget').show();
             	$.ajax({
                     url: MicroMaps.config.ROOT + "isadmin",
                     success: function(response) {
@@ -149,6 +149,7 @@
                     		$(".adminDiv").show();
                     		_this.load();
                     	} else {
+                    		$('#loading-widget').hide();
                     		$("#login-modal").show();
                     	}
                     }

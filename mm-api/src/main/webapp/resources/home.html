@@ -36,10 +36,10 @@
 </div>
 <header>
 <a id="downloadBtn" href="" style="display: none"> Download </a>
-<div id="logo"><a href="/"> <img src="resources/images/MicroMappers-Logo.png"> </a> </div>
+<div id="logo"><a href="/MMAPI/"> <img src="resources/images/MicroMappers-Logo.png"> </a> </div>
 
 <div class="info pull-right">
-    <img src="resources/images/qcri_logo.png" >
+    <a href="http://qcri.com/our-research/social-innovation" target="_blank"><img src="resources/images/qcri_logo.png"></a>
 </div>
 
 <div class="search-bar pull-right">
@@ -56,16 +56,23 @@
         <ul class="sidebar-tabs" role="tablist">
             <li class="active"><a href="#crises" role="tab" title="Crises"><i class="fa fa-map-marker"></i></a></li>
         </ul>
-        <div class="social-logos" title="Spread the Word!">
+        <div class="social-logos" title="Spread the Word">
           <a href="javascript:faceWindow('http://gis.micromappers.org/MMAPI/','')" class="fb"> <i class="fa fa-facebook"></i> </a>
           <a href="javascript:tweetWindow('http://gis.micromappers.org/MMAPI/','')" class="twitter"> <i class="fa fa-twitter"></i> </a>
           <a href="javascript:googleWindow('http://gis.micromappers.org/MMAPI/','')" class="gplus"> <i class="fa fa-google-plus"></i> </a>
         </div>
-        <div class="adminDiv" style="display: none">
-			<a href="index#clickers" class="admin"><i class="fa fa-user"></i></a>
+        <div class="our-partners" >
+          <a href="http://www.unocha.org/" class="ocha" title="Office for the Coordination of Humanitarian Affairs (OCHA)" target="_blank"> <img src="resources/images/ocha.png" height="40px" width="40px"></a>
+          <a href="http://www.standbytaskforce.org/" class="sbtf" title="Standby Task Force (SBTF)" target="_blank"> <img src="resources/images/sbtf.png" height="40px" width="40px"> </a>
+        </div>
+        <div class="adminDiv" style="display: none" title="Admin Panel">
+			<a href="index#clickers" class="admin"><i class="fa fa-user admin-side-icon"></i></a>
 		</div>
-		<div class="share-div">
-			<a href="#" class="share"><i class="fa fa-share-alt"></i></a>
+		<div class="share-div" title="Share Micromaps">
+			<a href="#" class="share"><i class="fa fa-share-alt share-side-icon"></i></a>
+		</div>
+		<div class="partners-div" title="Our Partners">
+			<a href="#" class="partner"><img src="resources/images/partners.png" height="40px" width="40px"></img></a>
 		</div>
         <div class="sidebar-container">
           <div class="sidebar-pane active" id="crises">
@@ -116,20 +123,6 @@
 						</button>
 					</form>
 				</div>
-				<!-- <div class="col-md-6">
-					<form action="signin/facebook" method="POST">
-						<button type="submit" class="btn btn-social btn-facebook" style="width: 100%">
-							<span class="fa fa-facebook"></span> Sign in with Facebook
-						</button>
-					</form>
-				</div> -->
-				<!-- <div class="col-md-3">
-					<form action="signin/google" method="POST">
-						<button type="submit" class="btn btn-social btn-google">
-							<span class="fa fa-google"></span> Sign in with Google
-						</button>
-					</form>
-				</div> -->
 			</div>
 			
 			<div class="row" style="padding-top: 20px">			
@@ -181,6 +174,9 @@
     $(document).ready(function(){
         $(".share-div a").click(function(){
             $(".social-logos").toggle();
+        })
+        $(".partners-div a").click(function(){
+            $(".our-partners").toggle();
         })
     });
 
