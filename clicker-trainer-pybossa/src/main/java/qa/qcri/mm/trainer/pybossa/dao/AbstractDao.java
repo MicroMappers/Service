@@ -25,4 +25,6 @@ public interface AbstractDao<E, I extends Serializable> {
     List<E> getMaxOrderByCriteria(Criterion criterion, String orderBy) ;
     List<E> getAll();
     List<E> findAllByKey(String key,Criterion criterion);
+
+    List<E> findUniqueByCriteria(Criterion criterion, String uniqueField);
 }
