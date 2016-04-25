@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 
 import org.apache.http.HttpHeaders;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -62,6 +63,16 @@ public class NewsImageServiceImpl implements NewsImageService {
 	public Long save(NewsImage newsImage) {
 		return newsImageDao.save(newsImage);
 	}
+	
+	public void saveALl(List<NewsImage> newsImages) {
+		for(NewsImage newsImage : newsImages) {
+			try {
+				newsImageDao.save(newsImage);
+			} catch (ConstraintViolationException e) {
+				logger.info("Duplicate newsimage found.. not inserted !");
+			}
+		}
+	}
 
 	@SuppressWarnings("static-access")
 	@Override
@@ -82,14 +93,14 @@ public class NewsImageServiceImpl implements NewsImageService {
                 		logger.warn("Will insert data into clientapp");
                 		List<NewsImage> newsImages = readDataFromFile(fileURL, clientAppID);
                 		logger.warn("news image will insert: "+ newsImages == null? 0 : newsImages.size());
-	                	newsImageDao.saveAll(newsImages);
+                		saveALl(newsImages);
 	                	logger.warn("Gdelt Data Inserted.... ");
                 	} else {
                 		logger.warn("Gdelt Data Not Inserted due to duplicate ");
                 	}
                 }
-                Thread.sleep(1000*60);
-                //Thread.sleep(900000);
+                //Thread.sleep(1000*60);
+                Thread.sleep(900000);
                 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
