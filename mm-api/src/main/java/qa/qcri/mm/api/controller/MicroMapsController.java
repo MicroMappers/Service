@@ -94,11 +94,6 @@ public class MicroMapsController {
 	public String getAllCrisis() throws Exception {
 		return microMapsService.getAllCrisisJSONP().toJSONString();
 	}
-	
-	/*@RequestMapping(value = "/JSONP/crisis", method = RequestMethod.GET)
-	public String getAllCrisisJSONP() throws Exception {
-		return "jsonp(" + microMapsService.getAllCrisisJSONP().toJSONString() + ");";
-	}*/
 
 	@RequestMapping(value = "/JSONP/crisis/apps/id/{id}", method = RequestMethod.GET)
 	public String getAppsByCrisisJSONP(@PathVariable("id") long id) throws Exception {
@@ -110,30 +105,16 @@ public class MicroMapsController {
 		return microMapsService.getGeoClickerByClientApp(id);
 	}
 
-	/*@RequestMapping(value = "/JSONP/text/id/{id}", method = RequestMethod.GET)
-	public String getAllTextJSONP(@PathVariable("id") long id) throws Exception {
-		return "jsonp(" + microMapsService.getGeoClickerByClientApp(id) + ");";
-	}*/
 
 	@RequestMapping(value = "/JSON/image/id/{id}", method = RequestMethod.GET)
 	public String getAllImageJSON(@PathVariable("id") long id) throws Exception {
 		return microMapsService.getGeoClickerByClientApp(id);
 	}
 
-	/*@RequestMapping(value = "/JSONP/image/id/{id}", method = RequestMethod.GET)
-	public String getAllImageJSONP(@PathVariable("id") long id) throws Exception {
-		return "jsonp(" + microMapsService.getGeoClickerByClientApp(id) + ");";
-	}*/
-
 	@RequestMapping(value = "/JSON/aerial/id/{id}", method = RequestMethod.GET)
 	public String getAllAerialJSON(@PathVariable("id") long id) throws Exception {
 		return microMapsService.getGeoClickerByClientApp(id);
 	}
-
-	/*@RequestMapping(value = "/JSONP/aerial/id/{id}", method = RequestMethod.GET)
-	public String getAllAerialJSONP(@PathVariable("id") long id) throws Exception {
-		return "jsonp(" + microMapsService.getGeoClickerByClientApp(id) + ");";
-	}*/
 
 	@RequestMapping(value = "/JSON/geojson/id/{id}/createdDate/{createdDate}", method = RequestMethod.GET)
 	public String getGeojsonAfterTaskQueue(@PathVariable("id") long id, @PathVariable("createdDate") long createdDate)

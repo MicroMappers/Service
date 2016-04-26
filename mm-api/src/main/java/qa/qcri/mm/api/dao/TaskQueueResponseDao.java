@@ -1,9 +1,9 @@
 package qa.qcri.mm.api.dao;
 
-import qa.qcri.mm.api.entity.TaskQueueResponse;
-
 import java.util.Date;
 import java.util.List;
+
+import qa.qcri.mm.api.entity.TaskQueueResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,4 +16,5 @@ public interface TaskQueueResponseDao {
 
     List<TaskQueueResponse> getTaskQueueResponseByTaskQueueID(Long taskQueueID);
     List<TaskQueueResponse> getTaskQueueResponseByTaskQueueIDBasedOnLastUpdate(Long taskQueueID, Date updated);
+	List<TaskQueueResponse> getTaskQueueResponseByClientAppID(Long clientAppID);
 }

@@ -1,12 +1,15 @@
 package qa.qcri.mm.api.dao.impl;
 
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-import qa.qcri.mm.api.dao.TaskQueueResponseDao;
-import qa.qcri.mm.api.entity.TaskQueueResponse;
-
 import java.util.Date;
 import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import qa.qcri.mm.api.dao.TaskQueueResponseDao;
+import qa.qcri.mm.api.entity.TaskQueueResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +28,13 @@ public class TaskQueueResponseDaoImpl extends AbstractDaoImpl<TaskQueueResponse,
     @Override
     public List<TaskQueueResponse> getTaskQueueResponseByTaskQueueID(Long taskQueueID) {
         return findByCriteria(Restrictions.eq("taskQueueID", taskQueueID));  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    
+    @Override
+    public List<TaskQueueResponse> getTaskQueueResponseByClientAppID(Long clientAppID) {
+    	Query query = getCurrentSession().createSQLQuery("SELECT * FROM task_queue_response tqr JOIN task_queue tq ON tqr.task_queue_id = tq.id and tq.client_app_id = "+clientAppID).addEntity(TaskQueueResponse.class);
+    	query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+    	return query.list();
     }
 
     @Override
