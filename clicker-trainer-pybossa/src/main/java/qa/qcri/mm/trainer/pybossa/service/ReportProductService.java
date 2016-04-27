@@ -14,7 +14,8 @@ import java.util.List;
 public interface ReportProductService {
 
     void generateReportTemplateFromExternalSource() throws Exception;
-    void generateCVSReportForGeoClicker() throws Exception;
+    void generateCVSReportForTextGeoClicker() throws Exception;
+    void generateCVSReportForImageGeoClicker() throws Exception;
     void generateGeoJsonForESRI(List<GeoJsonOutputModel> geoJsonOutputModels) throws Exception;
     void generateMapBoxTemplateForAerialClicker() throws Exception;
     void generateGeoJsonForClientApp(Long clientAppID) throws Exception;

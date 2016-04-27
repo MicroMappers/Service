@@ -26,7 +26,7 @@ public class MicroMapperWorkerTest {
     	long startTime = System.nanoTime();
      // List<TaskQueueResponse> responseList =  clientAppResponseService.getTaskQueueResponseByContent();
       //microMapperWorker.processTaskPublish();
-      microMapperWorker.processTaskImport();
+     // microMapperWorker.processTaskImport();
      // microMapperWorker.processTaskExport();
      // microMapperWorker.processTaskImportOnDemand();
       long endTime = System.nanoTime();

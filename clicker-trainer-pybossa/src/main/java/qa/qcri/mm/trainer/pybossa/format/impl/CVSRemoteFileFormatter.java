@@ -135,7 +135,7 @@ public class CVSRemoteFileFormatter {
 
                     String tweetID = row[7];
                     // only for ecuator crisis fileter. temp. solution
-                    if(tweetID.equalsIgnoreCase("EQ-2016-000035-ECU")){
+                    //if(tweetID.equalsIgnoreCase("EQ-2016-000035-ECU")){
                         String tweet=row[1];
                         String author=row[0];
                         String lat=row[4];
@@ -146,7 +146,7 @@ public class CVSRemoteFileFormatter {
 
                         MicromapperInput source = new MicromapperInput(tweetID, tweet, author, lat, lng, imgURL, created);
                         sourceSet.add(source);
-                    }
+                   // }
 
                 }
 
@@ -174,7 +174,7 @@ public class CVSRemoteFileFormatter {
         }
         csvReader.close();
         // REMOVEW HEADER
-        if(sourceSet.size() >= 1){
+        if(sourceSet.size() > 0){
             sourceSet.remove(0);
         }
 
@@ -212,7 +212,7 @@ public class CVSRemoteFileFormatter {
         }
         csvReader.close();
 
-        if(sourceSet.size() >= 1){
+        if(sourceSet.size() > 0){
             sourceSet.remove(0);
         }
 
