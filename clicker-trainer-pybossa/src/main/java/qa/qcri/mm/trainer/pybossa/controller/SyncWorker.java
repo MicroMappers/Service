@@ -4,9 +4,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import qa.qcri.mm.trainer.pybossa.service.ClientAppCreateWorker;
 import qa.qcri.mm.trainer.pybossa.service.MicroMapperWorker;
 import qa.qcri.mm.trainer.pybossa.service.PusherService;
 import qa.qcri.mm.trainer.pybossa.service.Worker;
+import qa.qcri.mm.trainer.pybossa.store.LookupCode;
+
+import java.util.Calendar;
 
 
 /**
@@ -19,22 +23,26 @@ public class SyncWorker implements Worker {
 
     @Autowired
     private MicroMapperWorker microMapperWorker;
-    
+
     @Autowired
-    PusherService pusherService;
-    
-    
+    private ClientAppCreateWorker clientAppWorker;
 
 	@Override
 	public void work() {
 		String threadName = Thread.currentThread().getName();
 		logger.info("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
-
+        Calendar cal = Calendar.getInstance();
         try {
             /**/
             microMapperWorker.processTaskPublish();
             microMapperWorker.processTaskImport();
             microMapperWorker.processTaskExport();
+
+            clientAppWorker.doCreateApp();
+            int hour = cal.get(Calendar.HOUR_OF_DAY) ;
+            if(hour == LookupCode.CLIENT_APP_DELETION_TIME){
+                clientAppWorker.doAppDelete();
+            }
              /**/
             Thread.sleep(180000);
         }
