@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <TITLE>MicroMaps - Realtime Crisis Mapping</TITLE>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta property="og:title" content="MicroMaps - Realtime Crisis Mapping">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://gis.micromappers.org/MMAPI/">
+    <meta property="og:image" content="http://gis.micromappers.org/MMAPI/images/MicroMappers-Logo.png">
+    <meta property="og:description" content="Digital disaster response with a single click.">
+
+    <link href="resources/css/font-awesome.min.css" rel="stylesheet">
+    <link href="resources/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="resources/css/toastr.min.css" rel="stylesheet">
+    <link href="resources/css/leaflet.css" rel="stylesheet">
+    <link rel="stylesheet" href="resources/css/jstree.min.css" />
+    <link rel="stylesheet" href="resources/css/leaflet.awesome-markers.css" />
+    <link rel="stylesheet" href="resources/css/leaflet.label.css" />
+    <link rel="stylesheet" href="resources/css/MarkerCluster.css" />
+    <link rel="stylesheet" href="resources/css/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="resources/css/bootstrap-social.css" />
+    
+    <link rel="stylesheet" href="resources/css/micromaps.css" />
+	<link href="resources/css/font-awesome.min.css" rel="stylesheet">
+
+    <style media="screen">
+      .jstree li a ins { display:none !important; }
+    </style>
+
+</head>
+<body>
+	<!-- <header> -->
+		<a id="downloadBtn" href="" style="display: none"> Download </a>
+	<!-- </header> -->
+
+	<div id='loading-widget'>
+		<div
+			style="margin: 20%; background-color: white; border-radius: 12px; padding: 9px; width: 41px; margin-left: auto; margin-right: auto">
+			<i class="fa fa-spin fa-refresh fa-2x"></i>
+		</div>
+	</div>
+	
+	<div id="login-modal" class="login-dialog">
+		<div class="login-block text-center">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<img src="resources/images/micromaps_logo.jpg" height="60">
+				</div>
+			</div>
+			<br /> <span style="font-size: 24px; font-weight: bold">Micromappers</span>
+			<div class="row" style="padding-top: 25px">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<form action="signin/twitter" method="POST">
+						<button type="submit" class="btn btn-social btn-twitter"
+							style="width: 100%">
+							<span class="fa fa-twitter"></span> Sign in with Twitter
+						</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="row" style="padding-top: 20px">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<form action="signin/facebook" method="POST">
+						<button type="submit" class="btn btn-social btn-facebook"
+							style="width: 100%">
+							<span class="fa fa-facebook"></span> Sign in with Facebook
+						</button>
+					</form>
+				</div>
+			</div>
+			<div class="row" style="padding-top: 20px">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<form action="signin/google" method="POST">
+						<button type="submit" class="btn btn-social btn-google"
+							style="width: 100%">
+							<span class="fa fa-google"></span> Sign in with Google
+						</button>
+					</form>
+				</div>
+			</div>
+			<br /> By logging in, you are agreeing to the <a
+				href="resources/aidr_user_agreement.docx">terms of use,
+				privacy</a> and <a href="resources/aidr_data_policy.docx">data
+				policy.</a>
+		</div>
+	</div>
+
+
+	<div class="mainContainer" id="wrapper">
+
+		<div id="sidebar-wrapper">
+			<div class="sidebar-pane active" id="crises">
+				<div class="sub-header" id="sub-header">
+					<h1>Crises</h1>
+				</div>
+				<div id="crisesView" class="my-font" style="margin-top: 20px;"></div>
+			</div>
+		</div>
+
+		<div id="page-content-wrapper">
+
+			<div class="row headerWrapper">
+				<div class="collapse navbar-collapse col-md-1" id="bs-example-navbar-collapse-1" style="float: left">
+					<button class="navbar-toggle collapse in pull-left" data-toggle="collapse" id="menu-toggle-2">
+						<a href="#crises" role="tab" title="Crises">
+							<i class="fa fa-arrow-left" aria-hidden="true" style="color: white; font-size: 25px;"></i>
+						</a>
+					</button>
+				</div>
+				<div class="col-lg-2 col-md-3 col-sm-4 hidden-xs" tooltip-placement="right" uib-tooltip="Micromaps" style="float:left;">
+					<a href="/MMAPI/" class=""> <img
+						src="resources/images/MicroMappers-Logo.png"
+						class="micromappers-logo">
+					</a>
+				</div>
+				<!-- <div class="col-lg-1"></div> -->
+				<div class="input-group search-bar col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1 col-sm-5 col-xs-11" style="float:left;">
+				  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+				  <input id="searchCrisis" type="text" class="form-control" placeholder="Search Crisis" aria-describedby="basic-addon1" onfocus="this.value='';">
+				</div>
+				<div id="profile-dropdown" class="dropdown col-md-3 hidden-xs hidden-sm" style="">
+					 <button id="profileBtn" class="btn dropdown-toggle" type="button" data-toggle="dropdown">     	      	
+				      	<img src="" height="32" width="32" style="border-radius: 4px" id="profilePicture">
+				      	<span id="profileName"></span>
+				      	<i class="fa fa-caret-down"></i>
+				     </button>
+				     <ul class="dropdown-menu" style="left:60px;">
+				        <li id="adminDiv"><a href="index#clickers"><i class="fa fa-user"></i> Admin</a></li>
+				        <li id="divider" class="divider"></li>
+				        <li><a href="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+				     </ul>
+			    </div>
+			</div>
+			
+				<div id="map" class="sidebar-map"></div>
+			<!-- <div id="map" class="sidebar-map col-lg-12 col-md-12 col-sm-12 col-xs-12"></div> -->
+			<div class="row">
+				<div class="social-logos" title="Spread the Word!">
+					<a href="javascript:faceWindow('http://199.223.234.225/','')"
+						class="fb"> <i class="fa fa-facebook"></i>
+					</a> <a href="javascript:tweetWindow('http://199.223.234.225/','')"
+						class="twitter"> <i class="fa fa-twitter"></i>
+					</a> <a href="javascript:googleWindow('http://199.223.234.225/','')"
+						class="gplus"> <i class="fa fa-google-plus"></i>
+					</a>
+				</div>
+				<div class="our-partners" >
+		          <a href="http://www.unocha.org/" class="ocha" title="Office for the Coordination of Humanitarian Affairs (OCHA)" target="_blank"> <img src="resources/images/ocha.png" height="40px" width="40px"></a>
+		          <a href="http://www.standbytaskforce.org/" class="sbtf" title="Standby Task Force (SBTF)" target="_blank"> <img src="resources/images/sbtf.png" height="40px" width="40px"> </a>
+		        </div>
+		        
+				<div class="share-div">
+					<a href="#" class="share"><i class="fa fa-share-alt"></i></a>
+				</div>
+				<div class="partners-div" title="Our Partners">
+					<a href="#" class="partner"><img src="resources/images/partners.png" height="40px" width="40px"></img></a>
+				</div>
+			</div>
+			
+			<div id="image-modal" class="modal_dialog col-lg-12">
+				<a href="#close" title="close" class="close">X</a> <img
+					id="zoom_image" class="image-clicker" data-zoom-image="" src="" />
+			</div>
+
+			<div id="video-modal" class="modalDialog col-lg-12">
+				<div class="video-div">
+					<a href="#close" title="close" class="close"
+						onclick="$('#uavVideo').attr('src', '');">X</a>
+					<iframe id="video-clicker-iframe" name="uavVideo" width="700px"
+						height="520px" frameborder="0"></iframe>
+				</div>
+			</div>
+
+			<div id="aerial-modal" class="modalDialog col-lg-12">
+				<div class="aerial-div">
+					<a href="#close" title="close" class="close">X</a>
+					<div id="aerialMapContainer"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script src="resources/lib/jquery-1.11.2.min.js"></script>
+<script src="resources/lib/jquery-ui.min.js"></script>
+<script src="resources/lib/toastr.min.js"></script>
+<script src="resources/lib/leaflet.js"></script>
+<!-- <script src="lib/jstree.min.js"></script> -->
+<script src="resources/lib/jstree.js"></script>
+<script src="resources/lib/leaflet.awesome-markers.min.js"></script>
+<script src="resources/lib/leaflet.label.js"></script>
+<script src="resources/lib/jquery.elevatezoom.js"></script>
+<script src="resources/lib/leaflet.markercluster.js"></script>
+<script src="resources/lib/pusher.js"></script>
+<script src="resources/lib/bouncemarker.js"></script>
+
+<script src="resources/js/config.js"></script>
+<script src="resources/js/micromapsNew.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".share-div a").click(function(){
+            $(".social-logos").toggle();
+        })
+        $(".partners-div a").click(function(){
+            $(".our-partners").toggle();
+        })
+        $("#wrapper").toggleClass("toggled-2");
+    });
+
+    function tweetWindow(url, text) {
+      window.open( "http://twitter.com/share?url=" +
+        encodeURIComponent(url) + "&text=" +
+        encodeURIComponent(text) + "&count=none/",
+        "tweet", "height=300,width=550,resizable=1" )
+    }
+
+    function faceWindow(url, title) {
+      window.open( "http://www.facebook.com/sharer.php?u=" +
+        encodeURIComponent(url) + "&t=" +
+        encodeURIComponent(title),
+        "facebook", "height=300,width=550,resizable=1" )
+    }
+
+    function googleWindow(url, title) {
+        window.open("https://plus.google.com/share?url=" + encodeURIComponent(url),
+          '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+    }
+    
+    $("#menu-toggle-2").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled-2");
+        $(this).find('i').toggleClass('fa fa-arrow-left').toggleClass('fa fa-bars');
+    });
+
+</script>
+<script src="resources/lib/bootstrap.min.js"></script>
+</body>
+</html>
