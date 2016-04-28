@@ -169,7 +169,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 					    features.add(a);
 					}
 				} catch (Exception e) {
-					logger.warn("Exception while parsing json: "+taskQueueResponse.getResponse(),e);
+					logger.warn("Exception while parsing json response for taskQueueId: "+taskQueueResponse.getTaskQueueID());
 				}
         	}
 		} 
@@ -222,7 +222,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 							}
 						}
 					} catch (Exception e) {
-						logger.warn("Exception while parsing json: "+taskQueueResponse.getResponse(),e);
+						logger.warn("Exception while parsing json response for taskQueueId: "+taskQueueResponse.getTaskQueueID());
 					}
                 }
 			}
@@ -250,15 +250,15 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             System.out.println("crisis :" + clientApp.getName());
 
             List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-            for(TaskQueueResponse taskQueueresponse: responses){
-                if(!taskQueueresponse.getResponse().equalsIgnoreCase("{}") && !taskQueueresponse.getResponse().equalsIgnoreCase("[]")){
+            for(TaskQueueResponse taskQueueResponse: responses){
+                if(!taskQueueResponse.getResponse().equalsIgnoreCase("{}") && !taskQueueResponse.getResponse().equalsIgnoreCase("[]")){
                     try {
-						JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueresponse.getResponse());
+						JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponse.getResponse());
 						for(Object a : eachFeatureArrary){
 						    features.add(a);
 						}
 					} catch (Exception e) {
-						logger.warn("Excpetion while parsing json: "+taskQueueresponse, e);
+						logger.warn("Exception while parsing json response for taskQueueId: "+taskQueueResponse.getTaskQueueID());
 					}
                 }
             }
@@ -333,7 +333,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 							    features.add(a);
 							}
 						} catch (Exception e) {
-							logger.warn("Excpetion while parsing json: "+taskQueueResponse.getResponse(), e);
+							logger.warn("Exception while parsing json response for taskQueueId: "+taskQueueResponse.getTaskQueueID());
 						}
 	                }
 				}
@@ -444,7 +444,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             jsonArray =  (JSONArray)parser.parse(ans);
 
         } catch (ParseException e) {
-        	logger.warn("Exception while parsing json: "+ans,e);
+        	logger.warn("Exception while parsing answerMarkerInfo json for clientAppID: "+clientAppID);
         }
 
         return jsonArray;
