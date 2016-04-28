@@ -102,11 +102,69 @@
 				</div>
 				<div id="crisesView" class="my-font" style="margin-top: 20px;"></div>
 			</div>
+			<a href="http://qcri.com/our-research/social-innovation" target="_blank" style="padding: 8px; bottom:0; position: absolute"><img src="resources/images/qcri_logo.png" style="height: 47px"></a>
 		</div>
 
 		<div id="page-content-wrapper">
+			<nav class="navbar navbar-default" style="background-color: #5262bc; border-color: #5262bc; border-radius: 0px; color: #FFF">
+			  <div class="container-fluid">
+			  	<div class="collapse navbar-collapse col-md-1" id="bs-example-navbar-collapse-2" style="padding-left: 0px">
+					<div class="navbar-toggle collapse in pull-left" data-toggle="collapse" id="menu-toggle-2" style="margin: 0; border: none; margin-top: 3px">
+						<a href="#crises" role="tab" title="Crises">
+							<i class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color: white;"></i>
+						</a>
+					</div>
+				</div>
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="/MMAPI/" style="padding-top: 0px">
+			      	<img src="resources/images/MicroMappers-Logo.png" class="micromappers-logo" />
+			      	</a>
+			    </div>
+			    
+			    <!--   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				      <ul class="nav navbar-nav">
+        				<li><a href="http://qcri.com/our-research/social-innovation" target="_blank"><img src="resources/images/qcri_logo.png"></a></li>
+				      </ul>
+				  </div> -->
+				      
+			
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav navbar-right">
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding: 8px;background-color: #5262bc;">
+			          	<img src="" height="32" width="32" style="border-radius: 4px" id="profilePicture">
+				      	<span id="profileName" style="color: white"></span>
+						<span class="caret" style="color: white"></span>
+			          </a>
+			          <ul class="dropdown-menu">
+			            <li id="adminDiv"><a href="index#clickers"><i class="fa fa-user"></i> Admin</a></li>
+				        <li role="separator" class="divider"></li>
+				        <li><a href="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+			          </ul>
+			        </li>
+			      </ul>
+			      <form class="navbar-form navbar-right" role="search">
+			        <div class="input-group">
+					  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+					  <input id="searchCrisis" type="text" class="form-control" placeholder="Search Crisis" aria-describedby="basic-addon1" onfocus="this.value='';">
+					</div>
+			      </form>
+			      <ul class="nav navbar-nav navbar-right">
+        			<li><a href="http://qcri.com/our-research/social-innovation" target="_blank" style="padding: 0"><img src="resources/images/qcri_logo.png" style="height: 47px"></a></li>
+				  </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
 
-			<div class="row headerWrapper">
+			<!-- <div class="row headerWrapper">
 				<div class="collapse navbar-collapse col-md-1" id="bs-example-navbar-collapse-1" style="float: left">
 					<button class="navbar-toggle collapse in pull-left" data-toggle="collapse" id="menu-toggle-2">
 						<a href="#crises" role="tab" title="Crises">
@@ -120,7 +178,7 @@
 						class="micromappers-logo">
 					</a>
 				</div>
-				<!-- <div class="col-lg-1"></div> -->
+				<div class="col-lg-1"></div>
 				<div class="input-group search-bar col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1 col-sm-5 col-xs-11" style="float:left;">
 				  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
 				  <input id="searchCrisis" type="text" class="form-control" placeholder="Search Crisis" aria-describedby="basic-addon1" onfocus="this.value='';">
@@ -137,10 +195,9 @@
 				        <li><a href="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 				     </ul>
 			    </div>
-			</div>
+			</div> -->
 			
-				<div id="map" class="sidebar-map"></div>
-			<!-- <div id="map" class="sidebar-map col-lg-12 col-md-12 col-sm-12 col-xs-12"></div> -->
+			<div id="map" class="map"></div>
 			<div class="row">
 				<div class="social-logos" title="Spread the Word!">
 					<a href="javascript:faceWindow('http://199.223.234.225/','')"

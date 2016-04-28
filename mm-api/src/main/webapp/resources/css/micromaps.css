@@ -13,7 +13,7 @@ html, body {
     width: 100%;
     font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
     margin: 0;
-    margin-top:-5px;
+    margin-top:-20px;
     margin-bottom:-5px;
     padding: 0;
 }
@@ -315,9 +315,6 @@ input[type=text]:focus, textarea:focus {
     display: block;
 }
 
- .sidebar-map {
-    margin-left: 40px;
-}
 /* 
 @media (min-width: 768px) {
     .sidebar {
@@ -368,7 +365,7 @@ input[type=text]:focus, textarea:focus {
     box-shadow: 0 1px 2px rgba(0,0,0, 0.50);
     cursor: pointer;
     overflow: hidden;
-    height: 53px;
+    height: 52px;
 }
 
 /* Autocomplete Styling */
@@ -608,8 +605,7 @@ li.ui-autocomplete-category {
 .micromappers-logo {
 	width: 200px;
 	height: 47px;
-	margin-top: 5px;
-	//padding-left: 15px;
+	margin-top: 1px;
 }
 
  #wrapper {
@@ -692,9 +688,10 @@ li.ui-autocomplete-category {
       transition: all 0.5s ease;
       height: 98%;
 }
-#profileBtn {
-	
-	background-color: Transparent;
-	color: white;
-	margin-top: 5px;
+.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+	border: none;
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+	background-color: #5262bc;
 }
