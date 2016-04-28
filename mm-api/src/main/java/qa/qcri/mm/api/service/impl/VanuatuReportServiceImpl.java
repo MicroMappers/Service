@@ -1,20 +1,14 @@
 package qa.qcri.mm.api.service.impl;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.PamReportDao;
 import qa.qcri.mm.api.entity.PamReport;
-import qa.qcri.mm.api.entity.TaskQueueResponse;
-import qa.qcri.mm.api.service.SkyeyeReportService;
-import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.service.VanuatuReportService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,11 +20,6 @@ import java.util.List;
 @Service("vanuatuReportService")
 @Transactional(readOnly = true)
 public class VanuatuReportServiceImpl implements VanuatuReportService {
-
-    private JSONParser parser = new JSONParser();
-
-    @Autowired
-    TaskQueueService taskQueueService;
 
     @Autowired
     PamReportDao pamReportDao;

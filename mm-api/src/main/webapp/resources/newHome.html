@@ -25,12 +25,14 @@
     <link rel="stylesheet" href="resources/css/micromaps.css" />
 	<link href="resources/css/font-awesome.min.css" rel="stylesheet">
 
+<link rel="stylesheet" href="resources/css/angular-material.min.css">
+<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
     <style media="screen">
       .jstree li a ins { display:none !important; }
     </style>
 
 </head>
-<body>
+<body ng-controller="DemoCtrl as demo"  ng-app="MyApp">
 	<!-- <header> -->
 		<a id="downloadBtn" href="" style="display: none"> Download </a>
 	<!-- </header> -->
@@ -128,12 +130,6 @@
 			      	</a>
 			    </div>
 			    
-			    <!--   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				      <ul class="nav navbar-nav">
-        				<li><a href="http://qcri.com/our-research/social-innovation" target="_blank"><img src="resources/images/qcri_logo.png"></a></li>
-				      </ul>
-				  </div> -->
-				      
 			
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -145,8 +141,8 @@
 						<span class="caret" style="color: white"></span>
 			          </a>
 			          <ul class="dropdown-menu">
-			            <li id="adminDiv"><a href="index#clickers"><i class="fa fa-user"></i> Admin</a></li>
-				        <li role="separator" class="divider"></li>
+			            <li id="adminDiv" style="display:none;"><a href="index#clickers"><i class="fa fa-user"></i> Admin</a></li>
+				        <li role="separator" id="divider" class="divider"></li>
 				        <li><a href="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
 			          </ul>
 			        </li>
@@ -163,63 +159,60 @@
 			    </div><!-- /.navbar-collapse -->
 			  </div><!-- /.container-fluid -->
 			</nav>
-
-			<!-- <div class="row headerWrapper">
-				<div class="collapse navbar-collapse col-md-1" id="bs-example-navbar-collapse-1" style="float: left">
-					<button class="navbar-toggle collapse in pull-left" data-toggle="collapse" id="menu-toggle-2">
-						<a href="#crises" role="tab" title="Crises">
-							<i class="fa fa-arrow-left" aria-hidden="true" style="color: white; font-size: 25px;"></i>
-						</a>
-					</button>
-				</div>
-				<div class="col-lg-2 col-md-3 col-sm-4 hidden-xs" tooltip-placement="right" uib-tooltip="Micromaps" style="float:left;">
-					<a href="/MMAPI/" class=""> <img
-						src="resources/images/MicroMappers-Logo.png"
-						class="micromappers-logo">
-					</a>
-				</div>
-				<div class="col-lg-1"></div>
-				<div class="input-group search-bar col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1 col-sm-5 col-xs-11" style="float:left;">
-				  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-				  <input id="searchCrisis" type="text" class="form-control" placeholder="Search Crisis" aria-describedby="basic-addon1" onfocus="this.value='';">
-				</div>
-				<div id="profile-dropdown" class="dropdown col-md-3 hidden-xs hidden-sm" style="">
-					 <button id="profileBtn" class="btn dropdown-toggle" type="button" data-toggle="dropdown">     	      	
-				      	<img src="" height="32" width="32" style="border-radius: 4px" id="profilePicture">
-				      	<span id="profileName"></span>
-				      	<i class="fa fa-caret-down"></i>
-				     </button>
-				     <ul class="dropdown-menu" style="left:60px;">
-				        <li id="adminDiv"><a href="index#clickers"><i class="fa fa-user"></i> Admin</a></li>
-				        <li id="divider" class="divider"></li>
-				        <li><a href="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-				     </ul>
-			    </div>
-			</div> -->
 			
 			<div id="map" class="map"></div>
-			<div class="row">
-				<div class="social-logos" title="Spread the Word!">
-					<a href="javascript:faceWindow('http://199.223.234.225/','')"
-						class="fb"> <i class="fa fa-facebook"></i>
-					</a> <a href="javascript:tweetWindow('http://199.223.234.225/','')"
-						class="twitter"> <i class="fa fa-twitter"></i>
-					</a> <a href="javascript:googleWindow('http://199.223.234.225/','')"
-						class="gplus"> <i class="fa fa-google-plus"></i>
-					</a>
+			 <div class="row">
+
+				<div class="share-div" ng-cloak="">
+					<md-fab-speed-dial ng-class="demo.selectedMode"	md-direction="left"> 
+						<md-fab-trigger>
+							<md-button aria-label="Menu" class="md-fab"
+								style="background-color: #0082c8;"> <md-tooltip
+								md-direction="bottom"> Share Micromaps </md-tooltip> <md-icon
+								md-font-icon="fa fa-share-alt fa-2x"></md-icon> 
+							</md-button> 
+						</md-fab-trigger> 
+						<md-fab-actions>
+							<md-button aria-label="Facebook" class="md-fab md-raised md-mini" style="background-color: #3b5998;"> 
+								<a href="javascript:faceWindow('http://gis.micromappers.org/MMAPI/','')">
+									<md-icon md-font-icon="fa fa-facebook fa-2x" aria-label="Facebook" style="color: white;"></md-icon>
+								</a> 
+							</md-button> 
+							<md-button aria-label="Twitter" class="md-fab md-raised md-mini" style="background-color: #55acee;"> 
+								<a href="javascript:tweetWindow('http://gis.micromappers.org/MMAPI/','')">
+									<md-icon md-font-icon="fa fa-twitter fa-2x" aria-label="Twitter" style="color: white;"></md-icon>
+								</a>
+							</md-button>
+							<md-button aria-label="GooglePlus"
+						class="md-fab md-raised md-mini"
+						style="background-color: #dd4b39;"> <a
+						href="javascript:googleWindow('http://gis.micromappers.org/MMAPI/','')">
+						<md-icon md-font-icon="fa fa-google-plus fa-2x"
+							aria-label="GooglePlus" style="color: white;"></md-icon>
+					</a> </md-button> </md-fab-actions> </md-fab-speed-dial>
 				</div>
-				<div class="our-partners" >
-		          <a href="http://www.unocha.org/" class="ocha" title="Office for the Coordination of Humanitarian Affairs (OCHA)" target="_blank"> <img src="resources/images/ocha.png" height="40px" width="40px"></a>
-		          <a href="http://www.standbytaskforce.org/" class="sbtf" title="Standby Task Force (SBTF)" target="_blank"> <img src="resources/images/sbtf.png" height="40px" width="40px"> </a>
-		        </div>
-		        
-				<div class="share-div">
-					<a href="#" class="share"><i class="fa fa-share-alt"></i></a>
-				</div>
-				<div class="partners-div" title="Our Partners">
-					<a href="#" class="partner"><img src="resources/images/partners.png" height="40px" width="40px"></img></a>
+				<div class="partners-div" ng-cloak="">
+					<md-fab-speed-dial ng-class="demo.selectedMode"
+						md-direction="left"> <md-fab-trigger>
+					<md-button aria-label="Partners" class="md-fab"
+						style="background-color: #0082c8;"> <md-tooltip
+						md-direction="bottom"> Our Partners </md-tooltip> <img
+						src="resources/images/partners.png"
+						style="height: 56px; width: 56px; margin-left: -5px;"></img> </md-button> </md-fab-trigger> <md-fab-actions>
+					<md-button aria-label="Ocha" class="md-fab md-raised md-mini">
+					<a href="http://www.unocha.org/" class="ocha" target="_blank">
+						<md-tooltip md-direction="bottom"> Office for the
+						Coordination of Humanitarian Affairs (OCHA) </md-tooltip> <img
+						src="resources/images/ocha.png" style="height: 40px; width: 40px; margin-left: -5px;"></img>
+					</a> </md-button> <md-button aria-label="Sbtf" class="md-fab md-raised md-mini">
+					<a href="http://www.standbytaskforce.org/" class="sbtf"
+						target="_blank"> <md-tooltip md-direction="bottom">
+						Standby Task Force (SBTF) </md-tooltip> <img src="resources/images/sbtf.png"
+						style="height: 40px; width: 40px; margin-left: -5px;"></img>
+					</a> </md-button> </md-fab-actions> </md-fab-speed-dial>
 				</div>
 			</div>
+			
 			
 			<div id="image-modal" class="modal_dialog col-lg-12">
 				<a href="#close" title="close" class="close">X</a> <img
@@ -243,6 +236,11 @@
 			</div>
 		</div>
 	</div>
+	
+<script src="resources/lib/angular.min.js"></script>
+<script src="resources/lib/angular-animate.min.js"></script>
+<script src="resources/lib/angular-aria.min.js"></script>
+<script src="resources/lib/angular-material.min.js"></script>
 
 <script src="resources/lib/jquery-1.11.2.min.js"></script>
 <script src="resources/lib/jquery-ui.min.js"></script>
@@ -259,6 +257,15 @@
 
 <script src="resources/js/config.js"></script>
 <script src="resources/js/micromapsNew.js"></script>
+
+<script>
+angular.module('MyApp',['ngMaterial'])
+.controller('DemoCtrl', function() {
+  
+  this.selectedMode = 'md-fling';
+});
+</script>
+
 <script type="text/javascript">
     $(document).ready(function(){
         $(".share-div a").click(function(){

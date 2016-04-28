@@ -31,8 +31,27 @@ public class TaskQueueResponseDaoImpl extends AbstractDaoImpl<TaskQueueResponse,
     }
     
     @Override
-    public List<TaskQueueResponse> getTaskQueueResponseByClientAppID(Long clientAppID) {
-    	Query query = getCurrentSession().createSQLQuery("SELECT * FROM task_queue_response tqr JOIN task_queue tq ON tqr.task_queue_id = tq.id and tq.client_app_id = "+clientAppID).addEntity(TaskQueueResponse.class);
+    public List<TaskQueueResponse> getTaskQueueResponseByClientAppIDAndStatus(Long clientAppID, Integer statusCodeType) {
+    	
+    	return getTaskQueueResponseByClientAppIDStatusAndCreated(clientAppID, statusCodeType, null);
+    }
+    
+    @Override
+    public List<TaskQueueResponse> getTaskQueueResponseByClientAppIDStatusAndCreated(Long clientAppID, Integer statusCodeType, Long createdDate) {
+    	
+    	Query query = null;
+    	
+    	if(createdDate!=null){
+    		//Don't change java.sql to java.util
+    		java.sql.Date date = new java.sql.Date(createdDate);
+    		query = getCurrentSession().createSQLQuery("SELECT * FROM task_queue_response tqr JOIN task_queue tq ON tqr.task_queue_id = tq.id where tq.client_app_id = ?  and tq.status = ? and tqr.created >= ?").addEntity(TaskQueueResponse.class);
+    		query.setParameter(2, date);
+    	}
+    	else{
+    		query = getCurrentSession().createSQLQuery("SELECT * FROM task_queue_response tqr JOIN task_queue tq ON tqr.task_queue_id = tq.id where tq.client_app_id = ?  and tq.status = ?").addEntity(TaskQueueResponse.class);
+    	}
+    	query.setParameter(0, clientAppID);
+    	query.setParameter(1, statusCodeType);
     	query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
     	return query.list();
     }

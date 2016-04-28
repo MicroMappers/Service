@@ -6,13 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,12 +28,10 @@ import qa.qcri.mm.api.entity.ClientApp;
 import qa.qcri.mm.api.entity.ClientAppAnswer;
 import qa.qcri.mm.api.entity.Crisis;
 import qa.qcri.mm.api.entity.MarkerStyle;
-import qa.qcri.mm.api.entity.TaskQueue;
 import qa.qcri.mm.api.entity.TaskQueueResponse;
 import qa.qcri.mm.api.service.ClientAppAnswerService;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.MicroMapsService;
-import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.store.URLReference;
 import qa.qcri.mm.api.template.AerialClickerKMLModel;
@@ -70,11 +68,9 @@ public class MicroMapsServiceImpl implements MicroMapsService {
     @Autowired
     MarkerStyleDao markerStyleDao;
 
-    @Autowired
-    TaskQueueService taskQueueService;
-
     private final JSONParser parser = new JSONParser();
-
+    protected static Logger logger = Logger.getLogger(MicroMapsServiceImpl.class);
+    
     @Override
     public List<MicroMapsCrisisModel> getAllCries() {
         List<MicroMapsCrisisModel> models = new ArrayList<MicroMapsCrisisModel>();
@@ -159,31 +155,24 @@ public class MicroMapsServiceImpl implements MicroMapsService {
     @Override
     public String getGeoClickerByClientAppAndAfterCreatedDate(Long clientAppID,Long createdDate) throws Exception{
 
-        //List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
-        //ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
-
         JSONObject geoClickerOutput = new JSONObject();
         JSONArray features = new JSONArray();
+        JSONArray eachFeatureArrary = null;
+        
+        List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDStatusAndCreated(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED, createdDate);
 
-        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-
-        for(TaskQueue t: taskQueueList){
-
-            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-
-            if(responses.size() > 0 ){
-                if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
-                	TaskQueueResponse taskQueueResponse = responses.get(0);                	
-                	if(taskQueueResponse.getCreated().compareTo(new Date(createdDate)) >= 0){
-                		JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponse.getResponse());
-                        for(Object a : eachFeatureArrary){
-                            features.add(a);
-                        }
-                	}               
-                }
-            }
-
-        }
+        for (TaskQueueResponse taskQueueResponse : responses) {
+        	if(!taskQueueResponse.getResponse().equalsIgnoreCase("{}") && !taskQueueResponse.getResponse().equalsIgnoreCase("[]")){
+        		try {
+					eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponse.getResponse());
+					for(Object a : eachFeatureArrary){
+					    features.add(a);
+					}
+				} catch (Exception e) {
+					logger.warn("Exception while parsing json: "+taskQueueResponse.getResponse(),e);
+				}
+        	}
+		} 
 
         geoClickerOutput.put("type", "FeatureCollection");
         geoClickerOutput.put("features", features);
@@ -202,8 +191,6 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
         JSONObject geoClickerOutput = new JSONObject();
         JSONArray features = new JSONArray();
-        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-        
         List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
         JSONArray bounds = null;
         if(crisises != null && !crisises.isEmpty()){
@@ -211,33 +198,35 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         	bounds = (JSONArray)parser.parse(crisis.getBounds());
         }
         
-        for(TaskQueue t: taskQueueList){
-            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-            if(responses.size() > 0 ){
-                if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
-                    JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
-                    for(Object a : eachFeatureArrary){
-                    	JSONObject jsonObject = (JSONObject) a;
-                    	
-                    	if(jsonObject != null && jsonObject.get("properties") != null 
-                    			&& jsonObject.get("geometry") != null && bounds != null){
-                    		
-                    		JSONObject geometryObject = (JSONObject) jsonObject.get("geometry");
-                        	JSONArray coordinates = (JSONArray) geometryObject.get("coordinates");                        	
-                        	
-                    		if( ((Number)coordinates.get(0)).doubleValue() >= ((Number)bounds.get(0)).doubleValue() 
-                    				&& ((Number)coordinates.get(0)).doubleValue() <= ((Number)bounds.get(2)).doubleValue()
-                    				&& ((Number)coordinates.get(1)).doubleValue() >= ((Number)bounds.get(1)).doubleValue() 
-                    				&& ((Number)coordinates.get(1)).doubleValue() <= ((Number)bounds.get(3)).doubleValue()){
-                    			
-                    			features.add(a);
-                    		
-                    		}
-                    	}
-                    }
+        List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        	for (TaskQueueResponse taskQueueResponse : responses) {
+        		if(!taskQueueResponse.getResponse().equalsIgnoreCase("{}") && !taskQueueResponse.getResponse().equalsIgnoreCase("[]")){
+                    try {
+						JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponse.getResponse());
+						for(Object a : eachFeatureArrary){
+							JSONObject jsonObject = (JSONObject) a;
+							
+							if(jsonObject != null && jsonObject.get("properties") != null 
+									&& jsonObject.get("geometry") != null && bounds != null){
+								
+								JSONObject geometryObject = (JSONObject) jsonObject.get("geometry");
+						    	JSONArray coordinates = (JSONArray) geometryObject.get("coordinates");                        	
+						    	
+								if( ((Number)coordinates.get(0)).doubleValue() >= ((Number)bounds.get(0)).doubleValue() 
+										&& ((Number)coordinates.get(0)).doubleValue() <= ((Number)bounds.get(2)).doubleValue()
+										&& ((Number)coordinates.get(1)).doubleValue() >= ((Number)bounds.get(1)).doubleValue() 
+										&& ((Number)coordinates.get(1)).doubleValue() <= ((Number)bounds.get(3)).doubleValue()){
+									
+									features.add(a);
+								}
+							}
+						}
+					} catch (Exception e) {
+						logger.warn("Exception while parsing json: "+taskQueueResponse.getResponse(),e);
+					}
                 }
-            }
-        }
+			}
+        
         geoClickerOutput.put("developedBy", "Qatar Computing Research Institute");
         geoClickerOutput.put("type", "FeatureCollection");
         geoClickerOutput.put("features", features);
@@ -250,7 +239,6 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
         System.out.println("clientAppID : " + clientAppID);
 
-        List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
         ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
 
         String fileName = URLReference.GEOJSON_HOME + "app" + File.separator + clientApp.getClientAppID() + ".json";
@@ -261,15 +249,17 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             JSONArray features = new JSONArray();
             System.out.println("crisis :" + clientApp.getName());
 
-            //List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-
-            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppID(clientAppID);
-            for(TaskQueueResponse response: responses){
-                if(!response.getResponse().equalsIgnoreCase("{}") && !response.getResponse().equalsIgnoreCase("[]")){
-                    JSONArray eachFeatureArrary = (JSONArray)parser.parse(response.getResponse());
-                    for(Object a : eachFeatureArrary){
-                        features.add(a);
-                    }
+            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+            for(TaskQueueResponse taskQueueresponse: responses){
+                if(!taskQueueresponse.getResponse().equalsIgnoreCase("{}") && !taskQueueresponse.getResponse().equalsIgnoreCase("[]")){
+                    try {
+						JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueresponse.getResponse());
+						for(Object a : eachFeatureArrary){
+						    features.add(a);
+						}
+					} catch (Exception e) {
+						logger.warn("Excpetion while parsing json: "+taskQueueresponse, e);
+					}
                 }
             }
             
@@ -278,6 +268,7 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             geoClickerOutput.put("features", features);            
             
             // if crisis is archived
+            List<Crisis> crisises = crisisDao.findCrisisByClientAppID(clientAppID);
             if(crisises != null && !crisises.isEmpty()){
             	Crisis crisis = crisises.get(0);
             	if(crisis.getActivationEnd() != null){
@@ -333,23 +324,19 @@ public class MicroMapsServiceImpl implements MicroMapsService {
             JSONArray features = new JSONArray();
 
             for (Crisis c : crisises) {
-                List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(c.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-
-                for (TaskQueue t : taskQueueList) {
-
-                    List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-
-                    if (responses.size() > 0) {
-                        if (!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")) {
-                            JSONArray eachFeatureArrary = (JSONArray) parser.parse(responses.get(0).getResponse());
-                            for (Object a : eachFeatureArrary) {
-                                features.add(a);
-                            }
-
-                        }
-                    }
-
-                }
+	            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(c.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+	            for (TaskQueueResponse taskQueueResponse : responses) {
+	            	if (!taskQueueResponse.getResponse().equalsIgnoreCase("{}") && !taskQueueResponse.getResponse().equalsIgnoreCase("[]")) {
+	                    try {
+							JSONArray eachFeatureArrary = (JSONArray) parser.parse(taskQueueResponse.getResponse());
+							for (Object a : eachFeatureArrary) {
+							    features.add(a);
+							}
+						} catch (Exception e) {
+							logger.warn("Excpetion while parsing json: "+taskQueueResponse.getResponse(), e);
+						}
+	                }
+				}
             }
 
             geoClickerOutput.put("type", "FeatureCollection");
@@ -367,31 +354,29 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
     @Override
     public String generateTextClickerKML(Long clientAppID) throws Exception{
-        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
         TextClickerKMLModel model = new TextClickerKMLModel();
         model.setParser(parser);
         model.setKmlText(new StringBuffer());
         model.buildHeader();
-        for(TaskQueue t: taskQueueList){
-            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-            model.buildKMLBody(responses);
-        }
-        model.buildFooter();
+        
+        List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+    	model.buildKMLBody(responses);
+
+    	model.buildFooter();
         return model.getKmlText().toString();
 
     }
 
     @Override
     public String generateImageClickerKML(Long clientAppID) throws Exception{
-        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
         ImageClickerKMLModel model = new ImageClickerKMLModel();
         model.setParser(parser);
         model.setKmlText(new StringBuffer());
         model.buildHeader();
-        for(TaskQueue t: taskQueueList){
-            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-            model.buildKMLBody(responses);
-        }
+        
+        List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        model.buildKMLBody(responses);
+        
         model.buildFooter();
         return model.getKmlText().toString();
 
@@ -399,15 +384,14 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
     @Override
     public String generateAericalClickerKML(Long clientAppID) throws Exception{
-        List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
         AerialClickerKMLModel model = new AerialClickerKMLModel();
         model.setParser(parser);
         model.setKmlText(new StringBuffer());
         model.buildHeader();
-        for(TaskQueue t: taskQueueList){
-            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-            model.buildKMLBody(responses);
-        }
+
+        List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        model.buildKMLBody(responses);
+            
         model.buildFooter();
         return model.getKmlText().toString();
 
@@ -457,11 +441,10 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         JSONParser parser = new JSONParser();
 
         try {
-
             jsonArray =  (JSONArray)parser.parse(ans);
 
         } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        	logger.warn("Exception while parsing json: "+ans,e);
         }
 
         return jsonArray;

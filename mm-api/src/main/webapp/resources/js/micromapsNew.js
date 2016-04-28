@@ -173,7 +173,6 @@
             	$.ajax({
                     url: MicroMaps.config.ROOT + "current_user",
                     success: function(response) {
-                    	$.log(response.data.status);
                     	if(response.data.status == "NOT_ADMIN") {
                     		$("#divider").hide();
                     		_this.load();

@@ -54,9 +54,9 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
         logger.warn("fileURL : " + fileURL );
         logger.warn("clientAppID : " + clientAppID );
 
-        boolean dublicateFound = clientAppSourceDao.findDuplicateSource(fileURL, clientAppID);
+        boolean duplicateFound = clientAppSourceDao.findDuplicateSource(fileURL, clientAppID);
 
-        if(!dublicateFound){
+        if(!duplicateFound){
             List<ClientAppSource>  sources = clientAppSourceDao.findActiveSourcePerClient( clientAppID );
             if(sources.size() > 0){
                 System.out.println("sources : EXTERNAL_DATA_SOURCE_UPLOADED");
@@ -70,7 +70,7 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
                 clientAppSourceDao.createNewSource(ca2);
             }
         }
-        return dublicateFound;
+        return duplicateFound;
     }
 
     @Override
