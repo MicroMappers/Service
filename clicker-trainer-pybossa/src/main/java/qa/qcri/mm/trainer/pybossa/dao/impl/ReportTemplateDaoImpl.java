@@ -40,7 +40,7 @@ public class ReportTemplateDaoImpl extends AbstractDaoImpl<ReportTemplate, Strin
     @Override
     public void updateReportItem(ReportTemplate reportTemplate) {
         //To change body of implemented methods use File | Settings | File Templates.
-        ReportTemplate reportItem = findByCriterionID(Restrictions.eq("reportTemplateID",reportTemplate.getReportTemplateID()));
+        ReportTemplate reportItem = findByCriterionID(Restrictions.eq("reportTemplateID", reportTemplate.getReportTemplateID()));
         if(reportItem != null){
             reportItem.setStatus(reportTemplate.getStatus());
             if(reportItem.getCreated() == null){
@@ -62,6 +62,12 @@ public class ReportTemplateDaoImpl extends AbstractDaoImpl<ReportTemplate, Strin
     @Override
     public List<ReportTemplate> getReportTemplateSearchBy(String field, String value) {
         return findByCriteria(Restrictions.eq(field, value));
+
+    }
+
+    @Override
+    public List<ReportTemplate> getReportTemplateWithUniqueKey(String field, Integer value, String uniqueKey ) {
+        return findUniqueByCriteria(Restrictions.eq(field, value), uniqueKey);
 
     }
 }

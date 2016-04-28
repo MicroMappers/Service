@@ -17,10 +17,7 @@ import qa.qcri.mm.trainer.pybossa.format.impl.CVSRemoteFileFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicromapperInput;
 import qa.qcri.mm.trainer.pybossa.service.*;
-import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
-import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
-import qa.qcri.mm.trainer.pybossa.store.URLPrefixCode;
-import qa.qcri.mm.trainer.pybossa.store.UserAccount;
+import qa.qcri.mm.trainer.pybossa.store.*;
 import qa.qcri.mm.trainer.pybossa.util.DateTimeConverter;
 
 import java.io.*;
@@ -38,7 +35,7 @@ import java.util.List;
 @Transactional(readOnly = false)
 public class ReportProductServiceImpl implements ReportProductService {
 
-    protected static Logger logger = Logger.getLogger("reportProductService");
+    protected static Logger logger = Logger.getLogger(ReportProductServiceImpl.class);
 
     @Autowired
     private ClientService clientService;
@@ -94,7 +91,7 @@ public class ReportProductServiceImpl implements ReportProductService {
     }
 
     @Override
-    public void generateCVSReportForGeoClicker() throws Exception{
+    public void generateCVSReportForImageGeoClicker() throws Exception{
         setClassVariable();
 
         if(client == null){
@@ -136,6 +133,54 @@ public class ReportProductServiceImpl implements ReportProductService {
                 }
             }
         }
+    }
+
+
+    @Override
+    public void generateCVSReportForTextGeoClicker() throws Exception{
+        setClassVariable();
+        if(client == null){
+            return;
+        }
+
+        List<ReportTemplate> temps =  reportTemplateService.getReportTemplateWithUniqueKey("clientAppID");
+
+        Iterator itr= temps.iterator();
+
+        while(itr.hasNext()){
+
+            Long clientAppID = (long)itr.next();
+            List<ReportTemplate> templateList =  reportTemplateService.getReportTemplateByClientApp(clientAppID, LookupCode.TEMPLATE_IS_READY_FOR_EXPORT);
+
+            if(templateList.size() > LookupCode.MIN_REPORT_TEMPLATE_EXPORT_SIZE){
+                CVSRemoteFileFormatter formatter = new CVSRemoteFileFormatter();
+                ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
+                String sTemp = reformatFileName(clientApp.getShortName()) ;
+
+                String fileName = PybossaConf.DEFAULT_TRAINER_FILE_PATH + sTemp;
+
+                CSVWriter writer = formatter.instanceToOutput(fileName);
+
+                for(int i=0; i < templateList.size(); i++){
+                    ReportTemplate rpt = templateList.get(i);
+                    String answer = rpt.getAnswer().trim().toLowerCase();
+
+                    formatter.addToCVSOuputFile(generateOutputData(rpt),writer);
+
+                    rpt.setStatus(LookupCode.TEMPLATE_EXPORTED);
+                    reportTemplateService.updateReportItem(rpt);
+                }
+                formatter.finalizeCVSOutputFile(writer);
+                ClientAppEvent targetClinetApp = clientAppEventService.getNextSequenceClientAppEvent(clientApp.getClientAppID());
+                if(targetClinetApp != null ){
+                    ClientAppSource appSource = new ClientAppSource(targetClinetApp.getClientAppID(), LookupCode.EXTERNAL_DATA_SOURCE_ACTIVE, fileName);
+                    clientAppSourceService.insertNewClientAppSource(appSource);
+                }
+
+            }
+
+        }
+
     }
 
     @Override
@@ -302,5 +347,20 @@ public class ReportProductServiceImpl implements ReportProductService {
 
         }
 
+    }
+
+    private String reformatFileName(String shortName){
+        String sTemp = DateTimeConverter.reformattedCurrentDateForFileName() + shortName ;
+
+        if(sTemp.length() > 50){
+            int iCutCount = sTemp.length() - 50;
+            iCutCount = sTemp.length() - iCutCount;
+
+            sTemp = sTemp.substring(0, iCutCount) ;
+
+        }
+        sTemp = sTemp + "export.csv";
+
+        return sTemp;
     }
 }

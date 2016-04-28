@@ -3,11 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>clickers-gis</groupId>
-    <artifactId>clickers-gis</artifactId>
+    <groupId>clickers-gis-util</groupId>
+    <artifactId>clickers-gis-util</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>clickers-gis</name>
+    <name>clickers-gis-util</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -86,7 +86,22 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.2.5</version>
+            <version>4.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>wget</artifactId>
+            <version>1.2.17</version>
         </dependency>
     </dependencies>
     <repositories>
@@ -110,7 +125,7 @@
         </repository>
     </repositories>
     <build>
-        <finalName>clickers-gis</finalName>
+        <finalName>clickers-gis-util</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

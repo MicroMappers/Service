@@ -59,13 +59,15 @@ public class PybossaCommunicator extends AbstractCommunicator {
                 }
             }
             else{
-
+                logger.error(response.getStatusLine().getStatusCode());
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatusLine().getStatusCode());
             }
 
         }catch (Exception ex) {
             System.out.println("ex Code sendPut: " + ex);
+            logger.error("url:" + url);
+            logger.error("data:" + data);
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
@@ -210,6 +212,7 @@ public class PybossaCommunicator extends AbstractCommunicator {
 
         }catch (Exception ex) {
            // System.out.println("Exception Code : " + ex);
+            logger.error("Exception Code : " + ex);
             responseOutput.append("Exception Code : " + ex);
 
         } finally {
@@ -230,7 +233,7 @@ public class PybossaCommunicator extends AbstractCommunicator {
         try {
             URL connectionURL = new URL(url);
             con = (HttpURLConnection) connectionURL.openConnection();
-
+            con.setConnectTimeout(5000);
             //System.out.println("con default timeout value: " + con.getConnectTimeout());
 
             con.setRequestMethod("GET");
@@ -248,9 +251,20 @@ public class PybossaCommunicator extends AbstractCommunicator {
             }
             in.close();
 
+        } catch (java.net.SocketTimeoutException e1) {
+            logger.error("ex Code sendGet 1: " + e1 + " : sendGet url = " + url);
+            logger.error("[errror on sendGet ]" + url);
+        } catch (java.io.IOException e2) {
+            logger.error("ex Code sendGet 2: " + e2 + " : sendGet url = " + url);
+            logger.error("[errror on sendGet ]" + url);
         }catch (Exception ex) {
-            System.out.println("ex Code sendGet: " + ex + " : sendGet url = " + url);
-            logger.debug("[errror on sendGet ]" + url);
+            logger.error("ex Code sendGet 3: " + ex + " : sendGet url = " + url);
+            logger.error("[errror on sendGet ]" + url);
+        }
+        finally {
+            if(con != null){
+                con.disconnect();
+            }
         }
 
         return response.toString();

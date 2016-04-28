@@ -53,7 +53,7 @@ public class GridImage implements Runnable {
         }
 
         //generateFile(sb.toString(), foldername);
-        generateJson()  ;
+       // generateJson()  ;
 
     }
 
@@ -162,8 +162,8 @@ public class GridImage implements Runnable {
     }
 
     public static void main(String[] args) {
-        String parentPath = "/Users/jlucas/Documents/imagery/dugone/";
-        String[] folderName = {"CANONFIRE2"};
+        String parentPath = "/Users/jlucas/Downloads/Tacloban_02/";
+        String[] folderName = {"img"};
         //"day2_rgb_transect_count","day3_rgb_kaelber","day5_rgb_transect_main_road","day5_rgb_transect_rosinki_ixus","day5_rgb_zebra"
        // String parentPath = "/Users/jlucas/Documents/aerialClicker/";
         //String[] folderName = {"day5_rgb_zebra_archive"};

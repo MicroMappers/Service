@@ -1,8 +1,10 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,8 @@ import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
 @Service("taskQueueService")
 @Transactional(readOnly = true)
 public class TaskQueueServiceImpl implements TaskQueueService {
+
+    private static Logger logger = Logger.getLogger(TaskQueueServiceImpl.class);
 
     @Autowired
     private TaskQueueDao taskQueueDao;
@@ -34,7 +38,7 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     @Override
     @Transactional(readOnly = false)
     public void updateTaskQueue(TaskQueue taskQueue) {
-        /*TaskQueue queue;
+        TaskQueue queue;
         if(taskQueue.getDocumentID()!=null){
             queue = taskQueueDao.findTaskQueue(taskQueue.getTaskID(),taskQueue.getClientAppID(), taskQueue.getDocumentID()).get(0);
         }
@@ -42,10 +46,10 @@ public class TaskQueueServiceImpl implements TaskQueueService {
             queue = taskQueueDao.findTaskQueueByTaskID(taskQueue.getClientAppID(), taskQueue.getTaskID()).get(0);
         }
         queue.setStatus(taskQueue.getStatus());
-        queue.setUpdated(new Date());*/
+        queue.setUpdated(new Date());
 
         try{
-            taskQueueDao.updateTaskQueue(taskQueue);
+            taskQueueDao.updateTaskQueue(queue);
         }
         catch (Exception ex){
             System.out.println("updateTaskQueue Exception : " + ex.getMessage());

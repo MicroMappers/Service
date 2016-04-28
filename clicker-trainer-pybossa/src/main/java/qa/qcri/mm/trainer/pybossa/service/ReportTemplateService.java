@@ -17,4 +17,5 @@ public interface ReportTemplateService {
     void updateReportItem(ReportTemplate reportTemplate);
     List<ReportTemplate> getReportTemplateSearchByTwittID(String field, String value);
 	List<ReportTemplate> getReportTemplatesByUrl(String url);
+    List<ReportTemplate> getReportTemplateWithUniqueKey(String uniqueKey);
 }

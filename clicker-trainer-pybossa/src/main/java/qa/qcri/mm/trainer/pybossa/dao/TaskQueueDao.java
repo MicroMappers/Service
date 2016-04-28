@@ -15,7 +15,7 @@ import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 public interface TaskQueueDao extends AbstractDao<TaskQueue, String>  {
 
     void createTaskQueue(TaskQueue taskQueue);
-    public void updateTaskQueue(TaskQueue taskQueue);
+    void updateTaskQueue(TaskQueue taskQueue);
     List<TaskQueue> findTaskQueue(Long taskID, Long clientAppID, Long documentID);
     List<TaskQueue> findTaskQueueByDocument(Long clientAppID, Long documentID);
     List<TaskQueue> findTaskQueueByStatus(String column,Integer status);

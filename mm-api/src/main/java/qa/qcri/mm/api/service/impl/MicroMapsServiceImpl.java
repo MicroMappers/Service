@@ -244,7 +244,8 @@ public class MicroMapsServiceImpl implements MicroMapsService {
         return geoClickerOutput.toJSONString();     
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public String getGeoClickerByClientApp(Long clientAppID) throws Exception{
 
         System.out.println("clientAppID : " + clientAppID);
@@ -258,33 +259,23 @@ public class MicroMapsServiceImpl implements MicroMapsService {
 
         if(!DataFileUtil.doesFileExist(fileName)) {
             JSONArray features = new JSONArray();
-
             System.out.println("crisis :" + clientApp.getName());
 
-            List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+            //List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
 
-            System.out.println("taskQueueList :" + taskQueueList.size());
-
-            for(TaskQueue t: taskQueueList){
-
-                List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(t.getTaskQueueID());
-
-                if(responses.size() > 0 ){
-                    if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
-                        JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
-                        for(Object a : eachFeatureArrary){
-                            features.add(a);
-                        }
-
+            List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponseByClientAppID(clientAppID);
+            for(TaskQueueResponse response: responses){
+                if(!response.getResponse().equalsIgnoreCase("{}") && !response.getResponse().equalsIgnoreCase("[]")){
+                    JSONArray eachFeatureArrary = (JSONArray)parser.parse(response.getResponse());
+                    for(Object a : eachFeatureArrary){
+                        features.add(a);
                     }
                 }
-
             }
             
             geoClickerOutput.put("developedBy", "Qatar Computing Research Institute");
             geoClickerOutput.put("type", "FeatureCollection");
             geoClickerOutput.put("features", features);            
-            //System.out.println(geoClickerOutput.toJSONString());
             
             // if crisis is archived
             if(crisises != null && !crisises.isEmpty()){

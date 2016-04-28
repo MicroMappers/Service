@@ -2,6 +2,7 @@ package qa.qcri.mm.trainer.pybossa.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import qa.qcri.mm.trainer.pybossa.dao.ReportTemplateDao;
 import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
+import qa.qcri.mm.trainer.pybossa.store.LookupCode;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +23,8 @@ import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
 @Service("reportTemplateService")
 @Transactional(readOnly = false)
 public class ReportTemplateServiceImpl implements ReportTemplateService {
+
+    private static Logger logger = Logger.getLogger(ReportTemplateServiceImpl.class);
 
     @Autowired
     private ReportTemplateDao reportTemplateDao;
@@ -34,11 +38,18 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
 
         }
         catch(Exception ex){
+            logger.error("saveReportItem exception");
+            logger.error(ex.getMessage());
             System.out.println("saveReportItem exception : " + ex.getMessage());
             throw new RuntimeException(ex.getMessage());
         }
 
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<ReportTemplate> getReportTemplateWithUniqueKey(String uniqueKey) {
+        return reportTemplateDao.getReportTemplateWithUniqueKey("status", LookupCode.TEMPLATE_IS_READY_FOR_EXPORT, uniqueKey);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

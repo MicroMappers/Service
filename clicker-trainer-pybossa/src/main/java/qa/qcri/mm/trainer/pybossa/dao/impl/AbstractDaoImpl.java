@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -85,6 +86,7 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @Override
     public List<E> findAll() {
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        criteria.add(Restrictions.eq("status", 1));
         criteria.setProjection(Projections.distinct(Projections.property("crisisID")));
 
         return criteria.list();
@@ -108,6 +110,15 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
         return criteria.list();
     }
+
+    @Override
+    public List<E> findUniqueByCriteria(Criterion criterion, String uniqueField) {
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        criteria.add(criterion);
+        criteria.setProjection(Projections.distinct(Projections.property(uniqueField)));
+        return criteria.list();
+    }
+
 
     @Override
     public List<E> getAll() {

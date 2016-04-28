@@ -8,8 +8,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -24,8 +23,62 @@ import java.util.Date;
 public class DataPull {
 
     public static void main(String[] args)  {
-        String threadName = Thread.currentThread().getName();
+
+
+
+        //File file = new File("/Users/jlucas/Desktop/dataTest/winstonFiji.csv");
+        BufferedReader br = null;
+
+        try {
+
+            String sCurrentLine;
+
+            br = new BufferedReader(new FileReader("/Users/jlucas/Desktop/dataTest/winstonFiji.csv"));
+            int i = 0;
+            int fIndex = 0;
+            String fname = "/Users/jlucas/Desktop/dataTest/winstonFiji_"+ fIndex +".csv";
+
+            FileWriter fstream = new FileWriter(fname, true);
+            BufferedWriter out = new BufferedWriter(fstream);
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                System.out.println(sCurrentLine);
+                if(i == 1500){
+                    i = 0;
+                    fIndex = fIndex + 1;
+                    fname = "/Users/jlucas/Desktop/dataTest/winstonFiji_"+ fIndex +".csv";
+                    out.close();
+                    fstream = new FileWriter(fname, true);
+                    out = new BufferedWriter(fstream);
+                }
+
+
+                out.write(sCurrentLine);
+                out.newLine();
+
+                i++;
+            }
+
+            out.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)br.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+
+
+
+
+
+        //String threadName = Thread.currentThread().getName();
         //logger.debug("   " + threadName + " has began working.(SyncWorker - run ClientApps)");
+
         while(true){
             System.out.println("Data Pull Scheduler is starting");
             try {
@@ -43,8 +96,6 @@ public class DataPull {
 
                     String returnValue = sendPostGet(jsonArray.toJSONString(), "http://gis.micromappers.org/MMAPI/rest/source/save");
 
-
-
                 }
                 Thread.sleep(900000);
             }
@@ -55,6 +106,7 @@ public class DataPull {
             }
             System.out.println(" DataPull Scheduler is going sleep");
         }
+
 
 
     }

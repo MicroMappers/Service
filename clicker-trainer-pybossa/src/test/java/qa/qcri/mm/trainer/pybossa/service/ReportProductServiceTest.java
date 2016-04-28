@@ -22,7 +22,7 @@ public class ReportProductServiceTest {
 
     @Test
     public void testGenerateCVSReportForGeoClicker() throws Exception {
-      //  reportProductService.generateCVSReportForGeoClicker();
+       // reportProductService.generateCVSReportForImageGeoClicker();
       //  reportProductService.generateMapBoxTemplateForAerialClicker();
        // long cAppID = 255;
        // reportProductService.generateGeoJsonForClientApp(cAppID);

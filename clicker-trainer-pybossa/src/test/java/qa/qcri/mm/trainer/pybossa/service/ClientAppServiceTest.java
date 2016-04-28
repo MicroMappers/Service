@@ -27,6 +27,8 @@ public class ClientAppServiceTest {
     public void testGetAllCrisis() throws Exception {
 
        //List<ClientApp> clientAppList =   clientAppService.getAllCrisis();
+       // List<ClientApp> clientAppList2 = clientAppService.getAllClientAppByClientID(new Long(4));
+       // List<ClientApp> clientAppList3 = clientAppService.getAllClientAppByClientID(new Long(3));
         /**
         for (int i = 0; i < clientAppList.size(); i++) {
             Object obj =  clientAppList.get(i);
@@ -44,7 +46,9 @@ public class ClientAppServiceTest {
                 }
             }
         }
-       System.out.print("clientAppList: " + clientAppList);    **/
+
+         **/
+      // System.out.print("clientAppList: " + clientAppList);
 
 
 
