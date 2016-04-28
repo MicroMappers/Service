@@ -8,20 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import qa.qcri.mm.api.aidr_predict_entity.UserAccountActivity;
 import qa.qcri.mm.api.repository.UserAccountActivityRepository;
-import qa.qcri.mm.api.repository.UserAccountRepository;
-import qa.qcri.mm.api.repository.UserAccountRoleRepository;
 import qa.qcri.mm.api.service.UserAcountActivityService;
 
 
 @Service("userAccountActivityService")
 public class UserAcountActivityServiceImpl implements UserAcountActivityService{
 
-	@Autowired
-	private UserAccountRepository userRepository;
-	
-	@Autowired
-    private UserAccountRoleRepository userRoleRepository;
-	
 	@Autowired
     private UserAccountActivityRepository userAccountActivityRepository;
     

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.lang.Integer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,23 +91,17 @@ public class TaskQueueServiceImpl implements TaskQueueService {
 
     @Override
     public List<TaskQueueResponse> getTaskQueueResponseByClientApp(String shortName){
-        ClientApp app = clientAppService.findClientAppByCriteria("shortName", shortName);
-
-        List<TaskQueue> taskQueues =  this.getTaskQueueByClientAppStatus(app.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        ClientApp clientApp = clientAppService.findClientAppByCriteria("shortName", shortName);
 
         List<TaskQueueResponse> responses = new ArrayList<TaskQueueResponse>();
-
-        for(TaskQueue taskQ : taskQueues){
-            List<TaskQueueResponse> taskQueueResponse = taskQueueResponseDao.getTaskQueueResponseByTaskQueueID(taskQ.getTaskQueueID());
-            if(taskQueueResponse.size() > 0){
-                TaskQueueResponse thisTaskResponse = taskQueueResponse.get(0);
-                String infoOutput = thisTaskResponse.getResponse();
-
-                if(infoOutput!= null && !infoOutput.isEmpty()){
-                    responses.add(thisTaskResponse) ;
-                }
-            }
-        }
+        
+        List<TaskQueueResponse> taskQueueResponses = taskQueueResponseDao.getTaskQueueResponseByClientAppIDAndStatus(clientApp.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+        for (TaskQueueResponse taskQueueResponse : taskQueueResponses) {
+			if(StringUtils.isNotEmpty(taskQueueResponse.getResponse())){
+				responses.add(taskQueueResponse) ;
+			}
+		}
+        
         return responses;
     }
 

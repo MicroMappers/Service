@@ -1,5 +1,9 @@
 package qa.qcri.mm.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,20 +11,18 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import qa.qcri.mm.api.dao.ReportTemplateDao;
 import qa.qcri.mm.api.dao.TaskQueueResponseDao;
-import qa.qcri.mm.api.entity.*;
+import qa.qcri.mm.api.entity.ClientApp;
+import qa.qcri.mm.api.entity.ReportTemplate;
+import qa.qcri.mm.api.entity.TaskQueueResponse;
 import qa.qcri.mm.api.service.ClientAppService;
 import qa.qcri.mm.api.service.GeoService;
 import qa.qcri.mm.api.service.TaskQueueService;
 import qa.qcri.mm.api.store.CodeLookUp;
 import qa.qcri.mm.api.store.StatusCodeType;
 import qa.qcri.mm.api.template.GeoJsonOutputModel;
-
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,13 +54,9 @@ public class GeoServiceImpl implements GeoService {
         List<GeoJsonOutputModel> geoJsonOutputModels =  new ArrayList<GeoJsonOutputModel>();
         List<ClientApp> clientApps =  clientAppService.findClientAppByAppType("appType",CodeLookUp.APP_MAP)  ;
 
-        for(int i=0; i < clientApps.size(); i++){
-
-            ClientApp clientApp = clientApps.get(i);
-            List<TaskQueue> taskQueues = taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-            geoJsonOutputModels = processTaskQueue(taskQueues, geoJsonOutputModels, null);
-
-        }
+        for (ClientApp clientApp : clientApps) {
+            geoJsonOutputModels = processTaskQueue(clientApp.getClientAppID(), geoJsonOutputModels, StatusCodeType.TASK_LIFECYCLE_COMPLETED, null);
+		}
 
         return geoJsonOutputModels;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -69,12 +67,8 @@ public class GeoServiceImpl implements GeoService {
         List<GeoJsonOutputModel> geoJsonOutputModels =  new ArrayList<GeoJsonOutputModel>();
         List<ClientApp> clientApps =  clientAppService.findClientAppByAppType("appType",CodeLookUp.APP_MAP)  ;
 
-        for(int i=0; i < clientApps.size(); i++){
-
-            ClientApp clientApp = clientApps.get(i);
-            List<TaskQueue> taskQueues = taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-            geoJsonOutputModels = processTaskQueue(taskQueues, geoJsonOutputModels, updated);
-
+        for (ClientApp clientApp : clientApps) {
+            geoJsonOutputModels = processTaskQueue(clientApp.getClientAppID(), geoJsonOutputModels, StatusCodeType.TASK_LIFECYCLE_COMPLETED, updated);
         }
 
         JSONArray jsonArray = new JSONArray();
@@ -97,13 +91,9 @@ public class GeoServiceImpl implements GeoService {
         List<GeoJsonOutputModel> geoJsonOutputModels =  new ArrayList<GeoJsonOutputModel>();
         List<ClientApp> clientApps =  clientAppService.findClientAppByAppType("appType",CodeLookUp.APP_MAP)  ;
 
-        for(int i=0; i < clientApps.size(); i++){
-
-            ClientApp clientApp = clientApps.get(i);
-            List<TaskQueue> taskQueues = taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
-            geoJsonOutputModels = processTaskQueue(taskQueues, geoJsonOutputModels, updated);
-
-        }
+        for (ClientApp clientApp : clientApps) {
+            geoJsonOutputModels = processTaskQueue(clientApp.getClientAppID(), geoJsonOutputModels, StatusCodeType.TASK_LIFECYCLE_COMPLETED, updated);
+		}
 
         JSONArray jsonArray = new JSONArray();
         for(GeoJsonOutputModel item : geoJsonOutputModels) {
@@ -121,50 +111,45 @@ public class GeoServiceImpl implements GeoService {
     }
 
 
-    private List<GeoJsonOutputModel> processTaskQueue(List<TaskQueue> taskQueues, List<GeoJsonOutputModel> geoJsonOutputModels, Date updated) throws ParseException {
+    private List<GeoJsonOutputModel> processTaskQueue(Long clientAppId, List<GeoJsonOutputModel> geoJsonOutputModels, Integer statusCodeType, Date updated) throws ParseException {
         boolean isItOkToAdd = true;
-        for (TaskQueue element : taskQueues) {
-            isItOkToAdd = true;
+        List<TaskQueueResponse> taskQueueResponses =  taskQueueResponseDao.getTaskQueueResponseByClientAppIDStatusAndCreated(clientAppId, StatusCodeType.TASK_LIFECYCLE_COMPLETED, updated.getTime());
+      
+		for (TaskQueueResponse taskQueueResponse : taskQueueResponses) {
+        	isItOkToAdd = true;
+        	
+        	if(taskQueueResponse.getTaskInfo() != null && !isEmptyGeoJson(taskQueueResponse.getResponse())){
 
-            List<TaskQueueResponse> taskQueueResponses =  taskQueueResponseDao.getTaskQueueResponseByTaskQueueIDBasedOnLastUpdate(element.getTaskQueueID(), updated);
+                List<ReportTemplate>templateList =  reportTemplateDao.getReportTemplateSearchBy("tweetID", taskQueueResponse.getTaskInfo());
 
-            if(taskQueueResponses.size() > 0){
-
-                if(taskQueueResponses.get(0).getTaskInfo() != null){
-                    if(!isEmptyGeoJson(taskQueueResponses.get(0).getResponse()) ){
-
-                        List<ReportTemplate>templateList =  reportTemplateDao.getReportTemplateSearchBy("tweetID", taskQueueResponses.get(0).getTaskInfo());
-
-                        if(taskQueueResponses.size() > 0 && templateList.size() > 0 ){
-                            GeoJsonOutputModel model = new GeoJsonOutputModel(templateList.get(0), taskQueueResponses.get(0));
-                            if(model.getGeoJson().contains("No Location Information")){
-                                JSONArray newFeatures = new JSONArray();
-                                JSONArray features  = (JSONArray)parser.parse(model.getGeoJson()) ;
-                                for(int i =0; i < features.size(); i++){
-                                    if(!features.get(i).equals("No Location Information")){
-                                        newFeatures.add(features.get(i));
-                                    }
-                                }
-                                if(newFeatures.size() > 0){
-                                    model.setGeoJson(newFeatures.toJSONString());
-                                }
-                                else{
-                                    isItOkToAdd = false;
-                                }
-
-                            }
-                            if(isItOkToAdd){
-                                geoJsonOutputModels.add( model );
+                if(templateList.size() > 0 ){
+                    GeoJsonOutputModel model = new GeoJsonOutputModel(templateList.get(0), taskQueueResponse);
+                    if(model.getGeoJson().contains("No Location Information")){
+                        JSONArray newFeatures = new JSONArray();
+                        JSONArray features  = (JSONArray)parser.parse(model.getGeoJson()) ;
+                        for(int i =0; i < features.size(); i++){
+                            if(!features.get(i).equals("No Location Information")){
+                                newFeatures.add(features.get(i));
                             }
                         }
+                        if(newFeatures.size() > 0){
+                            model.setGeoJson(newFeatures.toJSONString());
+                        }
+                        else{
+                            isItOkToAdd = false;
+                        }
+
+                    }
+                    if(isItOkToAdd){
+                        geoJsonOutputModels.add( model );
                     }
                 }
             }
-        }
+		}
 
         return geoJsonOutputModels;
     }
-
+    
     private boolean isEmptyGeoJson(String jsonString){
         boolean isEmpty = false;
         //geometry
