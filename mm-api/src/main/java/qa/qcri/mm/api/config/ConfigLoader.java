@@ -25,12 +25,10 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = { "qa.qcri.mm.api","org.socialsignin.springsocial.security" })
+@ComponentScan(basePackages = { "qa.qcri.mm.api"})//,"org.socialsignin.springsocial.security" })
 @EnableScheduling
 public class ConfigLoader extends WebMvcConfigurerAdapter {
 
-	@Autowired
-	EntityManagerFactory entityManagerFactory;
 
 	/* To load properties files */
 	@Bean
@@ -52,13 +50,13 @@ public class ConfigLoader extends WebMvcConfigurerAdapter {
 	 * Defining bean to add openEntityManagerInViewInterceptor as intercepter
 	 * for enabling openEntityManagerInViewInterceptor pattern
 	 */
-	@Bean
+/*	@Bean
 	public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
 		OpenEntityManagerInViewInterceptor oemiv = new OpenEntityManagerInViewInterceptor();
 		oemiv.setEntityManagerFactory(entityManagerFactory);
 		return oemiv;
 	}
-	
+*/	
 	@Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

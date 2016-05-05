@@ -140,7 +140,8 @@
 
             _this.init = function () {
             	$('#loading-widget').show();
-            	$.ajax({
+            	_this.load();
+            	/*$.ajax({
                     url: MicroMaps.config.ROOT + "isadmin",
                     success: function(response) {
                     	if(response.data == "NOT_ADMIN") {
@@ -153,7 +154,7 @@
                     		$("#login-modal").show();
                     	}
                     }
-            	});
+            	});*/
                 return this;
             };
 
@@ -213,7 +214,7 @@
                     },
                     error: function(jq,status,message) {
                     	$('#loading-widget').hide();
-                    	$("#login-modal").show();
+                    	toastr.error("Unable to load crisis list. Pleas try again later.");
                     	//alert("login");
                     }
                     
@@ -446,7 +447,7 @@
               );
 
               var customMenu = function(node) {
-                var items = {
+                var items = {/*
                     "geojson": {
                         "label": "Download Geojson",
                         "icon" : "fa fa-download",
@@ -460,7 +461,7 @@
                         "action" : function(obj){
                           _this.downloadKML(_this.downloadNode);
                         }
-                    },
+                    },*/
                     "detail_map": {
                         "label": "Detail Map",
                         "icon" : "fa fa-share-square-o",
@@ -804,8 +805,8 @@
 
 
                 //var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'qcricl1linuxvm2.cloudapp.net/data/trainer/pam/pam' );
-                var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'aidr-prod.qcri.org/trainer/pam' );
-
+                //var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'aidr-prod.qcri.org/trainer/pam' );
+                var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'http://gis.micromappers.org/trainer/pam' );
 
                 L.imageOverlay(sImgURL, imageBounds).addTo(selectedMap);
 

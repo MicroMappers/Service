@@ -167,7 +167,7 @@ public class PybossaAppCreateWorker implements ClientAppCreateWorker {
             if(duplicateFound) {
                 String appInfoDuplicate = pybossaCommunicator.sendGet(PYBOSSA_APP_INFO_URL + appcode);
                 Long appIDDuplicate = textClickerFormat.getAppID(appInfoDuplicate, parser);
-                this.createClientAppInstance(crisisID, appname,description,appIDDuplicate,appcode,nominalAttributeID);
+                this.createClientAppInstance(crisisID, appname,description,appIDDuplicate,appcode,nominalAttributeID, LookupCode.AIDR_ONLY);
                 return;
             }
 
@@ -176,7 +176,7 @@ public class PybossaAppCreateWorker implements ClientAppCreateWorker {
                 String appInfo = pybossaCommunicator.sendGet(PYBOSSA_APP_INFO_URL + appcode);
                 Long appID = textClickerFormat.getAppID(appInfo, parser);
                 if(localClientApp == null){
-                    localClientApp = this.createClientAppInstance(crisisID, appname,description,appID,appcode,nominalAttributeID);
+                    localClientApp = this.createClientAppInstance(crisisID, appname,description,appID,appcode,nominalAttributeID, LookupCode.AIDR_ONLY);
                 }
                 this.doAppUpdate(localClientApp, appInfo, featureJsonObj, labelModel, code, name);
             }
@@ -273,8 +273,9 @@ public class PybossaAppCreateWorker implements ClientAppCreateWorker {
         }
     }
 
-    private ClientApp createClientAppInstance(Long crisisID, String appname, String description, Long appID, String appcode, Long nominalAttributeID){
+    private ClientApp createClientAppInstance(Long crisisID, String appname, String description, Long appID, String appcode, Long nominalAttributeID, Integer status){
         ClientApp clApp = new ClientApp(client.getClientID(),crisisID, appname,description,appID,appcode,nominalAttributeID, client.getDefaultTaskRunsPerTask(), LookupCode.APP_MULTIPLE_CHOICE);
+        clApp.setStatus(status);
         clientAppService.createClientApp(clApp);
         return clApp;
 
