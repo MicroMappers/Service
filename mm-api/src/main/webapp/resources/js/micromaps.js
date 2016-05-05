@@ -140,7 +140,8 @@
 
             _this.init = function () {
             	$('#loading-widget').show();
-            	$.ajax({
+            	_this.load();
+            	/*$.ajax({
                     url: MicroMaps.config.ROOT + "isadmin",
                     success: function(response) {
                     	if(response.data == "NOT_ADMIN") {
@@ -153,7 +154,7 @@
                     		$("#login-modal").show();
                     	}
                     }
-            	});
+            	});*/
                 return this;
             };
 
@@ -213,7 +214,7 @@
                     },
                     error: function(jq,status,message) {
                     	$('#loading-widget').hide();
-                    	$("#login-modal").show();
+                    	toastr.error("Unable to load crisis list. Pleas try again later.");
                     	//alert("login");
                     }
                     

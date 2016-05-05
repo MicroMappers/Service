@@ -2,24 +2,19 @@ package qa.qcri.mm.api.config;
 
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp.BasicDataSource;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -28,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Profile("default")
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "qa.qcri.mm.api.repository")
+//@EnableJpaRepositories(basePackages = "qa.qcri.mm.api.repository")
 public class PersistenceConfig {
 
 	@Value("${jdbc.driver}")
@@ -64,13 +59,14 @@ public class PersistenceConfig {
 	@Value("${aidr_predict.jdbc.password}")
 	private String aidrPredictPassword;
 
-	@Bean(destroyMethod = "close")
-	public DataSource dataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
+	
+	public DriverManagerDataSource dataSource() {
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setUrl(url);
 		dataSource.setDriverClassName(driver);
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
+
 		return dataSource;
 	}
 
@@ -85,17 +81,35 @@ public class PersistenceConfig {
 		return sessionFactory;
 	}
 
-	@Bean(destroyMethod = "close")
+/*	@Bean(destroyMethod = "close")
 	public DataSource aidrPredictDataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
+		org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
 		dataSource.setUrl(aidrPredictUrl);
 		dataSource.setDriverClassName(aidrPredictDriver);
 		dataSource.setUsername(aidrPredictUsername);
 		dataSource.setPassword(aidrPredictPassword);
+
+		dataSource.setJmxEnabled(jmxEnabled);
+		dataSource.setTestWhileIdle(testWhileIdle);
+		dataSource.setTestOnBorrow(testOnBorrow);
+		dataSource.setValidationQuery(validationQuery);
+		dataSource.setTestOnReturn(testOnReturn);
+		dataSource.setValidationInterval(validationInterval);
+		dataSource.setTimeBetweenEvictionRunsMillis(Integer.parseInt(timeBetweenEvictionRunsMillis));
+		dataSource.setMaxActive(maxActive);
+		dataSource.setInitialSize(initialSize);
+		dataSource.setMaxWait(maxWait);
+		dataSource.setRemoveAbandoned(removeAbandoned);
+		dataSource.setRemoveAbandonedTimeout(removeAbandonedTimeout);
+		dataSource.setMinEvictableIdleTimeMillis(Integer.parseInt(minEvictableIdleTimeMillis));
+		dataSource.setMinIdle(minIdle);
+		dataSource.setLogAbandoned(logAbandoned);
+		dataSource.setJdbcInterceptors(jdbcInterceptors);
+	
 		return dataSource;
 	}
-
-	@Bean
+*/
+/*	@Bean
 	public LocalSessionFactoryBean aidrPredictSessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(aidrPredictDataSource());
@@ -105,7 +119,7 @@ public class PersistenceConfig {
 
 		return sessionFactory;
 	}
-
+*/
 	Properties hibernateProperties() {
 		return new Properties() {
 			{
@@ -144,7 +158,7 @@ public class PersistenceConfig {
 	 */
 
 	/* Configuring Entity manager factory */
-	@Bean
+/*	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(aidrPredictDataSource());
@@ -157,10 +171,10 @@ public class PersistenceConfig {
 		entityManagerFactory.afterPropertiesSet();
 		return entityManagerFactory.getObject();
 	}
-
+*/
 	@Bean
-	public PlatformTransactionManager transactionManager() {
-		return new JpaTransactionManager(entityManagerFactory());
+	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+		return new HibernateTransactionManager(sessionFactory);
 	}
 
 	@Bean
