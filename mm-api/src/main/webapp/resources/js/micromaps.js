@@ -447,7 +447,7 @@
               );
 
               var customMenu = function(node) {
-                var items = {
+                var items = {/*
                     "geojson": {
                         "label": "Download Geojson",
                         "icon" : "fa fa-download",
@@ -461,7 +461,7 @@
                         "action" : function(obj){
                           _this.downloadKML(_this.downloadNode);
                         }
-                    },
+                    },*/
                     "detail_map": {
                         "label": "Detail Map",
                         "icon" : "fa fa-share-square-o",
