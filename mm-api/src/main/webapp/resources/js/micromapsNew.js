@@ -141,36 +141,9 @@
             
             _this.init = function () {
             	
-            	/*$.ajax({
-                    url: MicroMaps.config.ROOT + "isadmin",
-                    success: function(response) {
-                    	//$.log(response.data);
-                    	if(response.data == "NOT_ADMIN") {
-                    		$("#adminDiv").hide();
-                    		$("#adminDiv").next().hide();
-                    		_this.load();
-                    	} else if (response.data == "ADMIN") {
-                    		$("#adminDiv").show();
-                    		_this.load();
-                    	} else {
-                    		$("#login-modal").show();
-                    	}
-                    }
-            	});
-            	
-            	$.ajax({
-                    url: MicroMaps.config.ROOT + "current-user",
-                    success: function(response) {
-                    	profile = {
-                    			email: response.email,
-                    			name: response.name,
-                    			profile_pic: response.profile_pic
-                    	};
-                    }
-            	});*/
-            	
             	$('#loading-widget').show();
-            	$.ajax({
+            	_this.load();
+            	/*$.ajax({
                     url: MicroMaps.config.ROOT + "current_user",
                     success: function(response) {
                     	if(response.data.status == "NOT_ADMIN") {
@@ -190,7 +163,7 @@
                     			profile_pic: response.data.profile_pic
                     	};
                     }
-            	});
+            	});*/
                 return this;
             };
 
