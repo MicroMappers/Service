@@ -28,4 +28,6 @@ public interface TranslationService {
 	public List<TaskTranslation> findAllTranslations();
     public List<TaskTranslation> findAllTranslationsByClientAppIdAndStatus(Long clientAppId, String status, Integer count);
 
+    public boolean didWePublishToday();
+
 }

@@ -2,6 +2,7 @@ package qa.qcri.mm.trainer.pybossa.dao;
 
 import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,4 +20,5 @@ public interface TaskTranslationDao extends AbstractDao<TaskTranslation, String>
     void createTaskTranslation(TaskTranslation taskTranslation);
     void saveOrUpdateTaskTranslation(TaskTranslation taskTranslation);
     int countAllTranslationsByOrderID(Integer orderId);
+    int countAllTranslationsByDateAndStatus(Date fromDate, Date toDate, String status);
 }
