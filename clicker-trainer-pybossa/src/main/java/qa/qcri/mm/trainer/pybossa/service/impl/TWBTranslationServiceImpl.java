@@ -23,6 +23,7 @@ import qa.qcri.mm.trainer.pybossa.store.URLPrefixCode;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -76,21 +77,46 @@ public class TWBTranslationServiceImpl implements TranslationService {
         }
     }
 
+    public boolean didWePublishToday(){
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = format.format(new Date());
+        String fromDate = currentDate + " 00:00:00";
+        String toDate = currentDate + " 23:59:00";
+
+        SimpleDateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try{
+            int countOfToday = taskTranslationDao.countAllTranslationsByDateAndStatus(outFormat.parse(fromDate), outFormat.parse(toDate), TaskTranslation.STATUS_IN_PROGRESS);
+
+            if(countOfToday > 0){
+                return true;
+            }
+        }
+        catch(Exception e){
+            logger.error("didWePublishToday: " + e.getMessage());
+        }
+
+        return false;
+    }
+
     public Map pushAllTranslations(Long clientAppId, Long twbProjectId, long maxTimeToWait, int maxBatchSize) {
         //add ordering
         List<TaskTranslation> translations = findAllTranslationsByClientAppIdAndStatus(clientAppId, TaskTranslation.STATUS_NEW, maxBatchSize);
-        Map result = null;
+
         boolean forceProcessingByTime = false;
         long currentTimeMillis = System.currentTimeMillis();
-         // every 12hours
-      //  if ((currentTimeMillis - timeOfLastTranslationProcessingMillis) >= MAX_CHECK_TIME_MILLIS) {
-            Calendar calendar = Calendar.getInstance();
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        Calendar calendar = Calendar.getInstance();
 
-            if(dayOfWeek == Calendar.MONDAY || dayOfWeek == Calendar.WEDNESDAY || dayOfWeek == Calendar.FRIDAY ) {
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        Map result = null;
+
+        if(dayOfWeek == Calendar.MONDAY || dayOfWeek == Calendar.WEDNESDAY || dayOfWeek == Calendar.FRIDAY ) {
+            if(!didWePublishToday()){
                 forceProcessingByTime = true;
             }
-     //   }
+
+        }
 
         if ((forceProcessingByTime || translations.size() >= maxBatchSize) && (translations.size() > 0)) {
             while (true) {

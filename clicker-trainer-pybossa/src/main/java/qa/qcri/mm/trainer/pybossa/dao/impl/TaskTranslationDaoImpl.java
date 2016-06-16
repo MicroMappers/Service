@@ -75,4 +75,13 @@ public class TaskTranslationDaoImpl extends AbstractDaoImpl<TaskTranslation, Str
         List<TaskTranslation> translations = findByCriteria(Restrictions.eq("twbOrderId", new Long(orderId)));
         return translations.size();
     }
+
+    @Override
+    public int countAllTranslationsByDateAndStatus(Date fromDate, Date toDate, String status) {
+
+        List<TaskTranslation> translations = findByCriteria(Restrictions.conjunction()
+                .add(Restrictions.between("created", fromDate, toDate))
+                .add(Restrictions.eq("status", status)));
+        return translations.size();
+    }
 }
