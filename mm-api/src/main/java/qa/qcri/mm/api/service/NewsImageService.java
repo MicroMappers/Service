@@ -5,6 +5,7 @@ import qa.qcri.mm.api.entity.NewsImage;
 
 public interface NewsImageService {
 	
+	void startFetchingDataFromGdelt();
 	void startFetchingDataFromGdelt(Long clientAppID);
 	void stopFetchingDataFromGdelt(Long clientAppID);
 	boolean getGdeltPullStatus();
