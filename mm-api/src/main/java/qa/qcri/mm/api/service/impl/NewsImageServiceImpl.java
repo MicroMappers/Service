@@ -19,7 +19,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import qa.qcri.mm.api.dao.NewsImageDao;
@@ -48,6 +48,8 @@ public class NewsImageServiceImpl implements NewsImageService {
 	
 	private static boolean gdeltPullStatus = false;
 	
+	private static Long newsImageclientAppId = null; 
+	
 	@Override
 	public boolean getGdeltPullStatus() {
 		return gdeltPullStatus;
@@ -57,6 +59,14 @@ public class NewsImageServiceImpl implements NewsImageService {
 	@Override
 	public void stopFetchingDataFromGdelt(Long clientAppID) {
 		this.gdeltPullStatus = false;
+		newsImageclientAppId = null;
+	}
+	
+	@SuppressWarnings("static-access")
+	@Override
+	public void startFetchingDataFromGdelt(Long clientAppID) {
+		this.gdeltPullStatus = true;
+		newsImageclientAppId = clientAppID;
 	}
 	
 	@Override
@@ -74,13 +84,10 @@ public class NewsImageServiceImpl implements NewsImageService {
 		}
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
-	@Async
-	public void startFetchingDataFromGdelt(Long clientAppID) {
-		this.gdeltPullStatus = true;
-		
-		while(gdeltPullStatus){
+	@Scheduled(fixedDelay = 1000 * 15 * 60)
+	public void startFetchingDataFromGdelt() {
+		if(gdeltPullStatus && newsImageclientAppId != null){
             try {
             	logger.warn("*****************************************************************");
             	logger.warn("Gdelt Data Pulling Start");
@@ -88,10 +95,10 @@ public class NewsImageServiceImpl implements NewsImageService {
             	
             	logger.warn("Fetched URL: "+fileURL);
                 if(fileURL.indexOf(gdeltFileExtension) > -1){
-                	boolean duplicateFound = clientAppSourceService.addExternalDataSouceWithClientAppID(fileURL, clientAppID);
+                	boolean duplicateFound = clientAppSourceService.addExternalDataSouceWithClientAppID(fileURL, newsImageclientAppId);
                 	if(!duplicateFound) {
                 		logger.warn("Will insert data into clientapp");
-                		List<NewsImage> newsImages = readDataFromFile(fileURL, clientAppID);
+                		List<NewsImage> newsImages = readDataFromFile(fileURL, newsImageclientAppId);
                 		logger.warn("news image will insert: "+ newsImages == null? 0 : newsImages.size());
                 		saveALl(newsImages);
 	                	logger.warn("Gdelt Data Inserted.... ");
@@ -99,12 +106,7 @@ public class NewsImageServiceImpl implements NewsImageService {
                 		logger.warn("Gdelt Data Not Inserted due to duplicate ");
                 	}
                 }
-                //Thread.sleep(1000*60);
-                Thread.sleep(900000);
                 
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                logger.warn("Error in fetching gdelt data", e);
             } catch (Exception e) {
                 logger.warn("Error in fetching gdelt data", e);
             }
@@ -152,4 +154,6 @@ public class NewsImageServiceImpl implements NewsImageService {
         }
         return response.toString();
     }
+
+	
 }
