@@ -752,7 +752,7 @@
                     map.fitBounds(L.latLngBounds(southWest, northEast));    
                     
                     if(crisisName == "Hurricane Matthew") {
-                  	  map.removeLayer(matthew_tile);
+                  	  map.removeLayer(MicroMaps.matthew_tile);
                     }
                   } else {
                     toastr.info("<b>"+ crisisName + "</b><br/>" + crisisType + " clicker locations Added to Map.");
