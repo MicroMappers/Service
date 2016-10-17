@@ -35,7 +35,7 @@
              */
             var map, sidebar;
             var selectedCrisis = [];
-            var markerClusterGroup;
+            var markerClusterGroup, matthew_tile;
 
             /**
              * Public methods and properties
@@ -83,11 +83,15 @@
 
 
                 var accessToken = 'pk.eyJ1IjoidWF2aWF0b3JzIiwiYSI6IlpqZEx2UzgifQ.o6vACHfsO6CTk2yluUZwUA';
-                var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v4/uaviators.lln1n147/{z}/{x}/{y}.png?access_token=' + accessToken, {
+                var vanatu_tile = L.tileLayer('https://{s}.tiles.mapbox.com/v4/uaviators.lln1n147/{z}/{x}/{y}.png?access_token=' + accessToken, {
                     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
                 });
-                map = L.map('map',{maxZoom: 18, maxNativeZoom: 18, layers: [mapboxTiles]});
-
+                
+                var hur_matthew_tile = L.tileLayer('https://api.mapbox.com/styles/v1/uaviators/ciudytx2u00ao2iod7hxb6f9q/tiles/256/{z}/{x}/{y}?access_token=' + accessToken, {
+                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+                });
+                
+                map = L.map('map',{maxZoom: 18, maxNativeZoom: 18, layers: [vanatu_tile]});
 
                 map.setView(MicroMaps.config.MAP_CENTER, MicroMaps.config.MAP_DEFAULT_ZOOM);
                 //map.fitWorld();
@@ -96,6 +100,9 @@
                 sidebar = L.control.sidebar('sidebar').addTo(map);
 
                 MicroMaps.map = map;
+                MicroMaps.matthew_tile = hur_matthew_tile;
+                //map.removeLayer(matthew_tile);
+                
             };
 
             _this.defaultView = function (layer) {
@@ -591,7 +598,11 @@
                 if(data.selected.indexOf(data.node.id) >= 0 && (crisisTreeMap[crisisID] == null || crisisTreeMap[crisisID][clientId] == null)){
                   $('#loading-widget').show();
                   var API = crisisType.toLowerCase() == "video" ? MicroMaps.config.API.replace("JSON", "file") : MicroMaps.config.API;
-
+                  
+                  if(crisisName == "Hurricane Matthew") {
+                	  map.addLayer(matthew_tile);
+                  }
+                  
                   if(clientId == 1){
                     var url = "resources/json/vanuatu_real_time.json";
                     $.ajax({
@@ -738,7 +749,11 @@
                     var bounds = eval(crisisIdMap[crisisID][0].otherItem.bounds);
                     var northEast = L.latLng(bounds[3], bounds[2]);
                     var southWest = L.latLng(bounds[1], bounds[0]);
-                    map.fitBounds(L.latLngBounds(southWest, northEast));                    
+                    map.fitBounds(L.latLngBounds(southWest, northEast));    
+                    
+                    if(crisisName == "Hurricane Matthew") {
+                  	  map.removeLayer(matthew_tile);
+                    }
                   } else {
                     toastr.info("<b>"+ crisisName + "</b><br/>" + crisisType + " clicker locations Added to Map.");
                     if(labelCode != null){
@@ -804,8 +819,6 @@
 
 
 
-                //var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'qcricl1linuxvm2.cloudapp.net/data/trainer/pam/pam' );
-                //var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'aidr-prod.qcri.org/trainer/pam' );
                 var sImgURL = feature.properties.imgURL.replace('aidr-prod.qcri.org/data/trainer/pam', 'aidr-web.qcri.org/trainer/pam' );
 
                 L.imageOverlay(sImgURL, imageBounds).addTo(selectedMap);
