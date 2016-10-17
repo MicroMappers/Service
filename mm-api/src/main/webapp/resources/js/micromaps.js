@@ -600,7 +600,7 @@
                   var API = crisisType.toLowerCase() == "video" ? MicroMaps.config.API.replace("JSON", "file") : MicroMaps.config.API;
                   
                   if(crisisName == "Hurricane Matthew") {
-                	  map.addLayer(matthew_tile);
+                	  map.addLayer(MicroMaps.matthew_tile);
                   }
                   
                   if(clientId == 1){
