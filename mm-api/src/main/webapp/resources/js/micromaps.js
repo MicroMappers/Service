@@ -756,6 +756,9 @@
                     }
                   } else {
                     toastr.info("<b>"+ crisisName + "</b><br/>" + crisisType + " clicker locations Added to Map.");
+                    if(crisisName == "Hurricane Matthew") {
+                  	  map.addLayer(MicroMaps.matthew_tile);
+                    }
                     if(labelCode != null){
                       if(crisisTreeMap[crisisID][clientId][labelCode] != null){
                         var crisisLayer = crisisTreeMap[crisisID][clientId][labelCode].crisisLayer;
