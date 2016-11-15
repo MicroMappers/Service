@@ -20,8 +20,10 @@ public interface TaskQueueDao extends AbstractDao<TaskQueue, String>  {
     List<TaskQueue> findTaskQueueByDocument(Long clientAppID, Long documentID);
     List<TaskQueue> findTaskQueueByStatus(String column,Integer status);
     List<TaskQueue> findTaskQueueSetByStatus(Long clientAppID, Integer status);
+    Long findTaskQueueSetCountByStatus(Long clientAppID, Integer status);
     List<TaskQueue> findTaskQueueByTaskID(Long clientAppID, Long taskID);
     void deleteTaskQueue(Long taskQueueID);
     List<TaskQueue> findLatestTaskQueue(Long clientAppID)  ;
 	List<TaskQueue> findTaskQueueByClientAppId(Long clientAppID);
+	Long findTaskQueueCountByStatus(String column, Integer status);
 }

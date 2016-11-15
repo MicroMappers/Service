@@ -25,7 +25,7 @@ public class CrisisApplicationListFormatter {
     public void format(){
 
         String url = client.getHostURL() +"/app/" + clientApp.getShortName();
-        Integer remainingTask = taskQueueService.getCountTaskQeueByStatusAndClientApp(clientApp.getClientAppID(), 1);
+        Long remainingTask = taskQueueService.getCountTaskQueueByStatusAndClientApp(clientApp.getClientAppID(), 1);
 
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("<div class=\"row-fluid well well-small\">");
@@ -34,7 +34,7 @@ public class CrisisApplicationListFormatter {
         stringBuffer.append("</div>");
     }
 
-    public StringBuffer getApplicationColumn(String applicationName, Integer remainingTask, String url){
+    public StringBuffer getApplicationColumn(String applicationName, Long remainingTask, String url){
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("<div class=\"span9\">");
         stringBuffer.append("<h2><a href=\"");

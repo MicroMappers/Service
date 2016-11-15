@@ -67,6 +67,11 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
     }
     
     @Override
+    public Long findTaskQueueCountByStatus(String column, Integer status) {
+        return findCountByCriteria(Restrictions.eq(column, status));  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    
+    @Override
     public List<TaskQueue> findTaskQueueByClientAppId(Long clientAppID) {
         return findByCriteria(Restrictions.eq("clientAppID", clientAppID));
     }
@@ -74,6 +79,13 @@ public class TaskQueueDaoImpl extends AbstractDaoImpl<TaskQueue, String> impleme
     @Override
     public List<TaskQueue> findTaskQueueSetByStatus(Long clientAppID, Integer status) {
         return findByCriteria(Restrictions.conjunction()
+                .add(Restrictions.eq("clientAppID", clientAppID))
+                .add(Restrictions.eq("status", status)));
+    }
+    
+    @Override
+    public Long findTaskQueueSetCountByStatus(Long clientAppID, Integer status) {
+        return findCountByCriteria(Restrictions.conjunction()
                 .add(Restrictions.eq("clientAppID", clientAppID))
                 .add(Restrictions.eq("status", status)));
     }

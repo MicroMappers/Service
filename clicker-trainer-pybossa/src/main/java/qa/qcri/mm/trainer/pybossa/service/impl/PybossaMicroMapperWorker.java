@@ -843,7 +843,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
         int min = MAX_PENDING_QUEUE_SIZE;
 
         if(obj.getTcProjectId()== null){
-            int currentPendingTask =  taskQueueService.getCountTaskQeueByStatusAndClientApp(obj.getClientAppID(), LookupCode.AIDR_ONLY);
+            int currentPendingTask =  taskQueueService.getCountTaskQueueByStatusAndClientApp(obj.getClientAppID(), LookupCode.AIDR_ONLY).intValue();
             int numQueue = MAX_PENDING_QUEUE_SIZE - currentPendingTask;
             if(numQueue < 0) {
                 min =  0;

@@ -27,4 +27,7 @@ public interface AbstractDao<E, I extends Serializable> {
     List<E> findAllByKey(String key,Criterion criterion);
 
     List<E> findUniqueByCriteria(Criterion criterion, String uniqueField);
+	Long findCountByCriteria(Criterion criterion);
+	Long findCountByCriteria(Criterion criterion, Integer count);
+	Long getTotalCount();
 }

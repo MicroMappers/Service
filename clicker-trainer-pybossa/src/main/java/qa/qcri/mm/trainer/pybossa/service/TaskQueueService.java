@@ -19,11 +19,11 @@ public interface TaskQueueService {
     List<TaskQueue> getTaskQueueByDocument(Long clientAppID, Long documentID);
     List<TaskQueue> getTaskQueueByStatus(String column,Integer status);
     List<TaskQueue> getTaskQueueByClientAppStatus(Long clientAppID,Integer status);
-    Integer getCountTaskQeueByStatus(String column,Integer status);
-    Integer getCountTaskQeueByStatusAndClientApp(Long clientAppID,Integer status);
+    Long getCountTaskQueueByStatusAndClientApp(Long clientAppID,Integer status);
     void deleteAbandonedTaskQueue(Long taskQueueID);
     List<TaskQueue> getLastActiveTaskQueue(Long clientAppID);
     List<TaskQueueResponse> getCompletedTaskQueue(Long clientAppID);
 	List<TaskQueue> getTaskQueueByClientAppId(Long clientAppID);
+	Long getCountTaskQueueByStatus(String column, Integer status);
 
 }

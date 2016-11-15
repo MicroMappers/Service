@@ -1,15 +1,15 @@
 package qa.qcri.mm.trainer.pybossa.dao.impl;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-import qa.qcri.mm.trainer.pybossa.dao.TaskTranslationDao;
-import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import qa.qcri.mm.trainer.pybossa.dao.TaskTranslationDao;
+import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
 
 /**
  * 
@@ -48,10 +48,14 @@ public class TaskTranslationDaoImpl extends AbstractDaoImpl<TaskTranslation, Str
         return list;
     }
 
+    @Override
     public List<TaskTranslation> findAllTranslations() {
-        Criteria criteria = getCurrentSession().createCriteria(TaskTranslation.class);
-        return criteria.list();
-
+        return getAll();
+    }
+    
+    @Override
+    public Long findTotalTranslationsCount() {
+        return getTotalCount();
     }
 
 	@Override
@@ -71,17 +75,25 @@ public class TaskTranslationDaoImpl extends AbstractDaoImpl<TaskTranslation, Str
 	}
 
     @Override
-    public int countAllTranslationsByOrderID(Integer orderId) {
-        List<TaskTranslation> translations = findByCriteria(Restrictions.eq("twbOrderId", new Long(orderId)));
-        return translations.size();
+    public long countAllTranslationsByOrderID(Integer orderId) {
+    	Long translationsCount = findCountByCriteria(Restrictions.eq("twbOrderId", new Long(orderId)));
+        if(translationsCount == null){
+        	return 0L;
+        }else{
+        	return translationsCount;
+        }
     }
 
     @Override
-    public int countAllTranslationsByDateAndStatus(Date fromDate, Date toDate, String status) {
+    public long countAllTranslationsByDateAndStatus(Date fromDate, Date toDate, String status) {
 
-        List<TaskTranslation> translations = findByCriteria(Restrictions.conjunction()
+    	Long translationsCount = findCountByCriteria(Restrictions.conjunction()
                 .add(Restrictions.between("created", fromDate, toDate))
                 .add(Restrictions.eq("status", status)));
-        return translations.size();
+    	 if(translationsCount == null){
+         	return 0L;
+         }else{
+         	return translationsCount;
+         }
     }
 }

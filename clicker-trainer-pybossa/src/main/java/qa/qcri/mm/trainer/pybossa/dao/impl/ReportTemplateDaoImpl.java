@@ -25,11 +25,11 @@ public class ReportTemplateDaoImpl extends AbstractDaoImpl<ReportTemplate, Strin
 
     @Override
     public void saveReportItem(ReportTemplate reportTemplate) {
-        List<ReportTemplate> templateList =  findByCriteria(Restrictions.conjunction()
+        Long templateCount =  findCountByCriteria(Restrictions.conjunction()
                 .add(Restrictions.eq("taskQueueID",reportTemplate.getTaskQueueID()))
                 .add(Restrictions.eq("answer", reportTemplate.getAnswer())));
 
-        if(templateList.size() == 0) {
+        if(templateCount == null || templateCount == 0) {
         	if(reportTemplate.getCreated() == null){
         		reportTemplate.setCreated(new Date().toString());
         	}

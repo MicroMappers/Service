@@ -87,7 +87,7 @@ public class TWBTranslationServiceImpl implements TranslationService {
         SimpleDateFormat outFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try{
-            int countOfToday = taskTranslationDao.countAllTranslationsByDateAndStatus(outFormat.parse(fromDate), outFormat.parse(toDate), TaskTranslation.STATUS_IN_PROGRESS);
+            long countOfToday = taskTranslationDao.countAllTranslationsByDateAndStatus(outFormat.parse(fromDate), outFormat.parse(toDate), TaskTranslation.STATUS_IN_PROGRESS);
 
             if(countOfToday > 0){
                 return true;
@@ -210,7 +210,7 @@ public class TWBTranslationServiceImpl implements TranslationService {
 
     private void processTranslationDocument(String download_link, String selfLink, Integer orderId, Integer projectId) throws Exception {
         try {
-           int translationCount = taskTranslationDao.countAllTranslationsByOrderID(orderId);
+           long translationCount = taskTranslationDao.countAllTranslationsByOrderID(orderId);
            if(translationCount > 0 )
             {
                 String content = TranslationCenterCommunicator.getTranslationDocumentContent(download_link);
@@ -443,8 +443,19 @@ public class TWBTranslationServiceImpl implements TranslationService {
     @Override
     @Transactional
     public List<TaskTranslation> findAllTranslations() {
-
         return taskTranslationDao.findAllTranslations();
+    }
+    
+    @Override
+    @Transactional
+    public Long findTotalTranslationsCount() {
+    	Long translationsCount = taskTranslationDao.findTotalTranslationsCount();
+    	if(translationsCount !=null){
+    		return translationsCount;
+    	}else{
+    		return 0L;
+    	}
+         
     }
 
     @Transactional

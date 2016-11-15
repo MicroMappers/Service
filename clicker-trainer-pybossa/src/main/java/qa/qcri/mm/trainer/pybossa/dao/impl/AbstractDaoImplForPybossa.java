@@ -15,15 +15,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import qa.qcri.mm.trainer.pybossa.dao.AbstractDao;
 
-public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDao<E,I> {
+public class AbstractDaoImplForPybossa<E, I extends Serializable> implements AbstractDao<E,I> {
 
     private Class<E> entityClass;
 
-    protected AbstractDaoImpl(Class<E> entityClass) {
+    protected AbstractDaoImplForPybossa(Class<E> entityClass) {
         this.entityClass = entityClass;
     }
 
-    @Qualifier("sessionFactory")
+    @Qualifier("sessionFactoryForPybossa")
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -157,4 +157,3 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     }
 
 }
-

@@ -84,16 +84,21 @@ public class TaskQueueServiceImpl implements TaskQueueService {
 
 
     @Override
-    public Integer getCountTaskQeueByStatus(String column, Integer status) {
-        return taskQueueDao.findTaskQueueByStatus(column,status).size();  //To change body of implemented methods use File | Settings | File Templates.
+    public Long getCountTaskQueueByStatus(String column, Integer status) {
+    	Long taskQueueCount = taskQueueDao.findTaskQueueCountByStatus(column,status);
+        if(taskQueueCount!=null){
+        	return taskQueueCount;
+        }
+        return 0L;
     }
 
     @Override
-    public Integer getCountTaskQeueByStatusAndClientApp(Long clientAppID, Integer status) {
-        List<TaskQueue> taskQueueList = taskQueueDao.findTaskQueueSetByStatus(clientAppID, status);
-        if(taskQueueList!=null)
-            return taskQueueList.size();  //To change body of implemented methods use File | Settings | File Templates.
-        return 0;
+    public Long getCountTaskQueueByStatusAndClientApp(Long clientAppID, Integer status) {
+    	Long taskQueueCount = taskQueueDao.findTaskQueueSetCountByStatus(clientAppID, status);
+        if(taskQueueCount!=null){
+        	return taskQueueCount;
+        }
+        return 0L;
     }
 
     @Override
