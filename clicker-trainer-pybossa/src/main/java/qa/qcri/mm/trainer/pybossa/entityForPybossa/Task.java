@@ -134,5 +134,12 @@ public class Task implements Serializable {
 		this.info = info;
 	}
 
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", project=" + project + ", quorum=" + quorum + ", calibration=" + calibration
+				+ ", state=" + state + ", priority0=" + priority0 + ", nAnswers=" + nAnswers + ", created=" + created
+				+ ", info=" + info + "]";
+	}
+
    
 }

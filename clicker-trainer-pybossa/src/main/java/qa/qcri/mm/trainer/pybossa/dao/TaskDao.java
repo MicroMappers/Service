@@ -9,6 +9,7 @@ import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
  * Time: 8:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface TaskDao extends AbstractDao<Task, String>{
+public interface TaskDao extends AbstractDao<Task, Integer>{
 
+	Task getTaskByIdandProjectId(Long id, Long projectId);
 }

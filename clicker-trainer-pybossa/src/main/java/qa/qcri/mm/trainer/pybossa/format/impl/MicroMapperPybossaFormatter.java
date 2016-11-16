@@ -2,12 +2,14 @@ package qa.qcri.mm.trainer.pybossa.format.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.event.spi.PreCollectionRecreateEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,6 +24,8 @@ import qa.qcri.mm.trainer.pybossa.entity.Crisis;
 import qa.qcri.mm.trainer.pybossa.entity.MarkerStyle;
 import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.Project;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
 import qa.qcri.mm.trainer.pybossa.service.impl.PybossaCommunicator;
 import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
@@ -44,37 +48,32 @@ public class MicroMapperPybossaFormatter {
 
     public MicroMapperPybossaFormatter(){}
 
-    public List<String> assemblePybossaTaskPublishForm( List<MicromapperInput> inputSources, ClientApp clientApp) throws Exception {
+    public List<Task> assemblePybossaTaskPublishForm( List<MicromapperInput> inputSources, ClientApp clientApp) throws Exception {
 
-        List<String> outputFormatData = new ArrayList<String>();
+        List<Task> outputFormatData = new ArrayList<Task>();
 
-        Iterator itr= inputSources.iterator();
-
-        while(itr.hasNext()){
-            MicromapperInput micromapperInput = (MicromapperInput)itr.next();
-            JSONObject info = assemblePybossaInfoFormat(micromapperInput, clientApp) ;
-            
-            if(info != null) {
-            	JSONObject tasks = new JSONObject();
-	            tasks.put("info", info);
-	            tasks.put("n_answers", clientApp.getTaskRunsPerTask());
-	            tasks.put("quorum", clientApp.getQuorum());
-	            tasks.put("calibration", new Integer(0));
-	            tasks.put("project_id", clientApp.getPlatformAppID());
-	            tasks.put("priority_0", new Integer(0));
-	
-	            outputFormatData.add(tasks.toJSONString());
+        for (MicromapperInput micromapperInput : inputSources) {
+        	org.json.JSONObject info = assemblePybossaInfoFormat(micromapperInput, clientApp) ;
+        	if(info != null) {
+            	Task task = new Task();
+            	task.setInfo(info);
+            	task.setCalibration(new Integer(0));
+            	task.setnAnswers(clientApp.getTaskRunsPerTask());
+            	task.setQuorum(clientApp.getQuorum());
+            	Project project = new Project();
+            	project.setId(clientApp.getPlatformAppID().intValue());
+            	task.setProject(project);
+            	task.setPriority0(new Double(0));
+	            outputFormatData.add(task);
             }
-
-        }
-
+		}
         return outputFormatData;
     }
 
-    private JSONObject assemblePybossaInfoFormat(MicromapperInput micromapperInput, ClientApp clientApp) throws Exception{
+    private org.json.JSONObject assemblePybossaInfoFormat(MicromapperInput micromapperInput, ClientApp clientApp) throws Exception{
 
 
-        JSONObject pybossaData = new JSONObject();
+        org.json.JSONObject pybossaData = new org.json.JSONObject();
         pybossaData.put("question","please tag it.");
 
         if(clientApp.getAppType() == StatusCodeType.APP_MAP ){
@@ -98,7 +97,7 @@ public class MicroMapperPybossaFormatter {
         return pybossaData;
     }
 
-    private JSONObject createNonGeoClickerInfo(JSONObject pybossaData, MicromapperInput micromapperInput ){
+    private org.json.JSONObject createNonGeoClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
     	//logger.warn(micromapperInput);
         if(micromapperInput.getDocumentID() != null && micromapperInput.getAnswer()!=null){
         	logger.info("parsing document ID");
@@ -126,7 +125,7 @@ public class MicroMapperPybossaFormatter {
 
     }
 
-    private JSONObject createGeoClickerInfo(JSONObject pybossaData, MicromapperInput micromapperInput ){
+    private org.json.JSONObject createGeoClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
 
         pybossaData.put("author",micromapperInput.getAuthor());
         pybossaData.put("tweetid",micromapperInput.getTweetID());
@@ -142,7 +141,7 @@ public class MicroMapperPybossaFormatter {
         return pybossaData;
     }
 
-    private JSONObject createAerialClickerInfo(JSONObject pybossaData, MicromapperInput micromapperInput ){
+    private org.json.JSONObject createAerialClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
 
         pybossaData.put("url",micromapperInput.getUrl());
         pybossaData.put("imgurl",micromapperInput.getUrl());
@@ -154,7 +153,7 @@ public class MicroMapperPybossaFormatter {
         return pybossaData;
     }
 
-    private JSONObject create3WClickerInfo(JSONObject pybossaData, MicromapperInput micromapperInput ){
+    private org.json.JSONObject create3WClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
 
         pybossaData.put("glide",micromapperInput.getGlide());
         pybossaData.put("link",micromapperInput.getLink());

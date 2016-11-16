@@ -1,22 +1,29 @@
 package qa.qcri.mm.trainer.pybossa.format.impl;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.trainer.pybossa.entity.*;
+
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.Project;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
 import qa.qcri.mm.trainer.pybossa.service.TranslationService;
 import qa.qcri.mm.trainer.pybossa.store.LookupCode;
 import qa.qcri.mm.trainer.pybossa.util.DataFormatValidator;
 import qa.qcri.mm.trainer.pybossa.util.JsonSorter;
 import qa.qcri.mm.trainer.pybossa.util.StreamConverter;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -393,7 +400,7 @@ public class TextClickerPybossaFormatter {
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    public List<String> assemblePybossaTaskPublishForm(String inputData, ClientApp clientApp) throws Exception {
+    /*public List<String> assemblePybossaTaskPublishForm(String inputData, ClientApp clientApp) throws Exception {
 
         List<String> outputFormatData = new ArrayList<String>();
         JSONParser parser = new JSONParser();
@@ -420,11 +427,11 @@ public class TextClickerPybossaFormatter {
         }
 
         return outputFormatData;
-    }
+    }*/
 
-    public List<String> assemblePybossaTaskPublishFormWithIndex(String inputData, ClientApp clientApp, int indexStart, int indexEnd) throws Exception {
+    public List<Task> assemblePybossaTaskPublishFormWithIndex(String inputData, ClientApp clientApp, int indexStart, int indexEnd) throws Exception {
 
-        List<String> outputFormatData = new ArrayList<String>();
+        List<Task> outputFormatData = new ArrayList<Task>();
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(inputData);
 
@@ -432,19 +439,19 @@ public class TextClickerPybossaFormatter {
 
         for(int i = indexStart; i < indexEnd; i++){
             JSONObject featureJsonObj = (JSONObject)jsonObject.get(i);
-            JSONObject info = assemblePybossaInfoFormat(featureJsonObj, parser, clientApp) ;
+            org.json.JSONObject info = assemblePybossaInfoFormat(featureJsonObj, parser, clientApp) ;
 
-            JSONObject tasks = new JSONObject();
-
-            tasks.put("info", info);
-            tasks.put("n_answers", clientApp.getTaskRunsPerTask());
-            tasks.put("quorum", clientApp.getQuorum());
-            tasks.put("calibration", new Integer(0));
-            tasks.put("project_id", clientApp.getPlatformAppID());
-            tasks.put("priority_0", new Integer(0));
-
-            outputFormatData.add(tasks.toJSONString());
-
+            Task task = new Task();
+            task.setInfo(info);
+            task.setnAnswers(clientApp.getTaskRunsPerTask());
+            task.setQuorum(clientApp.getQuorum());
+            task.setCalibration( new Integer(0));
+            Project project = new Project();
+            project.setId(clientApp.getPlatformAppID().intValue());
+            task.setProject(project);
+            task.setPriority0(new Double(0));
+            outputFormatData.add(task);
+            
         }
 
         return outputFormatData;
@@ -469,7 +476,6 @@ public class TextClickerPybossaFormatter {
                 String tweetID =  String.valueOf(data.get("id"));
 
                 TaskTranslation task = new TaskTranslation(clientApp.getClientAppID(),documentID, tweetID, userName, tweetTxt, TaskTranslation.STATUS_NEW);
-                //outputFormatData.add(task);
                 translationService.createTranslation(task);
 
             }
@@ -477,9 +483,6 @@ public class TextClickerPybossaFormatter {
         catch(Exception e){
             System.out.println("publicTaskTranslationTaskPublishForm : " + e);
         }
-
-
-       // return outputFormatData;
     }
 
     public String generateClientAppTemplateLabel(JSONArray labelModel){
@@ -559,7 +562,7 @@ public class TextClickerPybossaFormatter {
 
     }
 
-    private JSONObject assemblePybossaInfoFormat(JSONObject featureJsonObj, JSONParser parser, ClientApp clientApp) throws Exception{
+    private org.json.JSONObject assemblePybossaInfoFormat(JSONObject featureJsonObj, JSONParser parser, ClientApp clientApp) throws Exception{
 
         JSONObject data = (JSONObject) parser.parse((String) featureJsonObj.get("data"));
 
@@ -572,7 +575,7 @@ public class TextClickerPybossaFormatter {
         String createdAt = (String)data.get("created_at");
         Long tweetID =  (Long)data.get("id");
 
-        JSONObject pybossaData = new JSONObject();
+        org.json.JSONObject pybossaData = new org.json.JSONObject();
         pybossaData.put("question","please tag it.");
         pybossaData.put("userName",userName);
         pybossaData.put("tweetid",tweetID);
