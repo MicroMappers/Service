@@ -16,7 +16,7 @@ import java.util.*;
  * Time: 2:39 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CVSRemoteFileFormatter {
+public class CSVRemoteFileFormatter {
 
     public List<MicromapperInput> getInputDataForReportTemplate(String url) throws Exception{
         //tweetID,tweet,author,lat,lon,created,answerCode
@@ -352,15 +352,14 @@ public class CVSRemoteFileFormatter {
         return writer;
 
     }
-    public void addToCVSOuputFile(String[] data, CSVWriter writer) throws Exception{
+    public void addToCSVOuputFile(String[] data, CSVWriter writer) throws Exception{
 
         writer.writeNext(data);
 
     }
 
-    public void finalizeCVSOutputFile(CSVWriter writer) throws Exception{
+    public void finalizeCSVOutputFile(CSVWriter writer) throws Exception{
         writer.close();
-
     }
 
     public boolean doesSourcerExist(String fileLocation){

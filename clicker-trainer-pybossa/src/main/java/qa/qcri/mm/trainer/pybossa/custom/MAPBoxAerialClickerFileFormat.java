@@ -1,12 +1,13 @@
 package qa.qcri.mm.trainer.pybossa.custom;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import qa.qcri.mm.trainer.pybossa.entity.ImageMetaData;
-import qa.qcri.mm.trainer.pybossa.entity.NamibiaImage;
 
-import java.util.List;
+import qa.qcri.mm.trainer.pybossa.entity.ImageMetaData;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,30 +18,32 @@ import java.util.List;
  */
 public class MAPBoxAerialClickerFileFormat {
 
+	protected static Logger logger = Logger.getLogger(MAPBoxAerialClickerFileFormat.class);
+	
     public static JSONArray createAerialClickerData(List<ImageMetaData> metaDataList){
         JSONArray jsonArray = new JSONArray();
         JSONArray sizes = getBoundSize();
         JSONParser parser = new JSONParser();
         try{
             //metaDataList.get(i).getBounds()
-            for(int i=0; i < metaDataList.size(); i++){
-                JSONObject jsonObject = new JSONObject();
-                JSONArray bounds = (JSONArray)parser.parse(metaDataList.get(i).getBounds());
-
-                jsonObject.put("bounds", bounds);
-                jsonObject.put("size", sizes);
-                jsonObject.put("latlng",getLatLng(metaDataList.get(i)));
-                jsonObject.put("source", metaDataList.get(i).getFileName());
-
-                jsonObject.put("url", metaDataList.get(i).getFileName());
-
-                jsonArray.add(jsonObject);
-            }
+        	for (ImageMetaData metadata : metaDataList) {
+	
+        		JSONObject jsonObject = new JSONObject();
+        		JSONArray bounds = (JSONArray)parser.parse(metadata.getBounds());
+	
+        		jsonObject.put("bounds", bounds);
+        		jsonObject.put("size", sizes);
+        		jsonObject.put("latlng",getLatLng(metadata));
+        		jsonObject.put("source", metadata.getFileName());
+		
+        		jsonObject.put("url", metadata.getFileName());
+		
+        		jsonArray.add(jsonObject);
+        	}
         }
         catch (Exception e){
-           System.out.println("MAPBoxAerialClickerFileFormat : createAerialClickerData - " + e.getMessage());
+           logger.error("Excpetion in MAPBoxAerialClickerFileFormat.createAerialClickerData - " + e.getMessage());
         }
-
         return jsonArray;
     }
 

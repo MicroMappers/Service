@@ -15,8 +15,8 @@ import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 public interface ReportProductService {
 
     void generateReportTemplateFromExternalSource() throws Exception;
-    void generateCVSReportForTextGeoClicker() throws Exception;
-    void generateCVSReportForImageGeoClicker() throws Exception;
+    void generateCSVReportForTextGeoClicker() throws Exception;
+    void generateCSVReportForImageGeoClicker() throws Exception;
     void generateGeoJsonForESRI(List<GeoJsonOutputModel> geoJsonOutputModels) throws Exception;
     void generateMapBoxTemplateForAerialClicker() throws Exception;
     void generateGeoJsonForClientApp(ClientApp clientApp) throws Exception;

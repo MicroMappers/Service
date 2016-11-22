@@ -63,6 +63,14 @@ public class ReportTemplateServiceImpl implements ReportTemplateService {
         reportTemplateDao.updateReportItem(reportTemplate);
         //To change body of implemented methods use File | Settings | File Templates.
     }
+    
+    @Override
+    @Transactional(readOnly = false)
+    public void updateReportItem(List<ReportTemplate> reportTemplates) {
+    	for (ReportTemplate reportTemplate : reportTemplates) {
+    		updateReportItem(reportTemplate);
+		}
+    }
 
     @Override
     public List<ReportTemplate> getReportTemplateSearchByTwittID(String field, String value) {

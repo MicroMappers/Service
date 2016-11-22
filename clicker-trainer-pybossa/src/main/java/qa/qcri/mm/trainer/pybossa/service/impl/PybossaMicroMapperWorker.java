@@ -37,7 +37,7 @@ import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
 import qa.qcri.mm.trainer.pybossa.entity.TyphoonRubyTextGeoClicker;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
-import qa.qcri.mm.trainer.pybossa.format.impl.CVSRemoteFileFormatter;
+import qa.qcri.mm.trainer.pybossa.format.impl.CSVRemoteFileFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicroMapperPybossaFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicromapperInput;
@@ -76,7 +76,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 	protected static Logger logger = Logger.getLogger(PybossaMicroMapperWorker.class);
 
 	private Client client;
-	private final CVSRemoteFileFormatter cvsRemoteFileFormatter = new CVSRemoteFileFormatter();
+	private final CSVRemoteFileFormatter cvsRemoteFileFormatter = new CSVRemoteFileFormatter();
 	private int MAX_PENDING_QUEUE_SIZE = 50;
 	private final int MAX_IMPORT_PROCESS_QUEUE_SIZE = 300;
 	private String PYBOSSA_API_TASK_PUBLSIH_URL;
@@ -610,7 +610,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 	}
 
 	private void generateToTaskQueueForNonText(List<Task> tasks, Long clientAppID, Integer status, Long clientAppSourceID){
-		logger.info("addToTaskQueue : " + tasks);
+		logger.info("GenerateToTaskQueueForNonText : " + tasks);
 
 		List<TaskQueue> taskQueues = new ArrayList<TaskQueue>();
 
@@ -644,14 +644,14 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 	/** Publishing process  end**/
 
 
-
 	/** export process  start**/
 	@Override
 	public void processTaskExport() throws Exception {
-		reportProductService.generateCVSReportForImageGeoClicker();
-		reportProductService.generateCVSReportForTextGeoClicker();
+		logger.info("PybossaMicromapperWorker.processTaskExport Starts : "+new Date());
+		reportProductService.generateCSVReportForImageGeoClicker();
+		reportProductService.generateCSVReportForTextGeoClicker();
 		reportProductService.generateMapBoxTemplateForAerialClicker();
-
+		logger.info("PybossaMicromapperWorker.processTaskExport Ends"  + new Date());
 	}
 	/** export process  end**/
 
@@ -674,9 +674,8 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 				}
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.error("Exception while parsing json for getMarkerStyleForRubyClicker");
 		}
-
 		return selectedStyle;
 	}
 
@@ -694,21 +693,13 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in getMarkerStyleForClientApp for clientAppID: "+clientApp.getClientAppID(), e);
 		}
 
 		return selectedStyle;
 	}
 
-	private Crisis getCrisisDetail(ClientApp clientApp){
-		List<Crisis> cList = crisisDao.getClientAppCrisisDetail(clientApp.getClientAppID());
-
-		if(cList.size() > 0) {
-			return cList.get(0);
-		}
-		return null;
-	}
-
+	
 	/*** util class ***/
 
 	@SuppressWarnings("unchecked")
@@ -895,9 +886,7 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 				min = 0;
 			}
 		}
-
 		return min;
-
 	}
 
 	@Override
@@ -939,12 +928,10 @@ public class PybossaMicroMapperWorker implements MicroMapperWorker {
 					}
 
 				} catch (Exception e) {
-					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+					logger.error("Exception in processTaskImportOnDemand for "+shortName, e);
 				}
 			}
 		}
-
-
 	}
 }
 
