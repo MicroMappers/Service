@@ -16,5 +16,5 @@ public interface ClientAppSourceService {
     List<ClientAppSource> getClientAppSourceWithStatusCode(int status);
     void updateClientAppSourceStatus(Long clientAppSourceID, int status);
     void insertNewClientAppSource(ClientAppSource clientAppSource);
-    ClientAppSource getClientAppSourceByClientAppID(Long clientAppSourceID);
+    ClientAppSource getClientAppSourceByID(Long clientAppSourceID);
 }

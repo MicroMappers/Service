@@ -26,6 +26,21 @@ import org.json.JSONObject;
 @Table(name = "task_run")
 public class TaskRun implements Serializable {
 
+	public TaskRun(Integer id, String created, Project project, Task task, User user, String userIp, String finishTime,
+			Integer timeout, Integer calibration, JSONObject info) {
+		super();
+		this.id = id;
+		this.created = created;
+		this.project = project;
+		this.task = task;
+		this.user = user;
+		this.userIp = userIp;
+		this.finishTime = finishTime;
+		this.timeout = timeout;
+		this.calibration = calibration;
+		this.info = info;
+	}
+
 	/**
 	 * 
 	 */
@@ -45,7 +60,7 @@ public class TaskRun implements Serializable {
     
     @ManyToOne
     @JoinColumn (name = "task_id", nullable = false)
-    private Task task_id;
+    private Task task;
 
     @ManyToOne
     @JoinColumn (name = "user_id")
@@ -89,14 +104,6 @@ public class TaskRun implements Serializable {
 
 	public void setProject(Project project) {
 		this.project = project;
-	}
-
-	public Task getTask_id() {
-		return task_id;
-	}
-
-	public void setTask_id(Task task_id) {
-		this.task_id = task_id;
 	}
 
 	public User getUser() {
@@ -145,6 +152,14 @@ public class TaskRun implements Serializable {
 
 	public void setInfo(JSONObject info) {
 		this.info = info;
+	}
+
+	public Task getTask() {
+		return task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
 	}
 
 }

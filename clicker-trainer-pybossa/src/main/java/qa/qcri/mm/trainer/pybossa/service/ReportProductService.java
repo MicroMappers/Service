@@ -1,8 +1,9 @@
 package qa.qcri.mm.trainer.pybossa.service;
 
-import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
-
 import java.util.List;
+
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,5 +19,5 @@ public interface ReportProductService {
     void generateCVSReportForImageGeoClicker() throws Exception;
     void generateGeoJsonForESRI(List<GeoJsonOutputModel> geoJsonOutputModels) throws Exception;
     void generateMapBoxTemplateForAerialClicker() throws Exception;
-    void generateGeoJsonForClientApp(Long clientAppID) throws Exception;
+    void generateGeoJsonForClientApp(ClientApp clientApp) throws Exception;
 }

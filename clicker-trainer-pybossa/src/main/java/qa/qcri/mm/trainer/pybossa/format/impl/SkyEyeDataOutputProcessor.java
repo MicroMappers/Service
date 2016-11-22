@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
 
 /**
@@ -21,79 +23,62 @@ import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
  */
 public class SkyEyeDataOutputProcessor extends DataProcessor {
 
+	protected static Logger logger = Logger.getLogger(SkyEyeDataOutputProcessor.class);
+	 
     public SkyEyeDataOutputProcessor(ClientApp clientApp) {
         super(clientApp);
     }
 
     @Override
-    public TaskQueueResponse process(String datasource, TaskQueue taskQueue) throws Exception {
-        if(this.clientApp == null)
-            return null;
+    public TaskQueueResponse process(List<TaskRun> datasource, TaskQueue taskQueue) throws Exception {
+    	if(this.clientApp == null)
+    		return null;
 
-        this.datasource = datasource;
-        this.taskQueue = taskQueue;
+    	this.datasource = datasource;
+    	this.taskQueue = taskQueue;
 
-        TaskQueueResponse taskQueueResponse = null;
+    	TaskQueueResponse taskQueueResponse = null;
 
-        try{
+    	try{
 
-            JSONArray array = (JSONArray) parser.parse(this.datasource) ;
-            JSONArray taskQueueResJsonArray = new JSONArray();
-            if(array.size() > 0) {
-                Iterator itr= array.iterator();
+    		JSONArray taskQueueResJsonArray = new JSONArray();
+    		if(this.datasource.size() > 0) {
+    			JSONArray locations  =  new JSONArray();
 
-                JSONArray locations  =  new JSONArray();
+    			JSONObject finalProperties = new JSONObject();
+    			String imgURL = this.datasource.get(0).getInfo().getString("imgurl");
+    			finalProperties.put("imgURL", imgURL);
 
-                String tweetID = null;
+    			//JSONArray bounds = (JSONArray)parser.parse(this.getStringValueFromInfoJson(array, "geo"));
+    			JSONArray bounds = (JSONArray)parser.parse("[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]");
 
-                JSONObject finalProperties = new JSONObject();
-                String imgURL = this.getStringValueFromInfoJson(array, "imgurl");
-                finalProperties.put("imgURL", imgURL);
+    			finalProperties.put("bounds", bounds);
+    			finalProperties.put("taskid", this.taskQueue.getTaskID());
 
-                //JSONArray bounds = (JSONArray)parser.parse(this.getStringValueFromInfoJson(array, "geo"));
-                JSONArray bounds = (JSONArray)parser.parse("[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]");
-                		
-                finalProperties.put("bounds", bounds);
-                finalProperties.put("taskid", this.taskQueue.getTaskID());
+    			JSONObject features = this.getFeature(bounds);
 
-                JSONObject features = this.getFeature(bounds);
+    			for (TaskRun taskRun : this.datasource) {
+    				org.json.JSONObject info = taskRun.getInfo();
+    				JSONArray loc = (JSONArray)info.get("loc");
+    				this.getProperties(loc, info, locations, taskRun) ;
+    			}
 
-                while(itr.hasNext()){
-                    JSONObject featureJsonObj = (JSONObject)itr.next();
+    			finalProperties.put("features", locations);
 
+    			features.put("properties", finalProperties) ;
 
-                    JSONObject info = (JSONObject)featureJsonObj.get("info");
-                    JSONArray loc = (JSONArray)info.get("loc");
+    			if(locations.size() > 0){
+    				taskQueueResJsonArray.add(features)  ;
+    			}
 
-
-                    this.getProperties(loc, info, locations, featureJsonObj) ;
-
-                }
-
-                finalProperties.put("features", locations);
-
-                System.out.println("ans: " + finalProperties.toJSONString() );
-
-                features.put("properties", finalProperties) ;
-
-                System.out.println("ans: " + features.toJSONString() );
-
-                if(locations.size() > 0){
-                    taskQueueResJsonArray.add(features)  ;
-                }
-
-                taskQueueResponse = new TaskQueueResponse(this.taskQueue.getTaskQueueID(), taskQueueResJsonArray.toJSONString(), tweetID);
-
-            }
-        }
-        catch(Exception e){
-            System.out.println("Exception e : " + e) ;
-            taskQueueResponse = null;
-
-        }
-
-        return taskQueueResponse;
-
+    			taskQueueResponse = new TaskQueueResponse(this.taskQueue.getTaskQueueID(), taskQueueResJsonArray.toJSONString(), null);
+    		}
+    	}
+    	catch(Exception e){
+    		logger.error("Exception while processing data for SkyEyeDataOutputProcessor"+ e.getMessage());
+    		taskQueueResponse = null;
+    	}
+    	return taskQueueResponse;
     }
 
     @Override
@@ -114,14 +99,7 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
         return responses;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    private String getStringValueFromInfoJson(JSONArray array, String propertyName) throws Exception{
-        JSONObject response = (JSONObject)array.get(0);
-        JSONObject answer = (JSONObject)response.get("info");
-
-        return (String)answer.get(propertyName);
-    }
-
-    private JSONArray getProperties(JSONArray loc, JSONObject info, JSONArray locations, JSONObject parentJsonObject){
+    private JSONArray getProperties(JSONArray loc, org.json.JSONObject info, JSONArray locations, TaskRun taskRun){
 
         try{
             if(!loc.isEmpty() && loc.size() > 0){
@@ -151,7 +129,7 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
 
                     }
 
-                    properties.put("userID", parentJsonObject.get("user_id"));
+                    properties.put("userID",  taskRun.getUser().getId());
 
                     layer.remove("bounds");
                     layer.remove("taskid");
@@ -163,7 +141,7 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
 
         }
         catch (Exception e){
-            System.out.println("exception : getProperties - " + e.getMessage());
+            logger.error("Excpetion while gettingProperties form Json - " + e.getMessage());
         }
 
         return locations;
@@ -195,8 +173,7 @@ public class SkyEyeDataOutputProcessor extends DataProcessor {
 
         features.put("geometry", geometry) ;
 
-
-        System.out.println("***** : " + features.toJSONString());
+        logger.info("***** : " + features.toJSONString());
         return features;
 
     }

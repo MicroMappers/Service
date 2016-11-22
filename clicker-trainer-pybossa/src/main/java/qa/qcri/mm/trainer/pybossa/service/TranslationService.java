@@ -1,12 +1,12 @@
 package qa.qcri.mm.trainer.pybossa.service;
 
 
+import java.util.List;
+import java.util.Map;
+
 import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
 import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
 import qa.qcri.mm.trainer.pybossa.format.impl.TranslationRequestModel;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by kamal on 3/22/15.

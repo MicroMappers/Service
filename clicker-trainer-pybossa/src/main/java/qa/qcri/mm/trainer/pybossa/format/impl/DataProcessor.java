@@ -1,17 +1,17 @@
 package qa.qcri.mm.trainer.pybossa.format.impl;
 
-import org.json.simple.JSONObject;
+import java.util.List;
+
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
+
 import qa.qcri.mm.trainer.pybossa.dao.MarkerStyleDao;
 import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
 import qa.qcri.mm.trainer.pybossa.entity.MarkerStyle;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +27,7 @@ public abstract class DataProcessor extends Object {
 
     protected ClientApp clientApp;
     protected TaskQueue taskQueue;
-    protected String datasource;
+    protected List<TaskRun> datasource;
     protected JSONParser parser;
     protected List<MarkerStyle> style;
 
@@ -48,7 +48,7 @@ public abstract class DataProcessor extends Object {
         return this.clientApp;
     }
 
-    public abstract TaskQueueResponse process(String datasource, TaskQueue taskQueue) throws Exception;
+    public abstract TaskQueueResponse process(List<TaskRun> datasource, TaskQueue taskQueue) throws Exception;
 
     public abstract List<TaskQueueResponse> generateMapOuput(List<TaskQueue> taskQueues, ClientAppResponseService clientAppResponseService) throws Exception;
 

@@ -54,7 +54,7 @@ public class ClientAppSourceServiceImpl implements ClientAppSourceService {
     }
 
     @Override
-    public ClientAppSource getClientAppSourceByClientAppID(Long clientAppSourceID) {
+    public ClientAppSource getClientAppSourceByID(Long clientAppSourceID) {
         return clientAppSourceDao.getClientAppSourceByID(clientAppSourceID);
     }
 }

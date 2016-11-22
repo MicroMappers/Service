@@ -28,6 +28,7 @@ public class PybossaConf {
     public static double ONE_MILE_DISTANCE =  1;
 
     public static String TASK_STATUS_COMPLETED = "completed";
+    public static String TASK_STATUS_ONGOING = "ongoing";
 
     public static String TASK_QUEUE_GEO_INFO_NOT_FOUND = "No Location Information";
 

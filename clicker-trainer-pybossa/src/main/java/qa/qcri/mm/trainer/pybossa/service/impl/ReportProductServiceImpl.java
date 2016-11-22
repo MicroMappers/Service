@@ -1,6 +1,14 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -8,21 +16,34 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import au.com.bytecode.opencsv.CSVWriter;
 import qa.qcri.mm.trainer.pybossa.custom.MAPBoxAerialClickerFileFormat;
-import qa.qcri.mm.trainer.pybossa.dao.CrisisDao;
 import qa.qcri.mm.trainer.pybossa.dao.ImageMetaDataDao;
 import qa.qcri.mm.trainer.pybossa.dao.TaskQueueResponseDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
+import qa.qcri.mm.trainer.pybossa.entity.Client;
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppEvent;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppSource;
+import qa.qcri.mm.trainer.pybossa.entity.ImageMetaData;
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.format.impl.CVSRemoteFileFormatter;
 import qa.qcri.mm.trainer.pybossa.format.impl.GeoJsonOutputModel;
 import qa.qcri.mm.trainer.pybossa.format.impl.MicromapperInput;
-import qa.qcri.mm.trainer.pybossa.service.*;
-import qa.qcri.mm.trainer.pybossa.store.*;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppEventService;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppService;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppSourceService;
+import qa.qcri.mm.trainer.pybossa.service.ClientService;
+import qa.qcri.mm.trainer.pybossa.service.ReportProductService;
+import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
+import qa.qcri.mm.trainer.pybossa.service.TaskQueueService;
+import qa.qcri.mm.trainer.pybossa.store.LookupCode;
+import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
+import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
+import qa.qcri.mm.trainer.pybossa.store.UserAccount;
 import qa.qcri.mm.trainer.pybossa.util.DateTimeConverter;
-
-import java.io.*;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -154,7 +175,7 @@ public class ReportProductServiceImpl implements ReportProductService {
 
             if(templateList.size() > LookupCode.MIN_REPORT_TEMPLATE_EXPORT_SIZE){
                 CVSRemoteFileFormatter formatter = new CVSRemoteFileFormatter();
-                ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
+                ClientApp clientApp = clientAppService.findClientAppByID(clientAppID);
                 String sTemp = reformatFileName(clientApp.getShortName()) ;
 
                 String fileName = PybossaConf.DEFAULT_TRAINER_FILE_PATH + sTemp;
@@ -272,44 +293,37 @@ public class ReportProductServiceImpl implements ReportProductService {
     }
 
     @Override
-    public void generateGeoJsonForClientApp(Long clientAppID) throws Exception {
-
-        ClientApp clientApp = clientAppService.findClientAppByID("clientAppID", clientAppID);
-
+    public void generateGeoJsonForClientApp(ClientApp clientApp) throws Exception {
+    	logger.info("GenerateGeoJsonForClientApp Starts for ClientAppId : " + clientApp.getClientAppID());
+    	
         if(clientApp.getAppType().equals(StatusCodeType.APP_MAP)){
 
-            JSONObject geoClickerOutput = new JSONObject();
-            JSONArray features = new JSONArray();
+        	JSONArray features = new JSONArray();
 
-            System.out.println("crisis :" + clientApp.getName());
+            List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientApp.getClientAppID(), StatusCodeType.TASK_LIFECYCLE_COMPLETED);
 
-            List<TaskQueue> taskQueueList = taskQueueService.getTaskQueueByClientAppStatus(clientAppID, StatusCodeType.TASK_LIFECYCLE_COMPLETED);
+            for(TaskQueue taskQueue: taskQueueList){
 
-            System.out.println("taskQueueList :" + taskQueueList.size());
+            	List<TaskQueueResponse> taskQueueResponses = taskQueueResponseDao.getTaskQueueResponse(taskQueue.getTaskQueueID());
 
-            for(TaskQueue t: taskQueueList){
-
-                List<TaskQueueResponse> responses = taskQueueResponseDao.getTaskQueueResponse(t.getTaskQueueID());
-
-                if(responses.size() > 0 ){
-                    if(!responses.get(0).getResponse().equalsIgnoreCase("{}") && !responses.get(0).getResponse().equalsIgnoreCase("[]")){
-                        JSONArray eachFeatureArrary = (JSONArray)parser.parse(responses.get(0).getResponse());
-                        for(Object a : eachFeatureArrary){
-                            features.add((JSONObject) a);
-                        }
-
-                    }
-                }
-
+            	if(taskQueueResponses.size() > 0 ){
+            		if(!taskQueueResponses.get(0).getResponse().equalsIgnoreCase("{}") && !taskQueueResponses.get(0).getResponse().equalsIgnoreCase("[]")){
+            			JSONArray eachFeatureArrary = (JSONArray)parser.parse(taskQueueResponses.get(0).getResponse());
+            			for(Object a : eachFeatureArrary){
+            				features.add((JSONObject) a);
+            			}
+            		}
+            	}
             }
 
-            String fileName = PybossaConf.GEOJSON_HOME + clientAppID + ".json";
+            String fileName = PybossaConf.GEOJSON_HOME + clientApp.getClientAppID() + ".json";
             File f = new File(fileName);
 
             if(f.exists()){
                 f.delete();
             }
 
+            JSONObject geoClickerOutput = new JSONObject();
             geoClickerOutput.put("type", "FeatureCollection");
             geoClickerOutput.put("features", features);
 
@@ -317,7 +331,7 @@ public class ReportProductServiceImpl implements ReportProductService {
             writer.println(geoClickerOutput.toJSONString());
             writer.close();
         }
-
+        logger.info("GenerateGeoJsonForClientApp Ends for ClientAppId : " + clientApp.getClientAppID());
     }
 
 

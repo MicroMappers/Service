@@ -17,9 +17,17 @@ public class TaskDaoImpl extends AbstractDaoImplForPybossa<Task, Integer> implem
     }
     
     @Override
-    public Task getTaskByIdandProjectId(Long id, Long projectId) {
+    public Task getTaskByIdandProjectId(Integer id, Integer projectId) {
         return findByCriterionID(Restrictions.conjunction()
                 .add(Restrictions.eq("id",id))
                 .add(Restrictions.eq("project.id", projectId)));
     }
+
+	@Override
+	public Long getTaskCountByIdProjectIdAndState(Integer id, Integer projectId, String state) {
+		return findCountByCriteria(Restrictions.conjunction()
+                .add(Restrictions.eq("id",id))
+                .add(Restrictions.eq("project.id", projectId))
+                .add(Restrictions.eq("state", state)));
+	}
 }

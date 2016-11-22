@@ -6,6 +6,7 @@ import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
 
 public interface TaskPybossaService {
 
-	Task getTaskByIdandProjectId(Long taskID, Long projectId);
+	Task getTaskByIdandProjectId(Integer taskID, Integer projectId);
+	Long  getTaskCountByIdProjectIdAndState(Integer taskID, Integer projectId, String state);
 	List<Task> persist(List<Task> task);
 }

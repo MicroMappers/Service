@@ -2,14 +2,12 @@ package qa.qcri.mm.trainer.pybossa.format.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.hibernate.event.spi.PreCollectionRecreateEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,6 +24,7 @@ import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Project;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
 import qa.qcri.mm.trainer.pybossa.service.impl.PybossaCommunicator;
 import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
@@ -41,285 +40,278 @@ import qa.qcri.mm.trainer.pybossa.util.DataFormatValidator;
  * To change this template use File | Settings | File Templates.
  */
 public class MicroMapperPybossaFormatter {
-    protected static Logger logger = Logger.getLogger(MicroMapperPybossaFormatter.class);
-    
-    private final PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
+	protected static Logger logger = Logger.getLogger(MicroMapperPybossaFormatter.class);
+
+	private final PybossaCommunicator pybossaCommunicator = new PybossaCommunicator();
 
 
-    public MicroMapperPybossaFormatter(){}
+	public MicroMapperPybossaFormatter(){}
 
-    public List<Task> assemblePybossaTaskPublishForm( List<MicromapperInput> inputSources, ClientApp clientApp) throws Exception {
+	public List<Task> assemblePybossaTaskPublishForm( List<MicromapperInput> inputSources, ClientApp clientApp) throws Exception {
 
-        List<Task> outputFormatData = new ArrayList<Task>();
+		List<Task> outputFormatData = new ArrayList<Task>();
 
-        for (MicromapperInput micromapperInput : inputSources) {
-        	org.json.JSONObject info = assemblePybossaInfoFormat(micromapperInput, clientApp) ;
-        	if(info != null) {
-            	Task task = new Task();
-            	task.setInfo(info);
-            	task.setCalibration(new Integer(0));
-            	task.setnAnswers(clientApp.getTaskRunsPerTask());
-            	task.setQuorum(clientApp.getQuorum());
-            	Project project = new Project();
-            	project.setId(clientApp.getPlatformAppID().intValue());
-            	task.setProject(project);
-            	task.setPriority0(new Double(0));
-	            outputFormatData.add(task);
-            }
+		for (MicromapperInput micromapperInput : inputSources) {
+			org.json.JSONObject info = assemblePybossaInfoFormat(micromapperInput, clientApp) ;
+			if(info != null) {
+				Task task = new Task();
+				task.setInfo(info);
+				task.setCalibration(new Integer(0));
+				task.setnAnswers(clientApp.getTaskRunsPerTask());
+				task.setQuorum(clientApp.getQuorum());
+				Project project = new Project();
+				project.setId(clientApp.getPlatformAppID().intValue());
+				task.setProject(project);
+				task.setState(PybossaConf.TASK_STATUS_ONGOING);
+				task.setPriority0(new Double(0));
+				outputFormatData.add(task);
+			}
 		}
-        return outputFormatData;
-    }
+		return outputFormatData;
+	}
 
-    private org.json.JSONObject assemblePybossaInfoFormat(MicromapperInput micromapperInput, ClientApp clientApp) throws Exception{
-
-
-        org.json.JSONObject pybossaData = new org.json.JSONObject();
-        pybossaData.put("question","please tag it.");
-
-        if(clientApp.getAppType() == StatusCodeType.APP_MAP ){
-            pybossaData = createGeoClickerInfo(pybossaData, micromapperInput);
-            return  pybossaData;
-        }
+	private org.json.JSONObject assemblePybossaInfoFormat(MicromapperInput micromapperInput, ClientApp clientApp) throws Exception{
 
 
-        if(clientApp.getAppType() == StatusCodeType.APP_AERIAL){
-            pybossaData = createAerialClickerInfo(pybossaData, micromapperInput);
-            return  pybossaData;
-        }
+		org.json.JSONObject pybossaData = new org.json.JSONObject();
+		pybossaData.put("question","please tag it.");
 
-        if(clientApp.getAppType() == StatusCodeType.APP_3W){
-            pybossaData = create3WClickerInfo(pybossaData, micromapperInput);
-            return  pybossaData;
-        }
-        // otherwise, process no geoclicker
-        pybossaData = createNonGeoClickerInfo(pybossaData, micromapperInput);
+		if(clientApp.getAppType() == StatusCodeType.APP_MAP ){
+			pybossaData = createGeoClickerInfo(pybossaData, micromapperInput);
+			return  pybossaData;
+		}
 
-        return pybossaData;
-    }
 
-    private org.json.JSONObject createNonGeoClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
-    	//logger.warn(micromapperInput);
-        if(micromapperInput.getDocumentID() != null && micromapperInput.getAnswer()!=null){
-        	logger.info("parsing document ID");
-            try {
+		if(clientApp.getAppType() == StatusCodeType.APP_AERIAL){
+			pybossaData = createAerialClickerInfo(pybossaData, micromapperInput);
+			return  pybossaData;
+		}
+
+		if(clientApp.getAppType() == StatusCodeType.APP_3W){
+			pybossaData = create3WClickerInfo(pybossaData, micromapperInput);
+			return  pybossaData;
+		}
+		// otherwise, process no geoclicker
+		pybossaData = createNonGeoClickerInfo(pybossaData, micromapperInput);
+
+		return pybossaData;
+	}
+
+	private org.json.JSONObject createNonGeoClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
+		//logger.warn(micromapperInput);
+		if(micromapperInput.getDocumentID() != null && micromapperInput.getAnswer()!=null){
+			logger.info("parsing document ID");
+			try {
 				pybossaData.put("tweet_category",micromapperInput.getAnswer());
 				long docID = Long.parseLong(micromapperInput.getDocumentID()) ;
 				pybossaData.put("documentID", docID);
 			} catch (NumberFormatException e) {
 				return null;
 			}
-        }
+		}
 
 
-        pybossaData.put("author",micromapperInput.getAuthor());
-        pybossaData.put("tweetid",micromapperInput.getTweetID());
-        pybossaData.put("userID",micromapperInput.getAuthor());
-        pybossaData.put("tweet",micromapperInput.getTweet());
-        pybossaData.put("timestamp",micromapperInput.getCreated());
-        pybossaData.put("lat",micromapperInput.getLat());
-        pybossaData.put("lon",micromapperInput.getLng());
-        pybossaData.put("url",micromapperInput.getUrl());
-        pybossaData.put("imgurl",micromapperInput.getUrl());
+		pybossaData.put("author",micromapperInput.getAuthor());
+		pybossaData.put("tweetid",micromapperInput.getTweetID());
+		pybossaData.put("userID",micromapperInput.getAuthor());
+		pybossaData.put("tweet",micromapperInput.getTweet());
+		pybossaData.put("timestamp",micromapperInput.getCreated());
+		pybossaData.put("lat",micromapperInput.getLat());
+		pybossaData.put("lon",micromapperInput.getLng());
+		pybossaData.put("url",micromapperInput.getUrl());
+		pybossaData.put("imgurl",micromapperInput.getUrl());
 
-        return pybossaData;
+		return pybossaData;
 
-    }
+	}
 
-    private org.json.JSONObject createGeoClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
+	private org.json.JSONObject createGeoClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
 
-        pybossaData.put("author",micromapperInput.getAuthor());
-        pybossaData.put("tweetid",micromapperInput.getTweetID());
-        pybossaData.put("userID",micromapperInput.getAuthor());
-        pybossaData.put("tweet",micromapperInput.getTweet());
-        pybossaData.put("timestamp",micromapperInput.getCreated());
-        pybossaData.put("lat",micromapperInput.getLat());
-        pybossaData.put("lon",micromapperInput.getLng());
-        pybossaData.put("url",micromapperInput.getUrl());
-        pybossaData.put("imgurl",micromapperInput.getUrl());
-        pybossaData.put("category",micromapperInput.getAnswer());
+		pybossaData.put("author",micromapperInput.getAuthor());
+		pybossaData.put("tweetid",micromapperInput.getTweetID());
+		pybossaData.put("userID",micromapperInput.getAuthor());
+		pybossaData.put("tweet",micromapperInput.getTweet());
+		pybossaData.put("timestamp",micromapperInput.getCreated());
+		pybossaData.put("lat",micromapperInput.getLat());
+		pybossaData.put("lon",micromapperInput.getLng());
+		pybossaData.put("url",micromapperInput.getUrl());
+		pybossaData.put("imgurl",micromapperInput.getUrl());
+		pybossaData.put("category",micromapperInput.getAnswer());
 
-        return pybossaData;
-    }
+		return pybossaData;
+	}
 
-    private org.json.JSONObject createAerialClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
+	private org.json.JSONObject createAerialClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
 
-        pybossaData.put("url",micromapperInput.getUrl());
-        pybossaData.put("imgurl",micromapperInput.getUrl());
-        pybossaData.put("geo",micromapperInput.getGeo());
-        pybossaData.put("mediaSize",micromapperInput.getMediaSize());
-        pybossaData.put("category",micromapperInput.getUrl());
-        pybossaData.put("mediasource",micromapperInput.getMediasSource());
+		pybossaData.put("url",micromapperInput.getUrl());
+		pybossaData.put("imgurl",micromapperInput.getUrl());
+		pybossaData.put("geo",micromapperInput.getGeo());
+		pybossaData.put("mediaSize",micromapperInput.getMediaSize());
+		pybossaData.put("category",micromapperInput.getUrl());
+		pybossaData.put("mediasource",micromapperInput.getMediasSource());
 
-        return pybossaData;
-    }
+		return pybossaData;
+	}
 
-    private org.json.JSONObject create3WClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
+	private org.json.JSONObject create3WClickerInfo(org.json.JSONObject pybossaData, MicromapperInput micromapperInput ){
 
-        pybossaData.put("glide",micromapperInput.getGlide());
-        pybossaData.put("link",micromapperInput.getLink());
-        pybossaData.put("where",micromapperInput.getWhere());
-        pybossaData.put("who",micromapperInput.getWho());
-        pybossaData.put("langcode",micromapperInput.getLang());
+		pybossaData.put("glide",micromapperInput.getGlide());
+		pybossaData.put("link",micromapperInput.getLink());
+		pybossaData.put("where",micromapperInput.getWhere());
+		pybossaData.put("who",micromapperInput.getWho());
+		pybossaData.put("langcode",micromapperInput.getLang());
 
-        return pybossaData;
-    }
+		return pybossaData;
+	}
 
-    public boolean isTaskStatusCompleted(String data) throws Exception{
-        /// will do later for importing process
-        boolean isCompleted = false;
-        if(DataFormatValidator.isValidateJson(data)){
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(data);
-            JSONArray jsonObject = (JSONArray) obj;
+	public boolean isTaskStatusCompleted(String data) throws Exception{
+		/// will do later for importing process
+		boolean isCompleted = false;
+		if(DataFormatValidator.isValidateJson(data)){
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(data);
+			JSONArray jsonObject = (JSONArray) obj;
 
-            Iterator itr= jsonObject.iterator();
+			Iterator itr= jsonObject.iterator();
 
-            while(itr.hasNext()){
-                JSONObject featureJsonObj = (JSONObject)itr.next();
-              //  logger.debug("featureJsonObj : " +  featureJsonObj);
-                String status = (String)featureJsonObj.get("state") ;
-              //  logger.debug("status : "  + status);
-                if(status.equalsIgnoreCase(PybossaConf.TASK_STATUS_COMPLETED))
-                {
-                    isCompleted = true;
-                }
-            }
+			while(itr.hasNext()){
+				JSONObject featureJsonObj = (JSONObject)itr.next();
+				//  logger.debug("featureJsonObj : " +  featureJsonObj);
+				String status = (String)featureJsonObj.get("state") ;
+				//  logger.debug("status : "  + status);
+				if(status.equalsIgnoreCase(PybossaConf.TASK_STATUS_COMPLETED))
+				{
+					isCompleted = true;
+				}
+			}
 
-        }
-        return isCompleted;
-    }
+		}
+		return isCompleted;
+	}
 
-    public TaskQueueResponse getAnswerResponseForVideo(ClientApp clientApp, String pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
+	public TaskQueueResponse getAnswerResponseForVideo(ClientApp clientApp, List<TaskRun> pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
+		JSONObject responseJSON = new JSONObject();
+		//        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+		//        Iterator itr= array.iterator();
+		String answer = null;
 
-        JSONObject responseJSON = new JSONObject();
+		org.json.JSONObject infoToSave = null;
+		HashMap<Integer, Integer> severeTimeStamp = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> mildTimeStamp = new HashMap<Integer, Integer>();
 
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+		for (TaskRun taskRun : pybossaResult) {
 
-        Iterator itr= array.iterator();
-        String answer = null;
+			org.json.JSONObject info = taskRun.getInfo();
 
-        JSONObject infoToSave = null;
-        HashMap<Integer, Integer> severeTimeStamp = new HashMap<Integer, Integer>();
-        HashMap<Integer, Integer> mildTimeStamp = new HashMap<Integer, Integer>();
+			if(info.get("damage")!=null) {
+				if(info.get("damage").toString().isEmpty()){
+					answer = "";
+				}
+				else{
+					String answerInfo = (String)info.get("damage");
+					JSONObject answers = (JSONObject)parser.parse(answerInfo);
+					String severeAnswer = (String)answers.get("severe");
+					String mildAnswer = (String)answers.get("mild");
+					if(severeAnswer!=null){
+						severeTimeStamp = addToTimeStampList(severeTimeStamp, severeAnswer);
+					}
+					if(mildAnswer != null){
+						mildTimeStamp = addToTimeStampList(mildTimeStamp, mildAnswer);
+					}
 
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
+					for (Map.Entry entry : mildTimeStamp.entrySet()) {
+						if((Integer)entry.getValue() >= clientAppAnswer.getVoteCutOff()) {
+							infoToSave = info;
+						}
+					}
 
-            if(info.get("damage")!=null) {
-                if(info.get("damage").toString().isEmpty()){
-                    answer = "";
-                }
-                else{
-                    String answerInfo = (String)info.get("damage");
-                    JSONObject answers = (JSONObject)parser.parse(answerInfo);
-                    String severeAnswer = (String)answers.get("severe");
-                    String mildAnswer = (String)answers.get("mild");
-                    if(severeAnswer!=null){
-                        severeTimeStamp = addToTimeStampList(severeTimeStamp, severeAnswer);
-                    }
-                    if(mildAnswer != null){
-                        mildTimeStamp = addToTimeStampList(mildTimeStamp, mildAnswer);
-                    }
+					for (Map.Entry entry : severeTimeStamp.entrySet()) {
+						if((Integer)entry.getValue() >= clientAppAnswer.getVoteCutOff()) {
+							infoToSave = info;
+						}
+					}
+				}
+			}
+		}
 
-                    for (Map.Entry entry : mildTimeStamp.entrySet()) {
-                        if((Integer)entry.getValue() >= clientAppAnswer.getVoteCutOff()) {
-                            infoToSave = info;
-                        }
-                    }
+		severeTimeStamp = removeItemBelowCutOffForVideo(severeTimeStamp, clientAppAnswer);
+		mildTimeStamp =   removeItemBelowCutOffForVideo(mildTimeStamp, clientAppAnswer);
 
-                    for (Map.Entry entry : severeTimeStamp.entrySet()) {
-                        if((Integer)entry.getValue() >= clientAppAnswer.getVoteCutOff()) {
-                            infoToSave = info;
-                        }
-                    }
-                }
-            }
+		if( severeTimeStamp.size() > 0){
 
-        }
+			responseJSON.put("severe", StringUtils.collectionToCommaDelimitedString(severeTimeStamp.keySet()));
 
-        severeTimeStamp = removeItemBelowCutOffForVideo(severeTimeStamp, clientAppAnswer);
-        mildTimeStamp =   removeItemBelowCutOffForVideo(mildTimeStamp, clientAppAnswer);
+		}
+		else{
+			responseJSON.put("severe", "");
+		}
+		if( mildTimeStamp.size() > 0){
+			responseJSON.put("mild", StringUtils.collectionToCommaDelimitedString(mildTimeStamp.keySet()));
 
-        if( severeTimeStamp.size() > 0){
+		}
+		else{
+			responseJSON.put("mild", "");
+		}
 
-            responseJSON.put("severe", StringUtils.collectionToCommaDelimitedString(severeTimeStamp.keySet()));
+		handleItemAboveCutOffForVideo(taskQueueID, severeTimeStamp, mildTimeStamp, infoToSave, clientAppAnswer, rtpService);
 
-        }
-        else{
-            responseJSON.put("severe", "");
-        }
-        if( mildTimeStamp.size() > 0){
-            responseJSON.put("mild", StringUtils.collectionToCommaDelimitedString(mildTimeStamp.keySet()));
+		TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJSON.toJSONString(), "");
+		return  taskQueueResponse;
+	}
 
-        }
-        else{
-            responseJSON.put("mild", "");
-        }
+	public TaskQueueResponse getAnswerResponse(ClientApp clientApp, List<TaskRun> pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
+		if(clientAppAnswer == null){
+			return null;
+		}
 
-        handleItemAboveCutOffForVideo(taskQueueID, severeTimeStamp, mildTimeStamp, infoToSave, clientAppAnswer, rtpService);
+		JSONObject responseJSON = new JSONObject();
 
-        TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJSON.toJSONString(), "");
-        return  taskQueueResponse;
-    }
+		String[] acceptableAnswers = getAcceptableAnswers(clientAppAnswer,  parser);
 
-    public TaskQueueResponse getAnswerResponse(ClientApp clientApp, String pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
-        if(clientAppAnswer == null){
-            return null;
-        }
+		if(acceptableAnswers == null) {
+			//System.out.println("active answer key is null. No validation is required");
+			return null;
+		}
 
-        JSONObject responseJSON = new JSONObject();
+		int[] responses = new int[acceptableAnswers.length];
 
-        String[] acceptableAnswers = getAcceptableAnswers( clientAppAnswer,  parser);
+		String userAnswer = null;
 
-        if(acceptableAnswers == null) {
-            //System.out.println("active answer key is null. No validation is required");
-            return null;
-        }
+		int cutoffSize = getCutOffNumber(pybossaResult.size(), clientApp.getTaskRunsPerTask(), clientAppAnswer)  ;
 
-        int[] responses = new int[acceptableAnswers.length];
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+		for (TaskRun taskRun : pybossaResult) {
 
-        Iterator itr= array.iterator();
-        String userAnswer = null;
+			org.json.JSONObject info = taskRun.getInfo();
 
-        int cutoffSize = getCutOffNumber(array.size(), clientApp.getTaskRunsPerTask(), clientAppAnswer)  ;
+			//Long taskID = (Long) featureJsonObj.get("id");
 
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
+			userAnswer = this.getUserAnswer(info, clientApp);
 
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
+			if(userAnswer!=null ){
+				for(int i=0; i < acceptableAnswers.length; i++ ){
+					if(acceptableAnswers[i].trim().equalsIgnoreCase(userAnswer.trim())){
+						responses[i] = responses[i] + 1;
+						handleItemAboveCutOff(taskQueueID,responses[i], userAnswer, info, clientAppAnswer, rtpService, cutoffSize);
+					}
+				}
+			}
+		}
 
-            Long taskID = (Long) featureJsonObj.get("id");
+		String responseJsonString = "";
 
-            userAnswer = this.getUserAnswer(featureJsonObj, clientApp);
+		for(int i=0; i < acceptableAnswers.length; i++ ){
+			responseJSON.put(acceptableAnswers[i], responses[i]);
+		}
+		responseJsonString = responseJSON.toJSONString();
 
-            if(userAnswer!=null ){
-                for(int i=0; i < acceptableAnswers.length; i++ ){
-                    if(acceptableAnswers[i].trim().equalsIgnoreCase(userAnswer.trim())){
-                        responses[i] = responses[i] + 1;
-                        handleItemAboveCutOff(taskQueueID,responses[i], userAnswer, info, clientAppAnswer, rtpService, cutoffSize);
-                    }
-                }
-            }
-        }
+		TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJsonString, "");
+		return  taskQueueResponse;
+	}
 
-        String taskInfo = "";
-        String responseJsonString = "";
+	Map<Long, JSONObject> responseArrayMap = new HashMap<>();
 
-        for(int i=0; i < acceptableAnswers.length; i++ ){
-            responseJSON.put(acceptableAnswers[i], responses[i]);
-        }
-        responseJsonString = responseJSON.toJSONString();
-
-        TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJsonString, taskInfo);
-        return  taskQueueResponse;
-    }
-    
-    Map<Long, JSONObject> responseArrayMap = new HashMap<>();
-    
-    public String getCategoryFromJson(Long taskid) throws ParseException{
-    	if (responseArrayMap.isEmpty()) {
+	public String getCategoryFromJson(Long taskid) throws ParseException{
+		if (responseArrayMap.isEmpty()) {
 			JSONParser parser = new JSONParser();
 			String jsonData = pybossaCommunicator
 					.sendGet("http://maps.micromappers.org/data/esri/nepal/nepalText1.json");
@@ -338,89 +330,82 @@ public class MicroMapperPybossaFormatter {
 				}
 			}
 		}   	
-    	JSONObject jsonObject = responseArrayMap.get(taskid);
-    	if(jsonObject == null){
-    		return null;
-    	}
-    	return (String) jsonObject.get("answer");
-    }
+		JSONObject jsonObject = responseArrayMap.get(taskid);
+		if(jsonObject == null){
+			return null;
+		}
+		return (String) jsonObject.get("answer");
+	}
 
-    public TaskQueueResponse getAnswerResponseForGeo(String pybossaResult, JSONParser parser, Long taskQueueID, ClientApp clientApp, Crisis c, MarkerStyle markerStyle, ClientAppSource appSource, ReportTemplateService reportTemplateService, TyphoonRubyTextGeoClickerDao typhoonRubyTextGeoClickerDao) throws Exception{
-        boolean noLocationFound  = isContainNoLocationInfo( pybossaResult,  parser);
+	public TaskQueueResponse getAnswerResponseForGeo(List<TaskRun> pybossaResult, JSONParser parser, Long taskQueueID, ClientApp clientApp,Crisis crisis, 
+			MarkerStyle markerStyle, ClientAppSource appSource, ReportTemplateService reportTemplateService, TyphoonRubyTextGeoClickerDao typhoonRubyTextGeoClickerDao) throws Exception{
+		// boolean noLocationFound  = isContainNoLocationInfo(pybossaResult,  parser);
+		JSONArray locations  =  new JSONArray();
+		String uniqueIDString = null;
 
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+		for (TaskRun taskRun : pybossaResult) {
 
-        Iterator itr= array.iterator();
-        JSONArray locations  =  new JSONArray();
+			org.json.JSONObject info = taskRun.getInfo();
 
-        String uniqueIDString = null;
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
-            if(featureJsonObj.get("info") instanceof String){
-                //System.out.println("getAnswerResponseForGeo : info is instance of string, not JSONObject " );
-            }
+			String locValue = info.get("loc") == null? null : info.get("loc").toString();
+			if(locValue != null && !locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND) && crisis != null){
+				if(DataFormatValidator.isValidateJson(locValue)) {
+					JSONObject loc = (JSONObject)info.get("loc");
+					String locType = (String)loc.get("type");
 
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
+					if(locType.equalsIgnoreCase(PybossaConf.GEOJSON_TYPE_FEATURE_COLLECTION)){
+						JSONArray features = (JSONArray)loc.get("features");
 
-            String locValue = info.get("loc") == null? null : info.get("loc").toString();
-            if(locValue != null && !locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND) && c != null){
-                if(DataFormatValidator.isValidateJson(locValue)) {
-                    JSONObject loc = (JSONObject)info.get("loc");
-                    String locType = (String)loc.get("type");
-                    
-                    if(locType.equalsIgnoreCase(PybossaConf.GEOJSON_TYPE_FEATURE_COLLECTION)){
-                        JSONArray features = (JSONArray)loc.get("features");
+						for(int i= 0; i < features.size(); i++  ){
+							JSONObject aFeature = (JSONObject)features.get(i);
+							JSONObject properties = (JSONObject)aFeature.get("properties");
 
-                        for(int i= 0; i < features.size(); i++  ){
-                            JSONObject aFeature = (JSONObject)features.get(i);
-                            JSONObject properties = (JSONObject)aFeature.get("properties");
+							if(info.get("category") == null && appSource != null){
+								String[] row =   CVSFileDataSourceSearch.search((String)info.get("tweetid"),appSource.getSourceURL() );
+								if(row != null){
+									info.put("author", row[2] );
+									info.put("timestamp", row[6] );
+									info.put("category", row[7] );
+								}
+							}
 
-                            if(info.get("category") == null && appSource != null){
-                                String[] row =   CVSFileDataSourceSearch.search((String)info.get("tweetid"),appSource.getSourceURL() );
-                                if(row != null){
-                                    info.put("author", row[2] );
-                                    info.put("timestamp", row[6] );
-                                    info.put("category", row[7] );
-                                }
-                            }
+							properties.put("author", info.get("author") )   ;
+							properties.put("category", info.get("category") ) ;
+							properties.put("timestamp", info.get("timestamp") ) ;
+							properties.put("tweet", info.get("tweet") )   ;
+							properties.put("url", info.get("url") )   ;
+							properties.put("tweetid", info.get("tweetid") )   ;
+							properties.put("taskid", info.get("taskid") )   ;
+							properties.put("crisis_name", crisis.getDisplayName() )   ;
+							properties.put("crisis_type", crisis.getClickerType() )   ;
 
-                            properties.put("author", info.get("author") )   ;
-                            properties.put("category", info.get("category") ) ;
-                            properties.put("timestamp", info.get("timestamp") ) ;
-                            properties.put("tweet", info.get("tweet") )   ;
-                            properties.put("url", info.get("url") )   ;
-                            properties.put("tweetid", info.get("tweetid") )   ;
-                            properties.put("taskid", info.get("taskid") )   ;
-                            properties.put("crisis_name", c.getDisplayName() )   ;
-                            properties.put("crisis_type", c.getClickerType() )   ;
-                            
-                            String category = info.get("category") != null ? info.get("category").toString():"";
-                            JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser, category);
-                            if(mStyle != null){
-                                properties.put("style", mStyle );
-                                locations.add(aFeature) ;
-                            }                            
-                            uniqueIDString  = String.valueOf(info.get("tweetid"));
-                        }
+							String category = info.get("category") != null ? info.get("category").toString():"";
+							JSONObject mStyle = getMarkerStyleForClientApp(markerStyle,parser, category);
+							if(mStyle != null){
+								properties.put("style", mStyle );
+								locations.add(aFeature) ;
+							}                            
+							uniqueIDString  = String.valueOf(info.get("tweetid"));
+						}
 
-                    }
-                    else{ // Image GeoClicker process
+					}
+					else{ // Image GeoClicker process
 
-                    	logger.info("image geo clicker process ::: " + info);
-                        JSONObject geoLoc = (JSONObject)info.get("loc");
-                        JSONObject properties = (JSONObject)geoLoc.get("properties");
-                        properties.put("tweet", info.get("tweet") )   ;
-                        properties.put("author", info.get("author") )   ;
-                        properties.put("url", info.get("url") )   ;
-                        properties.put("timestamp", info.get("timestamp") )   ;
-                        properties.put("tweetid", info.get("tweetid") )   ;
-                        properties.put("taskid", info.get("taskid") )   ;
-                        properties.put("crisis_name", c.getDisplayName() )   ;
-                        properties.put("crisis_type", c.getClickerType() )   ;
-                        
-                        uniqueIDString = String.valueOf(info.get("url") );
-                        
-                        String category = null;
+						logger.info("image geo clicker process ::: " + info);
+						JSONObject geoLoc = (JSONObject)info.get("loc");
+						JSONObject properties = (JSONObject)geoLoc.get("properties");
+						properties.put("tweet", info.get("tweet") )   ;
+						properties.put("author", info.get("author") )   ;
+						properties.put("url", info.get("url") )   ;
+						properties.put("timestamp", info.get("timestamp") )   ;
+						properties.put("tweetid", info.get("tweetid") )   ;
+						properties.put("taskid", info.get("taskid") )   ;
+						properties.put("crisis_name", crisis.getDisplayName() )   ;
+						properties.put("crisis_type", crisis.getClickerType() )   ;
+
+						uniqueIDString = String.valueOf(info.get("url") );
+
+						String category = null;
 						List<ReportTemplate> reportTemplatesByUrl = reportTemplateService
 								.getReportTemplatesByUrl(uniqueIDString);
 						if (reportTemplatesByUrl != null && !reportTemplatesByUrl.isEmpty()) {
@@ -435,265 +420,244 @@ public class MicroMapperPybossaFormatter {
 						}
 						if(category != null){
 							category = category.trim().toLowerCase();
-                        	info.put("category", category);
-                        } else {
-                        	category = "mild";
-                        }
-                        properties.put("category", category) ;
-                        JSONObject mStyle = getMarkerStyleForClientApp(markerStyle, parser, category);
-                        
-                        if(mStyle != null){
-                        	properties.put("style", mStyle );
-                        	locations.add(geoLoc);
-                        }
-                        
-                        
-                    }
-                }
-            }
+							info.put("category", category);
+						} else {
+							category = "mild";
+						}
+						properties.put("category", category) ;
+						JSONObject mStyle = getMarkerStyleForClientApp(markerStyle, parser, category);
 
-        }
-        
-        logger.info("locations ::: " + locations);
-        
-        TaskQueueResponse taskQueueResponse = null;
-        if(!locations.isEmpty()){
-        	taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), uniqueIDString);
-        	logger.info("TaskQueueResponse : " + taskQueueResponse) ;
-        }
-        return  taskQueueResponse;
-    }
+						if(mStyle != null){
+							properties.put("style", mStyle );
+							locations.add(geoLoc);
+						}
+					}
+				}
+			}
+		}
 
-    public TaskQueueResponse getAnswerResponseForAerial(String pybossaResult, JSONParser parser, Long taskQueueID, ClientApp clientApp) throws Exception{
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+		logger.info("locations ::: " + locations);
 
-        Iterator itr= array.iterator();
-        JSONArray locations  =  new JSONArray();
-        String tweetID = null;
+		TaskQueueResponse taskQueueResponse = null;
+		if(!locations.isEmpty()){
+			taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), uniqueIDString);
+			logger.info("TaskQueueResponse : " + taskQueueResponse) ;
+		}
+		return  taskQueueResponse;
+	}
 
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
+	public TaskQueueResponse getAnswerResponseForAerial(List<TaskRun> pybossaResult, JSONParser parser, Long taskQueueID, ClientApp clientApp) throws Exception{
+		JSONArray locations  =  new JSONArray();
+		for (TaskRun taskRun : pybossaResult) {
 
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
-            String locValue = info.get("loc").toString();
-            if(!locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND) && !locValue.isEmpty()){
-                JSONObject loc = (JSONObject)info.get("loc");
-                locations.add(info.get("loc"))   ;
-            }
+			org.json.JSONObject info = taskRun.getInfo();
+			String locValue = info.get("loc").toString();
+			if( !locValue.isEmpty() && !locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND)){
+				locations.add(info.get("loc"))   ;
+			}
+		}
+		TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), null);
 
-        }
+		return  taskQueueResponse;
+	}
 
-        TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, locations.toJSONString(), tweetID);
+	private HashMap<Integer, Integer> addToTimeStampList(HashMap<Integer, Integer> timeStampList, String answerValue){
 
-        return  taskQueueResponse;
-    }
+		String[] answerAry = answerValue.split(",");
+		for(int i=0; i< answerAry.length; i++){
+			if(!answerAry[i].toString().isEmpty()){
+				Integer sec = Double.valueOf(answerAry[i]).intValue();
+				if(!timeStampList.containsKey(sec)) {
+					if(sec > 0){
+						Integer secAddOne = sec + 1;
+						if(!timeStampList.containsKey(secAddOne)){
+							if(sec > 1){
+								Integer secSubtractOne = sec - 1;
+								if(!timeStampList.containsKey(secSubtractOne)){
+									timeStampList.put(sec, 1);
+								}
+								else{
+									Integer value = timeStampList.get(secSubtractOne) ;
+									timeStampList.put(secSubtractOne, value + 1);
+								}
+							}
+						}
+						else{
+							Integer value = timeStampList.get(secAddOne) ;
+							timeStampList.put(secAddOne, value + 1);
+						}
+					}
+				}
+				else{
+					Integer value = timeStampList.get(sec) ;
+					timeStampList.put(sec, value + 1);
+				}
+			}
+		}
+		return timeStampList;
+	}
 
-    private HashMap<Integer, Integer> addToTimeStampList(HashMap<Integer, Integer> timeStampList, String answerValue){
+	private String getUserAnswer(org.json.JSONObject info, ClientApp clientApp){
 
-        String[] answerAry = answerValue.split(",");
-        for(int i=0; i< answerAry.length; i++){
-            if(!answerAry[i].toString().isEmpty()){
-                Integer sec = Double.valueOf(answerAry[i]).intValue();
-                if(!timeStampList.containsKey(sec)) {
-                    if(sec > 0){
-                        Integer secAddOne = sec + 1;
-                        if(!timeStampList.containsKey(secAddOne)){
-                            if(sec > 1){
-                                Integer secSubtractOne = sec - 1;
-                                if(!timeStampList.containsKey(secSubtractOne)){
-                                    timeStampList.put(sec, 1);
-                                }
-                                else{
-                                    Integer value = timeStampList.get(secSubtractOne) ;
-                                    timeStampList.put(secSubtractOne, value + 1);
-                                }
-                            }
-                        }
-                        else{
-                            Integer value = timeStampList.get(secAddOne) ;
-                            timeStampList.put(secAddOne, value + 1);
-                        }
-                    }
-                }
-                else{
-                    Integer value = timeStampList.get(sec) ;
-                    timeStampList.put(sec, value + 1);
-                }
-            }
-        }
-        return timeStampList;
-    }
+		String answer = null;
+		// tweet
+		if(info.get("category")!=null) {
+			answer = (String)info.get("category");
+		}
+		// image , video
+		if(info.get("damage")!=null && clientApp.getAppType() == StatusCodeType.APP_IMAGE) {
+			answer = (String)info.get("damage");
+		}
 
-    private String getUserAnswer(JSONObject featureJsonObj, ClientApp clientApp){
+		// geo
+		if(info.get("loc")!=null) {
+			answer = (String)info.get("loc");
+		}
 
-        String answer = null;
-        JSONObject info = (JSONObject)featureJsonObj.get("info");
-        // tweet
-        if(info.get("category")!=null) {
-            answer = (String)info.get("category");
-        }
-        // image , video
-        if(info.get("damage")!=null && clientApp.getAppType() == StatusCodeType.APP_IMAGE) {
-            answer = (String)info.get("damage");
-        }
+		return answer;
+	}
 
+	private String[] getAcceptableAnswers(ClientAppAnswer clientAppAnswer, JSONParser parser) throws ParseException {
+		String answerKey =  clientAppAnswer.getAnswer();
+		if(clientAppAnswer.getActiveAnswerKey() != null){
+			answerKey =  clientAppAnswer.getActiveAnswerKey();
+		}
 
+		JSONArray questionArrary =   (JSONArray) parser.parse(answerKey) ;
 
-        // geo
-        if(info.get("loc")!=null) {
-            answer = (String)info.get("loc");
-        }
+		int questionSize =  questionArrary.size();
+		String[] questions = new String[questionSize];
 
-        return answer;
-    }
+		for(int i=0; i< questionSize; i++){
+			JSONObject obj = (JSONObject)questionArrary.get(i);
+			questions[i] =   (String)obj.get("qa");
+		}
 
-    private String[] getAcceptableAnswers(ClientAppAnswer clientAppAnswer, JSONParser parser) throws ParseException {
-        String answerKey =  clientAppAnswer.getAnswer();
-        if(clientAppAnswer.getActiveAnswerKey() != null){
-            answerKey =  clientAppAnswer.getActiveAnswerKey();
-        }
+		return questions;
+	}
 
-        JSONArray questionArrary =   (JSONArray) parser.parse(answerKey) ;
+	private void handleItemAboveCutOff(Long taskQueueID,int responseCount, String answer, org.json.JSONObject info, ClientAppAnswer clientAppAnswer, ReportTemplateService reportTemplateService, int cutOffSize){
+		// MAKE SURE TO MODIFY TEMPLATE HTML  Standize OUTPUT FORMAT
+		if(responseCount >= cutOffSize){
+			String tweetID = (String)info.get("tweetid");
+			String tweet = (String)info.get("tweet");
+			String author= (String)info.get("author");
+			String lat= (String)info.get("lat");
+			String lng= (String)info.get("lon");
+			String url= (String)info.get("url");
+			String created = (String)info.get("timestamp");
+			Long taskID = (Long)info.get("taskid");
 
-        int questionSize =  questionArrary.size();
-        String[] questions = new String[questionSize];
+			if(taskQueueID!=null && taskID!=null && tweetID!=null && (tweet!=null && !tweet.isEmpty())){
+				ReportTemplate template = new ReportTemplate(taskQueueID,taskID,tweetID,tweet,author,lat,lng,url,created, answer, StatusCodeType.TEMPLATE_IS_READY_FOR_EXPORT, clientAppAnswer.getClientAppID());
+				reportTemplateService.saveReportItem(template);
+			}
+			// save to output
+		}
+	}
 
-        for(int i=0; i< questionSize; i++){
-            JSONObject obj = (JSONObject)questionArrary.get(i);
-            questions[i] =   (String)obj.get("qa");
-        }
+	private void handleItemAboveCutOffForVideo(Long taskQueueID, HashMap<Integer, Integer> severeTimeStamp, HashMap<Integer, Integer> mildTimeStamp, org.json.JSONObject info, ClientAppAnswer clientAppAnswer, ReportTemplateService reportTemplateService){
 
-        return questions;
-    }
+		if(info == null){
+			return;
+		}
+		String responseKeyWord = null;
+		String tweetID = (String)info.get("tweetid");
+		String tweet = (String)info.get("tweet");
+		String author= (String)info.get("author");
+		String lat= (String)info.get("lat");
+		String lng= (String)info.get("lon");
+		String url= (String)info.get("url");
+		String created = (String)info.get("timestamp");
+		Long taskID = (Long)info.get("taskid");
 
-    private void handleItemAboveCutOff(Long taskQueueID,int responseCount, String answer, JSONObject info, ClientAppAnswer clientAppAnswer, ReportTemplateService reportTemplateService, int cutOffSize){
-        // MAKE SURE TO MODIFY TEMPLATE HTML  Standize OUTPUT FORMAT
-        if(responseCount >= cutOffSize){
-            String tweetID = (String)info.get("tweetid");
-            String tweet = (String)info.get("tweet");
-            String author= (String)info.get("author");
-            String lat= (String)info.get("lat");
-            String lng= (String)info.get("lon");
-            String url= (String)info.get("url");
-            String created = (String)info.get("timestamp");
-            Long taskID = (Long)info.get("taskid");
+		List<Integer> unsortAnswerList = new ArrayList<Integer>();
 
-            if(taskQueueID!=null && taskID!=null && tweetID!=null && (tweet!=null && !tweet.isEmpty())){
-                ReportTemplate template = new ReportTemplate(taskQueueID,taskID,tweetID,tweet,author,lat,lng,url,created, answer, StatusCodeType.TEMPLATE_IS_READY_FOR_EXPORT, clientAppAnswer.getClientAppID());
-                reportTemplateService.saveReportItem(template);
-            }
-            // save to output
-        }
-    }
+		if(!severeTimeStamp.isEmpty() )  {
+			for (Map.Entry entry : severeTimeStamp.entrySet()) {
+				Integer value = (Integer)entry.getKey();
+				if (!unsortAnswerList.contains(value))
+					unsortAnswerList.add(value);
+				responseKeyWord = PybossaConf.VIDEO_CLICKER_RESPONSE_SEVERE;
+			}
+		}
 
-    private void handleItemAboveCutOffForVideo(Long taskQueueID, HashMap<Integer, Integer> severeTimeStamp, HashMap<Integer, Integer> mildTimeStamp, JSONObject info, ClientAppAnswer clientAppAnswer, ReportTemplateService reportTemplateService){
+		if(!mildTimeStamp.isEmpty() )  {
+			for (Map.Entry entry : mildTimeStamp.entrySet()) {
+				Integer value = (Integer)entry.getKey();
+				if (!unsortAnswerList.contains(value))
+					unsortAnswerList.add(value);
+				responseKeyWord = responseKeyWord + ":" +PybossaConf.VIDEO_CLICKER_RESPONSE_MILD;
+			}
+		}
 
-        if(info == null){
-            return;
-        }
-        String responseKeyWord = null;
-        String tweetID = (String)info.get("tweetid");
-        String tweet = (String)info.get("tweet");
-        String author= (String)info.get("author");
-        String lat= (String)info.get("lat");
-        String lng= (String)info.get("lon");
-        String url= (String)info.get("url");
-        String created = (String)info.get("timestamp");
-        Long taskID = (Long)info.get("taskid");
+		if(unsortAnswerList.size() > 1){
+			Collections.sort(unsortAnswerList);
+			String timeStampResponseValue = StringUtils.collectionToDelimitedString(unsortAnswerList,"-");
+			timeStampResponseValue = timeStampResponseValue + "-" + responseKeyWord ;
+			ReportTemplate template = new ReportTemplate(taskQueueID,taskID,tweetID,tweet,author,lat,lng,url,created, timeStampResponseValue , StatusCodeType.TEMPLATE_IS_READY_FOR_EXPORT, clientAppAnswer.getClientAppID());
+			reportTemplateService.saveReportItem(template);
+		}
+	}
 
-        List<Integer> unsortAnswerList = new ArrayList<Integer>();
+	private HashMap<Integer, Integer> removeItemBelowCutOffForVideo(HashMap<Integer, Integer> timeStampList, ClientAppAnswer clientAppAnswer ){
 
-        if(!severeTimeStamp.isEmpty() )  {
-            for (Map.Entry entry : severeTimeStamp.entrySet()) {
-                Integer value = (Integer)entry.getKey();
-                if (!unsortAnswerList.contains(value))
-                    unsortAnswerList.add(value);
-                responseKeyWord = PybossaConf.VIDEO_CLICKER_RESPONSE_SEVERE;
-            }
-        }
+		for(Iterator<Map.Entry<Integer,Integer>> it=timeStampList.entrySet().iterator();it.hasNext();){
+			Map.Entry<Integer, Integer> entry = it.next();
+			if (entry.getValue() < clientAppAnswer.getVoteCutOff()) {
+				it.remove();
+			}
+		}
 
-        if(!mildTimeStamp.isEmpty() )  {
-            for (Map.Entry entry : mildTimeStamp.entrySet()) {
-                Integer value = (Integer)entry.getKey();
-                if (!unsortAnswerList.contains(value))
-                    unsortAnswerList.add(value);
-                responseKeyWord = responseKeyWord + ":" +PybossaConf.VIDEO_CLICKER_RESPONSE_MILD;
-            }
-        }
+		return timeStampList;
+	}
 
-        if(unsortAnswerList.size() > 1){
-            Collections.sort(unsortAnswerList);
-            String timeStampResponseValue = StringUtils.collectionToDelimitedString(unsortAnswerList,"-");
-            timeStampResponseValue = timeStampResponseValue + "-" + responseKeyWord ;
-            ReportTemplate template = new ReportTemplate(taskQueueID,taskID,tweetID,tweet,author,lat,lng,url,created, timeStampResponseValue , StatusCodeType.TEMPLATE_IS_READY_FOR_EXPORT, clientAppAnswer.getClientAppID());
-            reportTemplateService.saveReportItem(template);
-        }
-    }
+	private boolean isContainNoLocationInfo(List<TaskRun> pybossaResult, JSONParser parser) throws ParseException {
+		boolean found = false;
+		for (TaskRun taskRun : pybossaResult) {
+			org.json.JSONObject info = taskRun.getInfo();
+			if(info.get("loc") != null){
+				String locValue = info.get("loc").toString();
+				if(locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND)){
+					found = true;
+				}
+			}
+		}
+		return  found;
+	}
 
-    private HashMap<Integer, Integer> removeItemBelowCutOffForVideo(HashMap<Integer, Integer> timeStampList, ClientAppAnswer clientAppAnswer ){
+	private int getCutOffNumber(int responseSize, int maxResponseSize, ClientAppAnswer clientAppAnswer){
 
-        for(Iterator<Map.Entry<Integer,Integer>> it=timeStampList.entrySet().iterator();it.hasNext();){
-            Map.Entry<Integer, Integer> entry = it.next();
-            if (entry.getValue() < clientAppAnswer.getVoteCutOff()) {
-                it.remove();
-            }
-        }
+		int cutOffSize =    clientAppAnswer.getVoteCutOff();
 
-        return timeStampList;
-    }
+		if(responseSize > maxResponseSize){
+			cutOffSize = (int)Math.round(maxResponseSize * 0.5);
+		}
 
-    private boolean isContainNoLocationInfo(String pybossaResult, JSONParser parser) throws ParseException {
-        boolean found = false;
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+		return cutOffSize;
+	}
 
-        Iterator itr= array.iterator();
+	private JSONObject getMarkerStyleForClientApp(MarkerStyle markerStyle, JSONParser parser, String answer){
 
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
+		JSONObject selectedStyle = null;
+		try {
+			if(markerStyle != null){
+				JSONObject mJson = (JSONObject)parser.parse(markerStyle.getStyle());
+				JSONArray mStyles = (JSONArray)mJson.get("style");
+				for(Object a : mStyles) {
+					JSONObject aStyle = (JSONObject)a;
 
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
-            if(info.get("loc") != null){
-	            String locValue = info.get("loc").toString();
-	            if(locValue.equalsIgnoreCase(PybossaConf.TASK_QUEUE_GEO_INFO_NOT_FOUND)){
-	                found = true;
-	            }
-            }
-        }
-        return  found;
-    }
+					if(aStyle.get("label_code").toString().equalsIgnoreCase(answer)){
+						selectedStyle = aStyle;
+					}
+				}
+			}
+		} catch (ParseException e) {
+			logger.warn("Parse Exception : " + e.getMessage());
+		}
 
-    private int getCutOffNumber(int responseSize, int maxResponseSize, ClientAppAnswer clientAppAnswer){
-
-        int cutOffSize =    clientAppAnswer.getVoteCutOff();
-
-        if(responseSize > maxResponseSize){
-            cutOffSize = (int)Math.round(maxResponseSize * 0.5);
-        }
-
-        return cutOffSize;
-    }
-
-    private JSONObject getMarkerStyleForClientApp(MarkerStyle markerStyle, JSONParser parser, String answer){
-    	  	
-        JSONObject selectedStyle = null;
-        try {
-        	if(markerStyle != null){
-                JSONObject mJson = (JSONObject)parser.parse(markerStyle.getStyle());
-                JSONArray mStyles = (JSONArray)mJson.get("style");
-                for(Object a : mStyles) {
-                    JSONObject aStyle = (JSONObject)a;
-
-                    if(aStyle.get("label_code").toString().equalsIgnoreCase(answer)){
-                        selectedStyle = aStyle;
-                    }
-                }
-        	}
-        } catch (ParseException e) {
-            logger.warn("Parse Exception : " + e.getMessage());
-        }
-
-        return selectedStyle;
-    }
+		return selectedStyle;
+	}
 
 
 }

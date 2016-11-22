@@ -23,6 +23,9 @@ public class ClientAppAnswer implements Serializable {
     @Column (name = "answer", nullable = false)
     private String answer;
 
+    @Column (name = "answer_marker_info", nullable = true)
+    private String answerMarkerInfo;
+    
     @Column (name = "created", nullable = false)
     private Date created;
 
@@ -80,4 +83,12 @@ public class ClientAppAnswer implements Serializable {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+	public String getAnswerMarkerInfo() {
+		return answerMarkerInfo;
+	}
+
+	public void setAnswerMarkerInfo(String answerMarkerInfo) {
+		this.answerMarkerInfo = answerMarkerInfo;
+	}
 }

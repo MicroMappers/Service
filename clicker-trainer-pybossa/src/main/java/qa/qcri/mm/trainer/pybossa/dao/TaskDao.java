@@ -11,5 +11,6 @@ import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
  */
 public interface TaskDao extends AbstractDao<Task, Integer>{
 
-	Task getTaskByIdandProjectId(Long id, Long projectId);
+	Task getTaskByIdandProjectId(Integer id, Integer projectId);
+	Long getTaskCountByIdProjectIdAndState(Integer taskID, Integer projectId, String state);
 }

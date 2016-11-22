@@ -1,6 +1,14 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
-import au.com.bytecode.opencsv.CSVParser;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,19 +20,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import au.com.bytecode.opencsv.CSVParser;
 import qa.qcri.mm.trainer.pybossa.dao.TaskTranslationDao;
-import qa.qcri.mm.trainer.pybossa.entity.*;
+import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
+import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
+import qa.qcri.mm.trainer.pybossa.entity.ReportTemplate;
+import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
 import qa.qcri.mm.trainer.pybossa.format.impl.TranslationRequestModel;
 import qa.qcri.mm.trainer.pybossa.format.impl.TranslationResponseModel;
-import qa.qcri.mm.trainer.pybossa.service.*;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppEventService;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
+import qa.qcri.mm.trainer.pybossa.service.ClientAppService;
+import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
+import qa.qcri.mm.trainer.pybossa.service.TranslationService;
 import qa.qcri.mm.trainer.pybossa.store.LookupCode;
 import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
 import qa.qcri.mm.trainer.pybossa.store.URLPrefixCode;
-
-import java.io.BufferedReader;
-import java.io.StringReader;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 
 /**
@@ -319,7 +332,7 @@ public class TWBTranslationServiceImpl implements TranslationService {
             }
 
             else{
-                ClientApp app =  clientAppService.findClientAppByID("clientAppID", taskTranslation.getClientAppId());
+                ClientApp app =  clientAppService.findClientAppByID(taskTranslation.getClientAppId());
                 TranslationResponseModel taskRespModel = new TranslationResponseModel(taskTranslation,app,code);
                 this.processAIDRPushing(taskTranslation, taskRespModel.getTaskResponse());
             }
@@ -364,7 +377,7 @@ public class TWBTranslationServiceImpl implements TranslationService {
     private void processAIDRPushing(TaskTranslation taskTranslation, JSONArray jsonObjectCopy)
     {
         long appID = taskTranslation.getClientAppId();
-        ClientApp app =  clientAppService.findClientAppByID("clientAppID", appID);
+        ClientApp app =  clientAppService.findClientAppByID(appID);
         String AIDR_TASK_ANSWER_URL = app.getClient().getAidrHostURL() + URLPrefixCode.TASK_ANSWER_SAVE;
 
         pybossaCommunicator.sendPost(jsonObjectCopy.toJSONString(), AIDR_TASK_ANSWER_URL);

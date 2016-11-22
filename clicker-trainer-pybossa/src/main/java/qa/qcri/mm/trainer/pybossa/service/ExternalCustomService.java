@@ -1,9 +1,12 @@
 package qa.qcri.mm.trainer.pybossa.service;
 
+import java.util.List;
+
 import org.json.simple.parser.JSONParser;
 import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,8 +20,8 @@ public interface ExternalCustomService {
     String NamibiaImage();
     TaskQueueResponse getAnswerResponseForAerial(String pybossaResult, JSONParser parser, Long taskQueueID, Long taskID) throws Exception;
     String NamibiaImageWithTag(int tagValue);
-    TaskQueueResponse getAnswerResponseForSkyEyes( ClientApp clientApp, String datasource, TaskQueue taskQueue) throws Exception;
+    TaskQueueResponse getAnswerResponseForSkyEyes( ClientApp clientApp, List<TaskRun> datasource, TaskQueue taskQueue) throws Exception;
     TaskQueueResponse testAerialClick(String pybossaResult) throws Exception;
-    TaskQueueResponse getAnswerResponse( ClientApp clientApp, String datasource, TaskQueue taskQueue) throws Exception;
+    TaskQueueResponse getAnswerResponse( ClientApp clientApp,  List<TaskRun> datasource, TaskQueue taskQueue) throws Exception;
 
 }

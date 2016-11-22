@@ -40,8 +40,8 @@ public class ClientAppDaoImpl extends AbstractDaoImpl<ClientApp, String> impleme
     }
 
     @Override
-    public ClientApp findClientAppByID(String columnName, Long id) {
-        ClientApp appCfg = findByCriterionID(Restrictions.eq(columnName, id));
+    public ClientApp findClientAppByID(Long id) {
+        ClientApp appCfg = findByCriterionID(Restrictions.eq("clientAppID", id));
         return appCfg;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

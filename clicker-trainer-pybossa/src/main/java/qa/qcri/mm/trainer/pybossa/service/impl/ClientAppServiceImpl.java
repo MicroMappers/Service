@@ -30,8 +30,8 @@ public class ClientAppServiceImpl implements ClientAppService {
     }
 
     @Override
-    public ClientApp findClientAppByID(String columnName, Long id) {
-        return clientAppDao.findClientAppByID(columnName, id);//To change body of implemented methods use File | Settings | File Templates.
+    public ClientApp findClientAppByID(Long id) {
+        return clientAppDao.findClientAppByID(id);//To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ClientAppServiceImpl implements ClientAppService {
     @Override
     @Transactional(readOnly = false)
     public void updateClientAppStatus(ClientApp clientApp, Integer status) {
-        ClientApp app = findClientAppByID("clientAppID", clientApp.getClientAppID());
+        ClientApp app = findClientAppByID(clientApp.getClientAppID());
         if(app != null){
             app.setStatus(status);
             clientAppDao.updateClientApp(app);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import qa.qcri.mm.trainer.pybossa.entity.ClientApp;
 import qa.qcri.mm.trainer.pybossa.entity.ImageMetaData;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 import qa.qcri.mm.trainer.pybossa.service.ClientAppResponseService;
 
 /**
@@ -27,7 +29,8 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
     @Autowired
     ImageMetaDataDao imageMetaDataDao;
 
-
+    protected static Logger logger = Logger.getLogger(VanuatuDataOutputProcessor.class);
+    
     public VanuatuDataOutputProcessor(ClientApp clientApp) {
         super(clientApp);
     }
@@ -37,7 +40,7 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
     }
 
     @Override
-    public TaskQueueResponse process(String datasource, TaskQueue taskQueue) throws Exception {
+    public TaskQueueResponse process(List<TaskRun> datasource, TaskQueue taskQueue) throws Exception {
         if(this.clientApp == null)
             return null;
 
@@ -48,15 +51,15 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
 
         try{
 
-            JSONArray array = (JSONArray) parser.parse(this.datasource) ;
+           // JSONArray array = (JSONArray) parser.parse(this.datasource) ;
             JSONArray taskQueueResJsonArray = new JSONArray();
-            if(array.size() > 0) {
-                Iterator itr= array.iterator();
+            if(this.datasource.size() > 0) {
+               // Iterator itr= array.iterator();
 
 
 
                 String tweetID = null;
-                String imgURL = (String)this.getStringValueFromInfoJson(array, "imgurl");
+                String imgURL = this.datasource.get(0).getInfo().getString("imgurl"); 
                                 
                 //String bounds = this.getStringValueFromInfoJson(array, "geo");
                 String bounds = "[125.00587463378906, 11.241715102754723, 125.00553131103516, 11.241378366973036]";
@@ -69,21 +72,20 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
                 JSONObject features = this.getFeature(imgURL);
 
                 JSONArray locations  =  new JSONArray();
-                while(itr.hasNext()){
-                    JSONObject featureJsonObj = (JSONObject)itr.next();
-
-                    JSONObject info = (JSONObject)featureJsonObj.get("info");
+                
+                for (TaskRun taskRun : this.datasource) {
+                	org.json.JSONObject info = taskRun.getInfo();
                     JSONArray loc = (JSONArray)info.get("loc");
                     this.getProperties(loc, info, locations) ;
-                }
+				}
 
                 finalProperties.put("features", locations);
 
-                System.out.println("ans: " + finalProperties.toJSONString() );
+                logger.info("ans: " + finalProperties.toJSONString() );
 
                 features.put("properties", finalProperties) ;
 
-                System.out.println("ans: " + features.toJSONString() );
+                logger.info("ans: " + features.toJSONString() );
 
                 if(locations.size() > 0){
                     taskQueueResJsonArray.add(features)  ;
@@ -94,13 +96,10 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
             }
         }
         catch(Exception e){
-            System.out.println("Exception e : " + e) ;
+            logger.info("Exception while processing Vanatu Data : " + e) ;
             taskQueueResponse = null;
-
         }
-
         return taskQueueResponse;
-
     }
 
     @Override
@@ -119,13 +118,6 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
             }
         }
         return responses;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    private Object getStringValueFromInfoJson(JSONArray array, String propertyName) throws Exception{
-        JSONObject response = (JSONObject)array.get(0);
-        JSONObject answer = (JSONObject)response.get("info");
-
-        return answer.get(propertyName);
     }
 
     private JSONObject getFeature(String imgURL){
@@ -157,51 +149,49 @@ public class VanuatuDataOutputProcessor extends DataProcessor {
 
     }
 
-    private JSONArray getProperties(JSONArray loc, JSONObject info, JSONArray locations){
+    private JSONArray getProperties(JSONArray loc, org.json.JSONObject info, JSONArray locations){
 
-        try{
-            if(!loc.isEmpty() && loc.size() > 0){
-                Iterator itr= loc.iterator();
-                while(itr.hasNext()){
-                    JSONObject featureJsonObj = (JSONObject)itr.next();
-                    JSONObject layer = (JSONObject)featureJsonObj.get("layer");
-                    String layerType = (String)featureJsonObj.get("layerType");
+    	try{
+    		if(!loc.isEmpty() && loc.size() > 0){
+    			Iterator itr= loc.iterator();
+    			while(itr.hasNext()){
+    				JSONObject featureJsonObj = (JSONObject)itr.next();
+    				JSONObject layer = (JSONObject)featureJsonObj.get("layer");
+    				String layerType = (String)featureJsonObj.get("layerType");
 
+    				JSONObject properties  =  (JSONObject)layer.get("properties");
 
-                    JSONObject properties  =  (JSONObject)layer.get("properties");
+    				properties.put("layerType",layerType);
 
-                    properties.put("layerType",layerType);
+    				if(style.size() > 0){
+    					JSONObject theStyleTemplate = (JSONObject)parser.parse(style.get(0).getStyle()) ;
 
-                    if(style.size() > 0){
-                        JSONObject theStyleTemplate = (JSONObject)parser.parse(style.get(0).getStyle()) ;
+    					JSONArray styles = (JSONArray)theStyleTemplate.get("style");
+    					for(int i=0; i < styles.size(); i++){
+    						JSONObject aStyle  = (JSONObject)styles.get(i);
+    						String lable_code = (String)aStyle.get("label_code");
+    						if(lable_code.equalsIgnoreCase(layerType)){
+    							properties.put("label",layerType);
+    							properties.put("style", aStyle);
+    						}
+    					}
 
-                        JSONArray styles = (JSONArray)theStyleTemplate.get("style");
-                        for(int i=0; i < styles.size(); i++){
-                            JSONObject aStyle  = (JSONObject)styles.get(i);
-                            String lable_code = (String)aStyle.get("label_code");
-                            if(lable_code.equalsIgnoreCase(layerType)){
-                                properties.put("label",layerType);
-                                properties.put("style", aStyle);
-                            }
-                        }
+    				}
 
-                    }
+    				properties.put("userID", info.get("user_id"));
 
-                    properties.put("userID", info.get("user_id"));
+    				layer.remove("bounds");
+    				layer.remove("taskid");
+    				layer.remove("imgURL");
 
-                    layer.remove("bounds");
-                    layer.remove("taskid");
-                    layer.remove("imgURL");
+    				locations.add(layer) ;
+    			}
+    		}
+    	}
+    	catch (Exception e){
+    		logger.info("Excpetion while getting Properties - " + e.getMessage());
+    	}
 
-                    locations.add(layer) ;
-                }
-            }
-
-        }
-        catch (Exception e){
-            System.out.println("exception : getProperties - " + e.getMessage());
-        }
-
-        return locations;
+    	return locations;
     }
 }

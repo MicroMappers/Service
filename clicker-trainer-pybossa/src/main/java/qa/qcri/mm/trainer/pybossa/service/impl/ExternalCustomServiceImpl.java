@@ -3,6 +3,7 @@ package qa.qcri.mm.trainer.pybossa.service.impl;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +21,7 @@ import qa.qcri.mm.trainer.pybossa.entity.NamibiaImage;
 import qa.qcri.mm.trainer.pybossa.entity.NamibiaReport;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueue;
 import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 import qa.qcri.mm.trainer.pybossa.format.impl.SkyEyeDataOutputProcessor;
 import qa.qcri.mm.trainer.pybossa.format.impl.VanuatuDataOutputProcessor;
 import qa.qcri.mm.trainer.pybossa.service.ClientAppService;
@@ -57,7 +59,8 @@ public class ExternalCustomServiceImpl  implements ExternalCustomService {
     @Autowired
     private MarkerStyleDao markerStyleDao;
 
-
+    protected static Logger logger = Logger.getLogger(ExternalCustomServiceImpl.class);
+    
     private SkyEyeDataOutputProcessor skyEyeDataOutputProcessor = null;
     private VanuatuDataOutputProcessor vanuatuDataOutputProcessor = null;
 
@@ -75,7 +78,7 @@ public class ExternalCustomServiceImpl  implements ExternalCustomService {
     }
 
     @Override
-    public TaskQueueResponse getAnswerResponseForSkyEyes(ClientApp clientApp, String datasource, TaskQueue taskQueue) throws Exception {
+    public TaskQueueResponse getAnswerResponseForSkyEyes(ClientApp clientApp, List<TaskRun> datasource, TaskQueue taskQueue) throws Exception {
         if(skyEyeDataOutputProcessor == null || skyEyeDataOutputProcessor.getClientApp().equals(clientApp))  {
             skyEyeDataOutputProcessor = new SkyEyeDataOutputProcessor(clientApp);
             skyEyeDataOutputProcessor.setMarkerStyleDao(markerStyleDao);
@@ -173,7 +176,7 @@ public class ExternalCustomServiceImpl  implements ExternalCustomService {
     }
 
 
-    private TaskQueueResponse getAnswerResponseForPAM(ClientApp clientApp, String datasource, TaskQueue taskQueue) throws Exception {
+    private TaskQueueResponse getAnswerResponseForPAM(ClientApp clientApp, List<TaskRun> datasource, TaskQueue taskQueue) throws Exception {
         if(vanuatuDataOutputProcessor == null || vanuatuDataOutputProcessor.getClientApp().equals(clientApp))  {
             vanuatuDataOutputProcessor = new VanuatuDataOutputProcessor(clientApp);
             vanuatuDataOutputProcessor.setImageMetaDataDao(imageMetaDataDao);
@@ -186,12 +189,12 @@ public class ExternalCustomServiceImpl  implements ExternalCustomService {
     }
 
     @Override
-    public TaskQueueResponse getAnswerResponse(ClientApp clientApp, String datasource, TaskQueue taskQueue) throws Exception {
+    public TaskQueueResponse getAnswerResponse(ClientApp clientApp, List<TaskRun> datasource, TaskQueue taskQueue) throws Exception {
 
-        System.out.println("name : " + clientApp.getShortName());
+        logger.info("getAnswerResponse for clientApp: " + clientApp.getShortName());
         if(clientApp.getShortName().equalsIgnoreCase(UserAccount.PAM_APP)) {
             // PAM
-            System.out.println("pam");
+        	logger.info("pam");
            return getAnswerResponseForPAM(clientApp,  datasource,  taskQueue);
         }
 

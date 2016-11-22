@@ -24,7 +24,7 @@ public class TaskPybossaServiceImpl implements TaskPybossaService {
 
 
     @Override
-    public Task getTaskByIdandProjectId(Long taskID, Long projectId) {
+    public Task getTaskByIdandProjectId(Integer taskID, Integer projectId) {
         return taskDao.getTaskByIdandProjectId(taskID, projectId); 
     }
 
@@ -37,5 +37,11 @@ public class TaskPybossaServiceImpl implements TaskPybossaService {
 			taskDao.save(task);
 		}
 		return tasks;
+	}
+
+
+	@Override
+	public Long getTaskCountByIdProjectIdAndState(Integer taskID, Integer projectId, String state) {
+		return taskDao.getTaskCountByIdProjectIdAndState(taskID, projectId, state); 
 	}
 }

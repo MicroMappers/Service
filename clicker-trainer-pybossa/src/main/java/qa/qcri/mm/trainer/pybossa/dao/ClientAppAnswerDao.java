@@ -12,5 +12,4 @@ import qa.qcri.mm.trainer.pybossa.entity.ClientAppAnswer;
 public interface ClientAppAnswerDao extends AbstractDao<ClientAppAnswer, String>  {
 
     ClientAppAnswer findClientAppAnswerByID(Long clientAppID);
-    void addClientAppAnswer(Long clientAppID, String answerJson, int cutOffValue);
 }

@@ -1,8 +1,10 @@
 package qa.qcri.mm.trainer.pybossa.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ import qa.qcri.mm.trainer.pybossa.store.StatusCodeType;
 @Transactional(readOnly = true)
 public class ClientAppResponseServiceImpl implements ClientAppResponseService {
 
+	private static Logger logger = Logger.getLogger(ClientAppResponseServiceImpl.class);
+	
     @Autowired
     private ClientAppAnswerDao clientAppAnswerDao;
 
@@ -53,10 +57,8 @@ public class ClientAppResponseServiceImpl implements ClientAppResponseService {
         try {
 			taskQueueResponseDao.addTaskQueueResponse(taskQueueResponse);
 		} catch (Exception e) {
-			System.out.println(taskQueueResponse.getResponse());
-			e.printStackTrace();
+			logger.error("Excpetion while persisting taskQueueResponse for taskQueueId : "+taskQueueResponse.getTaskQueueID(), e);
 		}
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -92,8 +94,11 @@ public class ClientAppResponseServiceImpl implements ClientAppResponseService {
 
     @Override
     @Transactional(readOnly = false)
-    public void saveClientAppAnswer(Long clientAppID, String answerJson, int cutOffValue) {
-        clientAppAnswerDao.addClientAppAnswer(clientAppID, answerJson, cutOffValue);
+    public ClientAppAnswer saveClientAppAnswer(Long clientAppID, String answerJson, int cutOffValue) {
+    	ClientAppAnswer clientAppAnswer = new ClientAppAnswer(clientAppID, answerJson);
+        clientAppAnswer.setVoteCutOff(cutOffValue);
+    	clientAppAnswer.setCreated(new Date());
+        clientAppAnswerDao.save(clientAppAnswer);
+        return clientAppAnswer;
     }
-
 }

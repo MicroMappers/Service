@@ -2,8 +2,12 @@ package qa.qcri.mm.trainer.pybossa.format.impl;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,9 +22,11 @@ import qa.qcri.mm.trainer.pybossa.entity.TaskQueueResponse;
 import qa.qcri.mm.trainer.pybossa.entity.TaskTranslation;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Project;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
+import qa.qcri.mm.trainer.pybossa.entityForPybossa.TaskRun;
 import qa.qcri.mm.trainer.pybossa.service.ReportTemplateService;
 import qa.qcri.mm.trainer.pybossa.service.TranslationService;
 import qa.qcri.mm.trainer.pybossa.store.LookupCode;
+import qa.qcri.mm.trainer.pybossa.store.PybossaConf;
 import qa.qcri.mm.trainer.pybossa.util.DataFormatValidator;
 import qa.qcri.mm.trainer.pybossa.util.JsonSorter;
 import qa.qcri.mm.trainer.pybossa.util.StreamConverter;
@@ -73,41 +79,30 @@ public class TextClickerPybossaFormatter {
         return appID;
     }
 
-    public String buildTaskOutputForAIDR(Long taskQueueId, String pybossaResult, JSONParser parser, ClientApp clientApp, ClientAppAnswer clientAppAnswer) throws Exception{
+    public List<TaskRun> buildTaskOutputForAIDR(Long taskQueueId, List<TaskRun> taskRuns, JSONParser parser, ClientApp clientApp, ClientAppAnswer clientAppAnswer) throws Exception{
 
-        JSONArray outJson = new JSONArray();
+    	List<TaskRun> outTaskRuns = new ArrayList<TaskRun>();
+    	
+    	if(taskRuns.size() > 0){
+    		TaskRun oneFeatureJsonObj = taskRuns.get(0);
+    		String finalAnswer = this.getAnswerResponse(clientApp, taskRuns, parser, clientAppAnswer, taskQueueId);
 
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
-
-        if(array.size() > 0){
-            JSONObject oneFeatureJsonObj = (JSONObject) array.get(0);
-            String finalAnswer = this.getAnswerResponse(clientApp,pybossaResult,parser,clientAppAnswer, taskQueueId);
-
-            System.out.println("finalAnswer : " + finalAnswer);
-
-            if(finalAnswer != null) {
-                JSONObject infoJson =  this.buildInfoJson( (JSONObject)oneFeatureJsonObj.get("info"), finalAnswer, clientApp );
-
-                oneFeatureJsonObj.put("info", infoJson);
-
-
-                outJson.add(oneFeatureJsonObj);
-
-                return outJson.toJSONString();
-            }
-
-
-        }
-
-        return null  ;
+    		if(finalAnswer != null) {
+    			
+    			org.json.JSONObject infoJson =  this.buildInfoJson(oneFeatureJsonObj.getInfo(), finalAnswer, clientApp );
+    			oneFeatureJsonObj.setInfo(infoJson);
+    			outTaskRuns.add(oneFeatureJsonObj);
+    			
+    			return outTaskRuns;
+    		}
+    	}
+    	return null  ;
     }
 
 
-    ///////////////////////////////////////////////////////////////////////
+    private org.json.JSONObject buildInfoJson(org.json.JSONObject infoJson,  String finalAnswer, ClientApp clientApp){
 
-    private JSONObject buildInfoJson(JSONObject infoJson,  String finalAnswer, ClientApp clientApp){
-
-        JSONObject obj = new JSONObject();
+    	org.json.JSONObject obj = new org.json.JSONObject();
         obj.put("documentID", infoJson.get("documentID"));
         obj.put("category", finalAnswer);
         obj.put("aidrID", infoJson.get("aidrID"));
@@ -117,53 +112,41 @@ public class TextClickerPybossaFormatter {
         return obj;
     }
 
-    public String getAnswerResponse(ClientApp clientApp, String pybossaResult, JSONParser parser, ClientAppAnswer clientAppAnswer, Long taskQueueID) throws Exception{
+    public String getAnswerResponse(ClientApp clientApp, List<TaskRun> pybossaResult, JSONParser parser, ClientAppAnswer clientAppAnswer, Long taskQueueID) throws Exception{
 
-        String[] questions = getQuestion( clientAppAnswer,  parser);
-        int[] responses = new int[questions.length];
+    	Map<String, Integer> questionMapWithResponseCount = getQuestion( clientAppAnswer,  parser);
 
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+    	org.json.JSONObject info = null;
+    	String answer = null;
+    	
+    	for (TaskRun taskRun : pybossaResult) {
 
-        Iterator itr= array.iterator();
+    		info = taskRun.getInfo();
+    		answer = this.getUserAnswer(info);
 
-        String answer = null;
-        JSONObject finalInfo = null;
+    		if(answer != null){
+    			if(questionMapWithResponseCount.containsKey(answer)){
+    				questionMapWithResponseCount.put(answer, questionMapWithResponseCount.get(answer) + 1);
+    			}
+    		}
+    	}
 
-        int cutoffSize = this.getCutOffNumber(array.size(), clientApp.getTaskRunsPerTask(), clientAppAnswer)  ;
+    	String finalAnswer = null;
+    	int cutoffSize = this.getCutOffNumber(pybossaResult.size(), clientApp.getTaskRunsPerTask(), clientAppAnswer)  ;
+    	
+    	for (String question : questionMapWithResponseCount.keySet()) {
+    		if(questionMapWithResponseCount.get(question) >= cutoffSize){
+    			finalAnswer =  question;
+    			if(finalAnswer.equalsIgnoreCase(LookupCode.ANSWER_NOT_ENGLISH)){
+    				handleTranslationItem(taskQueueID, answer, info, clientAppAnswer, cutoffSize);
+    			}
+    		}
+    	}
 
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
-            finalInfo = info;
-
-            answer = this.getUserAnswer(featureJsonObj);
-
-            if(answer != null){
-                for(int i=0; i < questions.length; i++ ){
-                    if(questions[i].trim().equalsIgnoreCase(answer.trim())){
-                        responses[i] = responses[i] + 1;
-                    }
-                }
-            }
-
-        }
-
-
-        String finalAnswer = null;
-
-        for(int i=0; i < questions.length; i++ ){
-            if(responses[i] >= cutoffSize){
-                finalAnswer =  questions[i];
-                if(finalAnswer.equalsIgnoreCase(LookupCode.ANSWER_NOT_ENGLISH)){
-                    handleTranslationItem(taskQueueID, answer, finalInfo, clientAppAnswer, cutoffSize);
-                }
-            }
-        }
-
-        return  finalAnswer;
+    	return  finalAnswer;
     }
 
-    private void handleTranslationItem(Long taskQueueID,String answer, JSONObject info, ClientAppAnswer clientAppAnswer, int cutOffSize){
+    private void handleTranslationItem(Long taskQueueID,String answer, org.json.JSONObject info, ClientAppAnswer clientAppAnswer, int cutOffSize){
 
         try{
             String tweetID = String.valueOf(info.get("tweetid"));
@@ -215,63 +198,50 @@ public class TextClickerPybossaFormatter {
 
     }
 
-    public TaskQueueResponse getTaskQueueResponse(ClientApp clientApp, String pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
-        System.out.println(" getTaskQueueResponse : taskQueueID " +  taskQueueID);
-        if(clientAppAnswer == null){
-            return null;
-        }
+    public TaskQueueResponse getTaskQueueResponse(ClientApp clientApp, List<TaskRun> pybossaResult, JSONParser parser, Long taskQueueID, ClientAppAnswer clientAppAnswer, ReportTemplateService rtpService) throws Exception{
+    	
+    	if(clientAppAnswer == null){
+    		return null;
+    	}
 
-        JSONObject responseJSON = new JSONObject();
+    	JSONObject responseJSON = new JSONObject();
 
+    	Map<String, Integer> correctAnswers = getQuestion(clientAppAnswer, parser);
+    	Map<String, Integer> activeAnswers = this.getActiveAnswerKey( clientAppAnswer,  parser);
 
-        String[] correctAnswers = getQuestion(clientAppAnswer, parser);
+    	//JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+    	int cutOffSize =  getCutOffNumber(pybossaResult.size(),  clientApp.getTaskRunsPerTask(), clientAppAnswer) ;
 
-        String[] activeAnswers = this.getActiveAnswerKey( clientAppAnswer,  parser);
-        int[] responses = new int[correctAnswers.length];
-        JSONArray array = (JSONArray) parser.parse(pybossaResult) ;
+    	//Iterator itr= array.iterator();
+    	String answer = null;
+    	for (TaskRun taskRun : pybossaResult) {
 
-        int cutOffSize =  getCutOffNumber(array.size(),  clientApp.getTaskRunsPerTask(), clientAppAnswer) ;
+    		org.json.JSONObject info = taskRun.getInfo();
+    		answer = this.getUserAnswer(info);
 
-        Iterator itr= array.iterator();
-        String answer = null;
-        boolean foundCutoffItem = false;
-        while(itr.hasNext()){
-            JSONObject featureJsonObj = (JSONObject)itr.next();
+    		if(answer!=null && !clientApp.getAppType().equals(LookupCode.APP_MAP) ){
+    			if(correctAnswers.containsKey(answer)){
+    				Integer responses = correctAnswers.get(answer);
+    				responses++;
+    				correctAnswers.put(answer, responses);
+    				handleItemAboveCutOff(taskQueueID,responses, answer, info, 
+    						clientAppAnswer, rtpService, cutOffSize, activeAnswers);
+    			}
+    		}
+    	}
 
-            JSONObject info = (JSONObject)featureJsonObj.get("info");
+    	String responseJsonString = "";
 
-            Long taskID = (Long) featureJsonObj.get("id");
+    	for (String question : correctAnswers.keySet()) {
+    		responseJSON.put(question, correctAnswers.get(question));
+    	}
+    	responseJsonString = responseJSON.toJSONString();
 
-            answer = this.getUserAnswer(featureJsonObj);
-
-            System.out.println("answer :" + answer);
-
-            if(answer!=null && !clientApp.getAppType().equals(LookupCode.APP_MAP) ){
-                for(int i=0; i < correctAnswers.length; i++ ){
-                    if(correctAnswers[i].trim().equalsIgnoreCase(answer.trim())){
-                        responses[i] = responses[i] + 1;
-                        foundCutoffItem = handleItemAboveCutOff(taskQueueID,responses[i], answer, info, clientAppAnswer, rtpService, cutOffSize, activeAnswers);
-                    }
-                }
-            }
-
-
-        }
-
-        String taskInfo = "";
-        String responseJsonString = "";
-
-        for(int i=0; i < correctAnswers.length; i++ ){
-            responseJSON.put(correctAnswers[i], responses[i]);
-        }
-        responseJsonString = responseJSON.toJSONString();
-
-
-        TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJsonString, taskInfo);
-        return  taskQueueResponse;
+    	TaskQueueResponse taskQueueResponse = new TaskQueueResponse(taskQueueID, responseJsonString, "");
+    	return  taskQueueResponse;
     }
 
-    private boolean handleItemAboveCutOff(Long taskQueueID,int responseCount, String answer, JSONObject info, ClientAppAnswer clientAppAnswer, ReportTemplateService reportTemplateService, int cutOffSize, String[] activeAnswers){
+    private boolean handleItemAboveCutOff(Long taskQueueID,int responseCount, String answer, org.json.JSONObject info, ClientAppAnswer clientAppAnswer, ReportTemplateService reportTemplateService, int cutOffSize, Map<String, Integer> activeAnswers){
         // MAKE SURE TO MODIFY TEMPLATE HTML  Standize OUTPUT FORMAT
         boolean processed = false;
         try{
@@ -322,13 +292,12 @@ public class TextClickerPybossaFormatter {
                     taskID = (Long)info.get("taskid");
                 }
 
-                for(int a=0; a < activeAnswers.length; a++){
-                    if(activeAnswers[a].equalsIgnoreCase(answer)){
-                        if(taskQueueID!=null && taskID!=null && tweetID!=null && (tweet!=null && !tweet.isEmpty())){
-                            ReportTemplate template = new ReportTemplate(taskQueueID,taskID,tweetID,tweet,author,lat,lng,url,created, answer, LookupCode.TEMPLATE_IS_READY_FOR_EXPORT, clientAppAnswer.getClientAppID());
-                            reportTemplateService.saveReportItem(template);
-                            processed = true;
-                        }
+                
+                if(activeAnswers.containsKey(answer)){
+                    if(taskQueueID!=null && taskID!=null && tweetID!=null && (tweet!=null && !tweet.isEmpty())){
+                        ReportTemplate template = new ReportTemplate(taskQueueID,taskID,tweetID,tweet,author,lat,lng,url,created, answer, LookupCode.TEMPLATE_IS_READY_FOR_EXPORT, clientAppAnswer.getClientAppID());
+                        reportTemplateService.saveReportItem(template);
+                        processed = true;
                     }
                 }
 
@@ -341,10 +310,8 @@ public class TextClickerPybossaFormatter {
         return processed;
     }
 
-    private String getUserAnswer(JSONObject featureJsonObj){
+    private String getUserAnswer(org.json.JSONObject info){
         String answer = null;
-        JSONObject info = (JSONObject)featureJsonObj.get("info");
-
         if(info.get("category")!=null) {
             answer = (String)info.get("category");
         }
@@ -352,22 +319,19 @@ public class TextClickerPybossaFormatter {
         return answer;
     }
 
-    private String[] getQuestion(ClientAppAnswer clientAppAnswer, JSONParser parser) throws ParseException {
-        String answerKey =   clientAppAnswer.getAnswer();
-        System.out.println("getQuestion : " + answerKey);
-        JSONArray questionArrary =   (JSONArray) parser.parse(answerKey) ;
-        int questionSize =  questionArrary.size();
-        String[] questions = new String[questionSize];
+    private Map<String, Integer> getQuestion(ClientAppAnswer clientAppAnswer, JSONParser parser) throws ParseException {
+        JSONArray questionArrary =   (JSONArray) parser.parse(clientAppAnswer.getAnswer()) ;
+        Map<String, Integer> questionMapWithResponseCount = new HashMap<String, Integer>(questionArrary.size());
 
-        for(int i=0; i< questionSize; i++){
+        for(int i=0; i< questionArrary.size(); i++){
+        	
             JSONObject obj = (JSONObject)questionArrary.get(i);
-            questions[i] =   (String)obj.get("qa");
+            questionMapWithResponseCount.put((String)obj.get("qa"), 0);
         }
-
-        return questions;
+        return questionMapWithResponseCount;
     }
 
-    private String[] getActiveAnswerKey(ClientAppAnswer clientAppAnswer, JSONParser parser) throws ParseException {
+    private Map<String, Integer> getActiveAnswerKey(ClientAppAnswer clientAppAnswer, JSONParser parser) throws ParseException {
 
         String answerKey =   clientAppAnswer.getActiveAnswerKey();
         System.out.println("getActiveAnswerKey : " + answerKey);
@@ -376,15 +340,15 @@ public class TextClickerPybossaFormatter {
         }
 
         JSONArray questionArrary =   (JSONArray) parser.parse(answerKey) ;
-        int questionSize =  questionArrary.size();
-        String[] questions = new String[questionSize];
+        Map<String, Integer> questionMapWithResponseCount = new HashMap<String, Integer>(questionArrary.size());
 
-        for(int i=0; i< questionSize; i++){
+        for(int i=0; i< questionArrary.size(); i++){
+        	
             JSONObject obj = (JSONObject)questionArrary.get(i);
-            questions[i] =   (String)obj.get("qa");
+            questionMapWithResponseCount.put((String)obj.get("qa"), 0);
+            // questions[i] =   (String)obj.get("qa");
         }
-
-        return questions;
+        return questionMapWithResponseCount;
     }
 
     public int getCutOffNumber(int responseSize, int maxResponseSize, ClientAppAnswer clientAppAnswer){
@@ -449,6 +413,7 @@ public class TextClickerPybossaFormatter {
             Project project = new Project();
             project.setId(clientApp.getPlatformAppID().intValue());
             task.setProject(project);
+            task.setState(PybossaConf.TASK_STATUS_ONGOING);
             task.setPriority0(new Double(0));
             outputFormatData.add(task);
             

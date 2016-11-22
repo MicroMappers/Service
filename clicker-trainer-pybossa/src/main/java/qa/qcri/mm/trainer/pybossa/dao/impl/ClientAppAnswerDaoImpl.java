@@ -27,14 +27,4 @@ public class ClientAppAnswerDaoImpl extends AbstractDaoImpl<ClientAppAnswer, Str
         return findByCriterionID(Restrictions.eq("clientAppID", clientAppID));  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
-    public void addClientAppAnswer(Long clientAppID, String answerJson, int cutOffValue) {
-        ClientAppAnswer clientAppAnswer = new ClientAppAnswer(clientAppID, answerJson);
-        clientAppAnswer.setVoteCutOff(cutOffValue);
-        if(clientAppAnswer.getCreated() == null){
-        	clientAppAnswer.setCreated(new Date());
-        }
-        save(clientAppAnswer);
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

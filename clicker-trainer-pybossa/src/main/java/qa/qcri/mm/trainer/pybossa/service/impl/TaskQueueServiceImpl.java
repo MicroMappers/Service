@@ -52,7 +52,7 @@ public class TaskQueueServiceImpl implements TaskQueueService {
             taskQueueDao.updateTaskQueue(queue);
         }
         catch (Exception ex){
-            System.out.println("updateTaskQueue Exception : " + ex.getMessage());
+            logger.error("Exception while updating TaskQueue : " + ex.getMessage());
             throw new RuntimeException(ex.getMessage());
         }
     }

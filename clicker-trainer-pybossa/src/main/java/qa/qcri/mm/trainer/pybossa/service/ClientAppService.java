@@ -14,7 +14,7 @@ import java.util.List;
 public interface ClientAppService {
 
     void createClientApp(ClientApp clientApp);
-    ClientApp findClientAppByID(String columnName, Long id);
+    ClientApp findClientAppByID(Long id);
     ClientApp findClientAppByCriteria(String columnName, String value);
     List<ClientApp> getAllCrisis();
     List<ClientApp> getAllClientAppByClientID(Long clientID);
