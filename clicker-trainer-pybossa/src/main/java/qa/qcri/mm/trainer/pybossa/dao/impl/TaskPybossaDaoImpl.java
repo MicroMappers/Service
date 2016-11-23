@@ -3,16 +3,16 @@ package qa.qcri.mm.trainer.pybossa.dao.impl;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import qa.qcri.mm.trainer.pybossa.dao.TaskDao;
+import qa.qcri.mm.trainer.pybossa.dao.TaskPybossaDao;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
 
 /**
  * User: kushal
  */
 @Repository
-public class TaskDaoImpl extends AbstractDaoImplForPybossa<Task, Integer> implements TaskDao {
+public class TaskPybossaDaoImpl extends AbstractDaoImplForPybossa<Task, Integer> implements TaskPybossaDao {
 
-    protected TaskDaoImpl(){
+    protected TaskPybossaDaoImpl(){
         super(Task.class);
     }
     

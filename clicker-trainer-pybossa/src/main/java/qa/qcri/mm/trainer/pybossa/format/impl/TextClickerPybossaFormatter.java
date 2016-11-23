@@ -3,11 +3,9 @@ package qa.qcri.mm.trainer.pybossa.format.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -55,15 +53,25 @@ public class TextClickerPybossaFormatter {
         this.translateRequired = translateRequired;
     }
 
-    public String assmeblePybossaAppCreationForm(String name, String shortName, String description) throws Exception{
+    public Project assmeblePybossaAppCreationForm(String name, String shortName, String description) throws Exception{
 
-        JSONObject app = new JSONObject();
-
-        app.put("name", name);
-        app.put("short_name", shortName);
-        app.put("description", description);
-
-        return app.toJSONString();
+        Project project = new Project();
+    	project .setName(name);
+    	project.setShortName(shortName);
+    	project.setDescription(description);
+    	project.setAllow_anonymous_contributors(Boolean.TRUE);
+    	project.setLongTasks(0);
+    	project.setHidden(0);
+    	project.setFeatured(Boolean.FALSE);
+    	project.setContacted(Boolean.FALSE);
+    	project.setUser(1);
+    	project.setTimeEstimate(0);
+    	project.setTimeLimit(0);
+    	project.setCalibrationFrac(0D);
+    	project.setBoltCourseId(0);
+    	project.setInfo(new org.json.JSONObject());
+    	project.setCategory(45);
+    	return project;
     }
 
     public Long getAppID(String jsonApp, JSONParser parser) throws Exception{
@@ -482,8 +490,9 @@ public class TextClickerPybossaFormatter {
 
     }
 
-    public String updateApp(ClientApp clientApp,JSONObject attribute, JSONArray labelModel, Long categoryID) throws Exception {
-        InputStream templateIS = Thread.currentThread().getContextClassLoader().getResourceAsStream("html/template.html");
+    public Project updateApp(Project remoteProject, ClientApp clientApp,JSONObject attribute, JSONArray labelModel, Long categoryID) throws Exception {
+       
+    	InputStream templateIS = Thread.currentThread().getContextClassLoader().getResourceAsStream("html/template.html");
         String templateString = StreamConverter.convertStreamToString(templateIS) ;
 
         templateString = templateString.replace("TEMPLATE:SHORTNAME", clientApp.getShortName());
@@ -504,27 +513,24 @@ public class TextClickerPybossaFormatter {
         InputStream longDescIS = Thread.currentThread().getContextClassLoader().getResourceAsStream("html/long_description.html");
         String longDescString = StreamConverter.convertStreamToString(longDescIS) ;
 
-        JSONObject appInfo = new JSONObject();
+        org.json.JSONObject appInfo = new org.json.JSONObject();
 
         appInfo.put("task_presenter", templateString);
 
         appInfo.put("tutorial", tutorialString);
         appInfo.put("thumbnail", "http://i.imgur.com/lgZAWIc.png");
 
-        JSONObject app = new JSONObject();
-        app.put("info", appInfo );
+        remoteProject.setInfo(appInfo);
+        remoteProject.setLong_description(longDescString);
+        remoteProject.setName(clientApp.getName());
+        remoteProject.setShortName(clientApp.getShortName());
+        remoteProject.setDescription(clientApp.getShortName());
+        remoteProject.setAllow_anonymous_contributors(Boolean.TRUE);
+        remoteProject.setHidden(0);
+        remoteProject.setCategory(categoryID.intValue());
+        remoteProject.setFeatured(Boolean.FALSE);
 
-        app.put("long_description", longDescString);
-        app.put("name", clientApp.getName());
-        app.put("short_name", clientApp.getShortName());
-        app.put("description", clientApp.getShortName());
-        app.put("allow_anonymous_contributors", true);
-        app.put("hidden", 0);
-        app.put("category_id", categoryID);
-        app.put("featured", false);
-
-        return  app.toJSONString();
-
+        return  remoteProject;
     }
 
     private org.json.JSONObject assemblePybossaInfoFormat(JSONObject featureJsonObj, JSONParser parser, ClientApp clientApp) throws Exception{

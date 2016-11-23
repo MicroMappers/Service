@@ -207,6 +207,12 @@ public class Project implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	public void setUser(Integer  userId) {
+		User user = new User();
+		user.setId(userId);
+		this.user = user;
+	}
 
 	public Integer getTimeEstimate() {
 		return timeEstimate;
@@ -245,6 +251,12 @@ public class Project implements Serializable {
 	}
 
 	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
+	public void setCategory(Integer categoryId) {
+		Category category = new Category();
+		category.setId(categoryId);
 		this.category = category;
 	}
 

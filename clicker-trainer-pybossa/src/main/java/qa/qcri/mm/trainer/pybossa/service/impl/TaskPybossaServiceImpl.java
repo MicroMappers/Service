@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import qa.qcri.mm.trainer.pybossa.dao.TaskDao;
+import qa.qcri.mm.trainer.pybossa.dao.TaskPybossaDao;
 import qa.qcri.mm.trainer.pybossa.entityForPybossa.Task;
 import qa.qcri.mm.trainer.pybossa.service.TaskPybossaService;
 
@@ -20,7 +20,7 @@ public class TaskPybossaServiceImpl implements TaskPybossaService {
     private static Logger logger = Logger.getLogger(TaskPybossaServiceImpl.class);
 
     @Autowired
-    private TaskDao taskDao;
+    private TaskPybossaDao taskDao;
 
 
     @Override
