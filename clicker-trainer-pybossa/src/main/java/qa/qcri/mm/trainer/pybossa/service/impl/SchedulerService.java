@@ -23,7 +23,7 @@ public class SchedulerService {
 
 	//@Scheduled(cron="0/3 * * * * ?")
 	//@Scheduled(cron="0 0/3 * * * ?")
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 180000)
 	public void doSchedule() {
 		logger.debug("Start schedule");
         syncWorker.work();

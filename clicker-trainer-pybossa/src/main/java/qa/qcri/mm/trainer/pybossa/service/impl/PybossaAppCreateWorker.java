@@ -162,11 +162,11 @@ public class PybossaAppCreateWorker implements ClientAppCreateWorker {
                 
                 if(remoteProject == null){
                 	logger.info("Creating Project in Pybossa for : "+ appcode);
-                	project = projectPybossaService.createProject(project);
+                	remoteProject = projectPybossaService.createProject(project);
                 	logger.info("Project created in Pybossa for : "+ appcode);
                 	updateInfo = true;
                 }else{
-                	logger.info("Duplicate app found : " + project.getId());
+                	logger.info("Duplicate app found : " + remoteProject.getId());
                     duplicateFound = true;
                 }
             }
@@ -202,8 +202,8 @@ public class PybossaAppCreateWorker implements ClientAppCreateWorker {
     public void doAppUpdate(Project remoteProject, ClientApp clientApp, JSONObject attribute, JSONArray labelModel) throws Exception{
 
     	logger.info("Updating Project in Pybossa for : "+ clientApp.getName());
-    	remoteProject = textClickerFormat.updateApp(remoteProject, clientApp, attribute, labelModel, PybossaConf.DEFAULT_CATEGORY_ID);
-    	projectPybossaService.updateProject(remoteProject);
+    	Project project = textClickerFormat.updateApp(remoteProject, clientApp, attribute, labelModel, PybossaConf.DEFAULT_CATEGORY_ID);
+    	projectPybossaService.updateProject(project);
     	logger.info("Project updated in Pybossa for : "+ clientApp.getName());
     	
         ClientAppAnswer clientAppAnswer = clientAppResponseService.getClientAppAnswer(clientApp.getClientAppID());
